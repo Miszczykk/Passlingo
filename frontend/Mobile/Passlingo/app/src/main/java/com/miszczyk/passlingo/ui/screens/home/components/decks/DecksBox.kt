@@ -20,34 +20,32 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.miszczyk.passlingo.ui.screens.home.viewmodel.HomeViewModel
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DecksBox() {
-    var showBottomSheet by remember { mutableStateOf(false) }
-    var showAlertDialog by remember { mutableStateOf(false) }
-    var selectedApps by remember { mutableStateOf(setOf<String>()) }
+fun DecksBox(viewModel: HomeViewModel = viewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
     val sheetState = rememberModalBottomSheetState()
 
 
     val animatedScaleMultiplier by animateFloatAsState(
-        targetValue = if (showBottomSheet) 1.2f else 1.0f,
+        targetValue = if (uiState.showBottomSheet) 1.2f else 1.0f,
         animationSpec = tween(durationMillis = 600),
         label = "ScaleAnimation"
     )
     val animatedColorLock by animateColorAsState(
-        targetValue = if (showBottomSheet) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary,
+        targetValue = if (uiState.showBottomSheet) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary,
         animationSpec = tween(durationMillis = 600),
         label = "ColorAnimation"
     )
@@ -66,7 +64,7 @@ fun DecksBox() {
         )
 
         IconButton(
-            onClick = { showBottomSheet = true },
+            onClick = { viewModel.onLockIconClicked() },
             modifier = Modifier
                 .padding(15.dp)
                 .background(
@@ -83,34 +81,21 @@ fun DecksBox() {
         }
     }
 
-    if (showBottomSheet) {
+    if (uiState.showBottomSheet) {
         AppLockBottomSheet(
             sheetState = sheetState,
-            selectedApps = selectedApps,
-            onAppToggled = { clickedPackageName ->
-                selectedApps = if (selectedApps.contains(clickedPackageName)) {
-                    selectedApps - clickedPackageName
-                } else {
-                    selectedApps + clickedPackageName
-                }
-            },
-            onBlockClicked = {
-                if (selectedApps.isNotEmpty()) showAlertDialog = true
-            },
-            onDismissRequest = { showBottomSheet = false }
+            userApps = uiState.userApps,
+            selectedApps = uiState.selectedApps,
+            onAppToggled = { viewModel.onAppToggled(it) },
+            onBlockClicked = { viewModel.onBlockSelectedClicked() },
+            onDismissRequest = { viewModel.onSheetDismissed() }
         )
     }
 
-    if (showAlertDialog) {
+    if (uiState.showAlertDialog) {
         BlockConfirmationDialog(
-            cancelClicked = {
-                showBottomSheet = false
-                showAlertDialog = false
-            },
-            {
-                showBottomSheet = false
-                showAlertDialog = false
-            }
+            cancelClicked = { viewModel.onDialogCancelled() },
+            { viewModel.onDialogConfirmed() }
         )
     }
 }

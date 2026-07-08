@@ -1,9 +1,5 @@
 package com.miszczyk.passlingo.ui.screens.home.components.decks
 
-import android.app.usage.UsageStatsManager
-import android.content.Context
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateColorAsState
@@ -34,8 +30,8 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -44,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miszczyk.passlingo.ui.screens.home.model.AppItem
 import com.miszczyk.passlingo.ui.screens.home.util.hasUsageStatsPermission
+import com.miszczyk.passlingo.ui.screens.home.util.requestUsageStatsPermission
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
@@ -53,12 +50,19 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 @OptIn(ExperimentalMaterial3Api::class)
 fun AppLockBottomSheet(
     sheetState: SheetState,
+    userApps: List<AppItem>,
     selectedApps: Set<String>,
     onAppToggled: (String) -> Unit,
     onBlockClicked: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    hasUsageStatsPermission()
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        if (!hasUsageStatsPermission(context)) {
+            requestUsageStatsPermission(context)
+        }
+    }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -119,104 +123,73 @@ fun AppLockBottomSheet(
             }
 
             Spacer(modifier = Modifier.height(30.dp))
+        }
 
-            val context = LocalContext.current
-            val packageManager = context.packageManager
-            val usageStatsManager =
-                context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-
-            val userApps = remember {
-                val endTime = System.currentTimeMillis()
-                val startTime = endTime - (30L * 24 * 60 * 60 * 1000)
-                val statsMap = usageStatsManager.queryAndAggregateUsageStats(startTime, endTime)
-
-                val myPackageName = context.packageName
-
-                packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
-                    .filter { app ->
-                        (app.flags and ApplicationInfo.FLAG_SYSTEM) == 0 &&
-                                app.packageName != myPackageName
-                    }.map { app ->
-                        val appName = app.loadLabel(packageManager).toString()
-                        val icon = packageManager.getApplicationIcon(app)
-                        val timeUsed = statsMap[app.packageName]?.totalTimeInForeground ?: 0L
-
-                        AppItem(
-                            name = appName,
-                            packageName = app.packageName,
-                            icon = icon,
-                            timeInForeground = timeUsed
-                        )
-                    }.sortedByDescending { it.timeInForeground }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth().padding(horizontal = 30.dp)
+                .weight(1f)
+        ) {
+            items(userApps) { app ->
+                val isChecked = selectedApps.contains(app.packageName)
+                AppListItem(
+                    app = app,
+                    isChecked = isChecked,
+                    onClick = {
+                        onAppToggled(app.packageName)
+                    }
+                )
+                Spacer(modifier = Modifier.height(20.dp))
             }
+        }
 
-            LazyColumn(
+        val buttonColor by animateColorAsState(
+            targetValue = if (selectedApps.isNotEmpty()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
+            label = "buttonColor"
+        )
+
+        val textColor by animateColorAsState(
+            targetValue = if (selectedApps.isNotEmpty()) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onSecondary,
+            label = "buttonColor"
+        )
+
+        val textDescription =
+            if (selectedApps.isNotEmpty()) "Block selected (${selectedApps.size})" else "Select apps to block"
+
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp, horizontal = 30.dp),
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = buttonColor
+            ),
+            onClick = {
+                if (selectedApps.isNotEmpty()) onBlockClicked()
+            }) {
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                items(userApps) { app ->
-                    val isChecked = selectedApps.contains(app.packageName)
-                    AppListItem(
-                        app = app,
-                        isChecked = isChecked,
-                        onClick = {
-                            onAppToggled(app.packageName)
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                }
-            }
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = "Block",
+                    tint = MaterialTheme.colorScheme.secondary,
+                )
 
-            val buttonColor by animateColorAsState(
-                targetValue = if (selectedApps.isNotEmpty()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
-                label = "buttonColor"
-            )
+                Spacer(modifier = Modifier.width(10.dp))
 
-            val textColor by animateColorAsState(
-                targetValue = if (selectedApps.isNotEmpty()) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onSecondary,
-                label = "buttonColor"
-            )
-
-            val textDescription =
-                if (selectedApps.isNotEmpty()) "Block selected (${selectedApps.size})" else "Select apps to block"
-
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = buttonColor
-                ),
-                onClick = {
-                    if (selectedApps.isNotEmpty()) onBlockClicked()
-                }) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "Block",
-                        tint = MaterialTheme.colorScheme.secondary,
-                    )
-
-                    Spacer(modifier = Modifier.width(10.dp))
-
-                    Text(
-                        text = textDescription, fontSize = 25.sp,
-                        color = textColor,
-                        fontFamily = vagRoundedBold
-                    )
-                }
+                Text(
+                    text = textDescription, fontSize = 25.sp,
+                    color = textColor,
+                    fontFamily = vagRoundedBold
+                )
             }
         }
     }
-
 }
 
 
