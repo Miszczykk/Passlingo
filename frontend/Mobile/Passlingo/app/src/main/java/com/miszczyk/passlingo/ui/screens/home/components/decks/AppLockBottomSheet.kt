@@ -1,14 +1,10 @@
 package com.miszczyk.passlingo.ui.screens.home.components.decks
 
-import android.app.AppOpsManager
 import android.app.usage.UsageStatsManager
 import android.content.Context
-import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Process
-import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Canvas
@@ -38,7 +34,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -48,6 +43,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miszczyk.passlingo.ui.screens.home.model.AppItem
+import com.miszczyk.passlingo.ui.screens.home.util.hasUsageStatsPermission
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
@@ -62,20 +58,7 @@ fun AppLockBottomSheet(
     onBlockClicked: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-        val mode = appOps.unsafeCheckOpNoThrow(
-            AppOpsManager.OPSTR_GET_USAGE_STATS,
-            Process.myUid(),
-            context.packageName
-        )
-        if (mode != AppOpsManager.MODE_ALLOWED) {
-            context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
-        }
-    }
-
+    hasUsageStatsPermission()
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -141,17 +124,6 @@ fun AppLockBottomSheet(
             val packageManager = context.packageManager
             val usageStatsManager =
                 context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-
-            val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-            val mode = appOps.unsafeCheckOpNoThrow(
-                AppOpsManager.OPSTR_GET_USAGE_STATS,
-                Process.myUid(),
-                context.packageName
-            )
-            val hasPermission = mode == AppOpsManager.MODE_ALLOWED
-            if (!hasPermission) {
-                context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
-            }
 
             val userApps = remember {
                 val endTime = System.currentTimeMillis()

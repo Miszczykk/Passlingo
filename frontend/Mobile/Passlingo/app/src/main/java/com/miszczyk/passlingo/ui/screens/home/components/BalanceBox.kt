@@ -20,12 +20,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.miszczyk.passlingo.ui.screens.home.convertTimeToString
+import com.miszczyk.passlingo.ui.screens.home.util.convertTimeToString
 import com.miszczyk.passlingo.ui.theme.vagRoundedBlack
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
-fun BalanceBox(modifier: Modifier = Modifier) {
+fun BalanceBox() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "AVAILABLE BALANCE",

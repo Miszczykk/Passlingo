@@ -35,8 +35,9 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
-import com.miszczyk.passlingo.ui.screens.home.convertTimeToString
 import com.miszczyk.passlingo.ui.screens.home.model.AppItem
+import com.miszczyk.passlingo.ui.screens.home.util.convertTimeToString
+import com.miszczyk.passlingo.ui.screens.home.util.formatDuration
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
@@ -103,21 +104,9 @@ fun AppListItem(app: AppItem, isChecked: Boolean, onClick: () -> Unit) {
                 fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.primary
             )
-            val totalSeconds = app.timeInForeground / 1000
-            val hours = totalSeconds / 3600
-            val minutes = (totalSeconds % 3600) / 60
-            val seconds = totalSeconds % 60
-
-            val rawTime = if (hours > 0) {
-                String.format("%02dh %02dm %02ds", hours, minutes, seconds)
-            } else if (minutes > 0) {
-                String.format("%02dm %02ds", minutes, seconds)
-            } else {
-                String.format("%02ds", seconds)
-            }
             Text(
                 text = convertTimeToString(
-                    rawTime = rawTime,
+                    rawTime = formatDuration(app.timeInForeground / 1000),
                     numberFont = 15.sp,
                     textFont = 12.sp
                 ),
