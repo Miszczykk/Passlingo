@@ -20,14 +20,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.miszczyk.passlingo.ui.screens.home.util.requestUsageStatsPermission
 import com.miszczyk.passlingo.ui.screens.home.viewmodel.HomeViewModel
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
@@ -37,6 +43,20 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 fun DecksBox(viewModel: HomeViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     val sheetState = rememberModalBottomSheetState()
+    val context = LocalContext.current
+    val lifeCycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifeCycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if(event == Lifecycle.Event.ON_RESUME){
+                viewModel.onReturnedFromSettings()
+            }
+        }
+        lifeCycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifeCycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
 
     val animatedScaleMultiplier by animateFloatAsState(
@@ -84,10 +104,12 @@ fun DecksBox(viewModel: HomeViewModel = viewModel()) {
     if (uiState.showBottomSheet) {
         AppLockBottomSheet(
             sheetState = sheetState,
+            hasUsagePermission = uiState.hasUsagePermission,
             userApps = uiState.userApps,
             selectedApps = uiState.selectedApps,
             onAppToggled = { viewModel.onAppToggled(it) },
             onBlockClicked = { viewModel.onBlockSelectedClicked() },
+            onRequestPermission = { requestUsageStatsPermission(context) },
             onDismissRequest = { viewModel.onSheetDismissed() }
         )
     }
@@ -95,7 +117,7 @@ fun DecksBox(viewModel: HomeViewModel = viewModel()) {
     if (uiState.showAlertDialog) {
         BlockConfirmationDialog(
             cancelClicked = { viewModel.onDialogCancelled() },
-            { viewModel.onDialogConfirmed() }
+            acceptClicked = { viewModel.onDialogConfirmed() }
         )
     }
 }

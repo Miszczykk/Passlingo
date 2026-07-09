@@ -1,9 +1,6 @@
 package com.miszczyk.passlingo.ui.screens.home.viewmodel
 
 import android.app.Application
-import android.content.pm.ChangedPackages
-import android.content.pm.LauncherApps
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.miszczyk.passlingo.ui.screens.home.data.AppUsageProvider
@@ -93,7 +90,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application){
     }
 
     fun onDialogCancelled(){
-        _uiState.update { it.copy(showBottomSheet = false) }
+        _uiState.update { it.copy(showAlertDialog = false,
+            showBottomSheet = false,
+            selectedApps = emptySet())}
     }
 
     fun onDialogConfirmed(){
@@ -107,6 +106,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application){
                 showBottomSheet = false,
                 selectedApps = emptySet()
             )
+        }
+    }
+
+    fun onReturnedFromSettings(){
+        if(_uiState.value.showBottomSheet){
+            checkPermissionAndLoadApps()
         }
     }
 }

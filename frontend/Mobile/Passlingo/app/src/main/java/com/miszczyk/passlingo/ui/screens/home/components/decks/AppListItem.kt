@@ -71,9 +71,7 @@ fun AppListItem(app: AppItem, isChecked: Boolean, onClick: () -> Unit) {
             .clip(RoundedCornerShape(16.dp))
             .background(rowBackgroundColor)
             .clickable {
-
                 onClick()
-
             }
             .border(
                 width = 2.dp,
