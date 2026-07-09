@@ -31,17 +31,13 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miszczyk.passlingo.ui.screens.home.model.AppItem
-import com.miszczyk.passlingo.ui.screens.home.util.hasUsageStatsPermission
-import com.miszczyk.passlingo.ui.screens.home.util.requestUsageStatsPermission
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
@@ -54,19 +50,13 @@ fun AppLockBottomSheet(
     hasUsagePermission: Boolean,
     userApps: List<AppItem>,
     selectedApps: Set<String>,
+    blockedApps: Set<String>,
+    onBlockedAppsClicked: () -> Unit,
     onAppToggled: (String) -> Unit,
     onBlockClicked: () -> Unit,
     onRequestPermission: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        if (!hasUsageStatsPermission(context)) {
-            requestUsageStatsPermission(context)
-        }
-    }
-
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState
@@ -179,9 +169,11 @@ fun AppLockBottomSheet(
                 ) {
                     items(userApps) { app ->
                         val isChecked = selectedApps.contains(app.packageName)
+                        val isBlocked = blockedApps.contains(app.packageName)
                         AppListItem(
                             app = app,
                             isChecked = isChecked,
+                            isBlocked = isBlocked,
                             onClick = {
                                 onAppToggled(app.packageName)
                             }
@@ -240,5 +232,3 @@ fun AppLockBottomSheet(
         }
     }
 }
-
-

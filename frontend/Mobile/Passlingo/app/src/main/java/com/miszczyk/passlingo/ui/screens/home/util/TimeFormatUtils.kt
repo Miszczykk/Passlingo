@@ -47,6 +47,14 @@ fun convertTimeToString(
     return annotatedTime
 }
 
+fun convertIntToTime(totalSeconds: Long): String{
+    val hours = totalSeconds / 3600
+    val minutes = (totalSeconds % 3600) / 60
+    val seconds = totalSeconds % 60
+
+    return String.format("%02dh %02dm %02ds", hours, minutes, seconds)
+}
+
 fun formatDuration(totalSeconds: Long): String {
     val hours = totalSeconds / 3600
     val minutes = (totalSeconds % 3600) / 60

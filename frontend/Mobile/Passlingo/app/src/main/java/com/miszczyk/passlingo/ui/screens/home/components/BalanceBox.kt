@@ -20,6 +20,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.miszczyk.passlingo.ui.screens.home.datastore.TIME
+import com.miszczyk.passlingo.ui.screens.home.util.convertIntToTime
 import com.miszczyk.passlingo.ui.screens.home.util.convertTimeToString
 import com.miszczyk.passlingo.ui.theme.vagRoundedBlack
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
@@ -57,7 +59,7 @@ fun BalanceBox() {
 
 @Composable
 private fun TimerText() {
-    val rawTime = "01h 45m 30s"
+    val rawTime = convertIntToTime(TIME)
 
     Text(
         text = convertTimeToString(rawTime, 80.sp, 30.sp),

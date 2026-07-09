@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,7 +42,7 @@ import com.miszczyk.passlingo.ui.screens.home.util.formatDuration
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun AppListItem(app: AppItem, isChecked: Boolean, onClick: () -> Unit) {
+fun AppListItem(app: AppItem, isChecked: Boolean, isBlocked: Boolean, onClick: () -> Unit) {
     val checkboxScale by animateFloatAsState(
         targetValue = if (isChecked) 1.2f else 1.0f,
         animationSpec = tween(durationMillis = 300),
@@ -49,9 +50,13 @@ fun AppListItem(app: AppItem, isChecked: Boolean, onClick: () -> Unit) {
     )
 
     val rowBackgroundColor by animateColorAsState(
-        targetValue = if (isChecked) MaterialTheme.colorScheme.secondary.copy(
-            alpha = 0.15f
-        ) else Color.Transparent,
+        targetValue = if (isBlocked) {
+            MaterialTheme.colorScheme.onBackground
+        } else {
+            if (isChecked) MaterialTheme.colorScheme.secondary.copy(
+                alpha = 0.15f
+            ) else Color.Transparent
+        },
         animationSpec = tween(durationMillis = 300),
         label = "RowBackground"
     )
@@ -112,6 +117,7 @@ fun AppListItem(app: AppItem, isChecked: Boolean, onClick: () -> Unit) {
             )
 
         }
+
         Box(
             modifier = Modifier
                 .size(24.dp)
@@ -120,13 +126,22 @@ fun AppListItem(app: AppItem, isChecked: Boolean, onClick: () -> Unit) {
                 .background(color = circleColor, shape = CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            if (isChecked) {
+            if (isBlocked) {
                 Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = "Checked",
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = "Locked",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(16.dp)
                 )
+            } else {
+                if (isChecked) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Checked",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
             }
         }
     }

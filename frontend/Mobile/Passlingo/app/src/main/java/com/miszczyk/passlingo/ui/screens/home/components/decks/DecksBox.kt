@@ -107,6 +107,8 @@ fun DecksBox(viewModel: HomeViewModel = viewModel()) {
             hasUsagePermission = uiState.hasUsagePermission,
             userApps = uiState.userApps,
             selectedApps = uiState.selectedApps,
+            blockedApps = uiState.blockedApps,
+            onBlockedAppsClicked = {viewModel.onBlockedAppsClicked()},
             onAppToggled = { viewModel.onAppToggled(it) },
             onBlockClicked = { viewModel.onBlockSelectedClicked() },
             onRequestPermission = { requestUsageStatsPermission(context) },
@@ -118,6 +120,13 @@ fun DecksBox(viewModel: HomeViewModel = viewModel()) {
         BlockConfirmationDialog(
             cancelClicked = { viewModel.onDialogCancelled() },
             acceptClicked = { viewModel.onDialogConfirmed() }
+        )
+    }
+
+    if(uiState.showAlertUnblockDialog){
+        BlockUnblockConfirmationDialog(
+            cancelClicked = {viewModel.onUnblockDialogCancelled()},
+            acceptClicked = {viewModel.onUnblockDialogConfirmed()}
         )
     }
 }

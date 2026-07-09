@@ -18,6 +18,8 @@ import kotlinx.coroutines.withContext
 data class DecksUiState(
     val showBottomSheet: Boolean = false,
     val showAlertDialog: Boolean = false,
+    val showAlertUnblockDialog: Boolean = false,
+    val appToUnblock: String? = null,
     val userApps: List<AppItem> = emptyList(),
     val selectedApps: Set<String> = emptySet(),
     val blockedApps: Set<String> = emptySet(),
@@ -25,7 +27,7 @@ data class DecksUiState(
     val isLoadingApps: Boolean = false
 )
 
-class HomeViewModel(application: Application) : AndroidViewModel(application){
+class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val appUsageProvider = AppUsageProvider(application)
     private val blockedAppsRepository = BlockedAppsRepository(application)
 
@@ -36,7 +38,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application){
         observeBlockedApps()
     }
 
-    private fun observeBlockedApps(){
+    private fun observeBlockedApps() {
         viewModelScope.launch {
             blockedAppsRepository.blockedApps.collect { blocked ->
                 _uiState.update { it.copy(blockedApps = blocked) }
@@ -44,58 +46,77 @@ class HomeViewModel(application: Application) : AndroidViewModel(application){
         }
     }
 
-    fun onLockIconClicked(){
+    fun onLockIconClicked() {
         _uiState.update { it.copy(showBottomSheet = true) }
         checkPermissionAndLoadApps()
     }
 
-    private fun checkPermissionAndLoadApps(){
+    private fun checkPermissionAndLoadApps() {
         val hasPermission = hasUsageStatsPermission(getApplication())
+        val alreadyHadPermission = _uiState.value.hasUsagePermission
+
         _uiState.update { it.copy(hasUsagePermission = hasPermission) }
 
-        if(hasPermission){
+        if (hasPermission && alreadyHadPermission) {
             loadInstalledApps()
         }
     }
 
-    private fun loadInstalledApps(){
+    private fun loadInstalledApps() {
         _uiState.update { it.copy(isLoadingApps = true) }
         viewModelScope.launch {
-            val apps = withContext(Dispatchers.IO){
+            val apps = withContext(Dispatchers.IO) {
                 appUsageProvider.getInstalledAppsWithUsage()
             }
             _uiState.update { it.copy(userApps = apps, isLoadingApps = false) }
         }
     }
 
-    fun onAppToggled(packageName: String){
+    fun onAppToggled(packageName: String) {
         _uiState.update { state ->
-            val newSelection = if(state.selectedApps.contains(packageName)){
-                state.selectedApps - packageName
+            if (!state.blockedApps.contains(packageName)) {
+                val newSelection =  if (state.selectedApps.contains(packageName)) {
+                    state.selectedApps - packageName
+                } else {
+                    state.selectedApps + packageName
+                }
+                state.copy(selectedApps = newSelection)
             }else{
-                state.selectedApps + packageName
+                state.copy(
+                    showAlertUnblockDialog = true,
+                    appToUnblock = packageName
+                )
             }
-            state.copy(selectedApps = newSelection)
+
         }
     }
 
-    fun onBlockSelectedClicked(){
-        if(_uiState.value.selectedApps.isNotEmpty()){
+    fun onBlockSelectedClicked() {
+        if (_uiState.value.selectedApps.isNotEmpty()) {
             _uiState.update { it.copy(showAlertDialog = true) }
         }
     }
 
-    fun onSheetDismissed(){
+    fun onBlockedAppsClicked() {
+        _uiState.update {
+            it.copy(showAlertUnblockDialog = true)
+        }
+    }
+
+
+    fun onSheetDismissed() {
         _uiState.update { it.copy(showBottomSheet = false, selectedApps = emptySet()) }
     }
 
-    fun onDialogCancelled(){
-        _uiState.update { it.copy(showAlertDialog = false,
-            showBottomSheet = false,
-            selectedApps = emptySet())}
+    fun onDialogCancelled() {
+        _uiState.update {
+            it.copy(
+                showAlertDialog = false
+            )
+        }
     }
 
-    fun onDialogConfirmed(){
+    fun onDialogConfirmed() {
         val selection = _uiState.value.selectedApps
         viewModelScope.launch {
             blockedAppsRepository.addBlockedApps(selection)
@@ -103,16 +124,40 @@ class HomeViewModel(application: Application) : AndroidViewModel(application){
         _uiState.update {
             it.copy(
                 showAlertDialog = false,
-                showBottomSheet = false,
                 selectedApps = emptySet()
             )
         }
     }
 
-    fun onReturnedFromSettings(){
-        if(_uiState.value.showBottomSheet){
+    fun onUnblockDialogCancelled() {
+        _uiState.update {
+            it.copy(
+                showAlertUnblockDialog = false,
+                appToUnblock = null
+            )
+        }
+    }
+
+    fun onUnblockDialogConfirmed() {
+        val appToUnblock = _uiState.value.appToUnblock
+
+        if (appToUnblock != null) {
+            viewModelScope.launch {
+                blockedAppsRepository.removeSingleBlockedApp(setOf(appToUnblock))
+            }
+        }
+
+        _uiState.update {
+            it.copy(
+                showAlertUnblockDialog = false,
+                appToUnblock = null
+            )
+        }
+    }
+
+    fun onReturnedFromSettings() {
+        if (_uiState.value.showBottomSheet) {
             checkPermissionAndLoadApps()
         }
     }
 }
-
