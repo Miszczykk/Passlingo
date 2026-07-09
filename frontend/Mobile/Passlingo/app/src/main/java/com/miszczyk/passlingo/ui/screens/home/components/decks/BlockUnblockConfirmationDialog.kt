@@ -1,22 +1,31 @@
 package com.miszczyk.passlingo.ui.screens.home.components.decks
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.miszczyk.passlingo.ui.screens.home.datastore.COST_TIME
+import com.miszczyk.passlingo.ui.screens.home.util.convertTimeToString
+import com.miszczyk.passlingo.ui.screens.home.util.formatDuration
+import com.miszczyk.passlingo.ui.theme.vagRoundedBlack
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
@@ -39,13 +48,50 @@ fun BlockUnblockConfirmationDialog(
             )
         },
         text = {
-            Text(
-                text = "Unlocking this app requires you to pay with you earned study time.",
-                fontSize = 15.sp,
-                color = MaterialTheme.colorScheme.onSecondary,
-                fontFamily = vagRoundedLight,
-                textAlign = TextAlign.Center,
-            )
+            Column() {
+                Text(
+                    text = "Unlocking this app requires you to pay with you earned study time.",
+                    fontSize = 15.sp,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontFamily = vagRoundedLight,
+                    textAlign = TextAlign.Center,
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                            .fillMaxWidth()
+                        .padding(horizontal = 30.dp)
+                        .shadow(elevation = 3.dp, shape = RoundedCornerShape(16.dp))
+                        .background(
+                            color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp)
+                        )
+                        .padding(vertical = 20.dp)
+                ) {
+                    Text(
+                        text = "COST TO UNLOCK",
+                        textAlign = TextAlign.Center,
+                        fontFamily = vagRoundedLight,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 2.5.sp,
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+
+                    ) {
+                        TimerText()
+                    }
+                }
+
+
+            }
+
         },
         confirmButton = {
             Row(
@@ -90,5 +136,16 @@ fun BlockUnblockConfirmationDialog(
                 }
             }
         }
+    )
+}
+
+@Composable
+private fun TimerText() {
+    val rawTime = formatDuration(COST_TIME)
+
+    Text(
+        text = convertTimeToString(rawTime, 25.sp, 20.sp),
+        textAlign = TextAlign.Center,
+        fontFamily = vagRoundedBlack,
     )
 }

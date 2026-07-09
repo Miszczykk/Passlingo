@@ -51,7 +51,6 @@ fun AppLockBottomSheet(
     userApps: List<AppItem>,
     selectedApps: Set<String>,
     blockedApps: Set<String>,
-    onBlockedAppsClicked: () -> Unit,
     onAppToggled: (String) -> Unit,
     onBlockClicked: () -> Unit,
     onRequestPermission: () -> Unit,
@@ -193,7 +192,7 @@ fun AppLockBottomSheet(
                 )
 
                 val textDescription =
-                    if (selectedApps.isNotEmpty()) "Block selected (${selectedApps.size})" else "Select apps to block"
+                    if (selectedApps.isNotEmpty()) "Block selected (+${(selectedApps.size * 900L) / 60}m)" else "Select apps to block"
 
                 Button(
                     modifier = Modifier

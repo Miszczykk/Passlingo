@@ -20,14 +20,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.miszczyk.passlingo.ui.screens.home.datastore.TIME
 import com.miszczyk.passlingo.ui.screens.home.util.convertIntToTime
 import com.miszczyk.passlingo.ui.screens.home.util.convertTimeToString
 import com.miszczyk.passlingo.ui.theme.vagRoundedBlack
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
-fun BalanceBox() {
+fun BalanceBox(balanceTime: Long) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "AVAILABLE BALANCE",
@@ -52,19 +51,20 @@ fun BalanceBox() {
                 )
                 .padding(vertical = 20.dp)
         ) {
-            TimerText()
+            TimerText(balanceTime)
         }
     }
 }
 
 @Composable
-private fun TimerText() {
-    val rawTime = convertIntToTime(TIME)
+private fun TimerText(balanceTime: Long) {
+    val rawTime = convertIntToTime(balanceTime)
 
     Text(
-        text = convertTimeToString(rawTime, 80.sp, 30.sp),
+        text = convertTimeToString(rawTime, 75.sp, 25.sp),
         textAlign = TextAlign.Center,
         fontFamily = vagRoundedBlack,
-        modifier = Modifier.offset(y = (10).dp)
+        modifier = Modifier.offset(y = 10.dp),
+        maxLines = 1
     )
 }
