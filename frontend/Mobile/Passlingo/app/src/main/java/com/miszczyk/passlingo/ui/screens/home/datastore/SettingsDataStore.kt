@@ -12,4 +12,4 @@ val BLOCKED_APPS_KEY = stringSetPreferencesKey("blocked_apps")
 val BALANCE_TIME_KEY = longPreferencesKey("balance_time")
 
 
-const val COST_TIME : Long = 3600L
+const val COST_TIME: Long = 3600L

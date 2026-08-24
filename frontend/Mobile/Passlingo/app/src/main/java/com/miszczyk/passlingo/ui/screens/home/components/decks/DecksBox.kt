@@ -48,7 +48,7 @@ fun DecksBox(viewModel: HomeViewModel = viewModel()) {
 
     DisposableEffect(lifeCycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            if(event == Lifecycle.Event.ON_RESUME){
+            if (event == Lifecycle.Event.ON_RESUME) {
                 viewModel.onReturnedFromSettings()
             }
         }
@@ -116,22 +116,22 @@ fun DecksBox(viewModel: HomeViewModel = viewModel()) {
     }
 
     if (uiState.showAlertDialog) {
-        BlockConfirmationDialog(
-            cancelClicked = { viewModel.onDialogCancelled() },
-            acceptClicked = { viewModel.onDialogConfirmed() }
+        LockAppDialog(
+            onConfirm = { viewModel.onLockAppDialogConfirmed() },
+            onCancel = { viewModel.onLockAppDialogCancelled() }
         )
     }
 
-    if(uiState.showAlertUnblockDialog){
-        BlockUnblockConfirmationDialog(
-            cancelClicked = {viewModel.onUnblockDialogCancelled()},
-            acceptClicked = {viewModel.onUnblockDialogConfirmed()}
+    if (uiState.showAlertUnblockDialog) {
+        UnlockAppDialog(
+            onConfirm = { viewModel.onUnlockAppDialogConfirmed() },
+            onCancel = { viewModel.onUnlockAppDialogCancelled() }
         )
     }
 
-    if(uiState.showAlertWithoutTime){
-        BlockWithoutTime(
-            Clicked = {viewModel.onBlockWithoutTimeClicked()}
+    if (uiState.showAlertWithoutTime) {
+        InsufficientTimeDialog(
+            onCancel = { viewModel.onInsufficientTimeDialogClicked() }
         )
     }
 }

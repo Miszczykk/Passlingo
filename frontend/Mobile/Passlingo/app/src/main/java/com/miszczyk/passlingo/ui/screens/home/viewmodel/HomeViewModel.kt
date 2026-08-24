@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -129,7 +128,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.update { it.copy(showBottomSheet = false, selectedApps = emptySet()) }
     }
 
-    fun onDialogCancelled() {
+    fun onLockAppDialogCancelled() {
         _uiState.update {
             it.copy(
                 showAlertDialog = false
@@ -137,7 +136,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun onDialogConfirmed() {
+    fun onLockAppDialogConfirmed() {
         val selection = _uiState.value.selectedApps
         val timeEarned = 900L * selection.size
 
@@ -153,7 +152,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun onUnblockDialogCancelled() {
+    fun onUnlockAppDialogCancelled() {
         _uiState.update {
             it.copy(
                 showAlertUnblockDialog = false,
@@ -162,7 +161,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun onUnblockDialogConfirmed() {
+    fun onUnlockAppDialogConfirmed() {
         val appToUnblock = _uiState.value.appToUnblock
 
         if (appToUnblock != null) {
@@ -180,7 +179,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun onBlockWithoutTimeClicked(){
+    fun onInsufficientTimeDialogClicked(){
         _uiState.update {
             it.copy(
                 showAlertWithoutTime = false,
