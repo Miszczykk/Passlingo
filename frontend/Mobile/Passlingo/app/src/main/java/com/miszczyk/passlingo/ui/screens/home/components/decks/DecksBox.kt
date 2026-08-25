@@ -34,13 +34,13 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.miszczyk.passlingo.ui.screens.home.util.requestUsageStatsPermission
-import com.miszczyk.passlingo.ui.screens.home.viewmodel.HomeViewModel
+import com.miszczyk.passlingo.ui.screens.home.viewmodel.DeckViewModel
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DecksBox(viewModel: HomeViewModel = viewModel()) {
+fun DecksBox(viewModel: DeckViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     val sheetState = rememberModalBottomSheetState()
     val context = LocalContext.current
@@ -94,7 +94,7 @@ fun DecksBox(viewModel: HomeViewModel = viewModel()) {
         ) {
             Icon(
                 imageVector = Icons.Default.Lock,
-                contentDescription = "Block",
+                contentDescription = "Lock",
                 tint = animatedColorLock,
                 modifier = Modifier.scale(animatedScaleMultiplier)
             )
@@ -107,7 +107,7 @@ fun DecksBox(viewModel: HomeViewModel = viewModel()) {
             hasUsagePermission = uiState.hasUsagePermission,
             userApps = uiState.userApps,
             selectedApps = uiState.selectedApps,
-            blockedApps = uiState.blockedApps,
+            blockedApps = uiState.lockedApps,
             onAppToggled = { viewModel.onAppToggled(it) },
             onBlockClicked = { viewModel.onBlockSelectedClicked() },
             onRequestPermission = { requestUsageStatsPermission(context) },
@@ -115,23 +115,5 @@ fun DecksBox(viewModel: HomeViewModel = viewModel()) {
         )
     }
 
-    if (uiState.showAlertDialog) {
-        LockAppDialog(
-            onConfirm = { viewModel.onLockAppDialogConfirmed() },
-            onCancel = { viewModel.onLockAppDialogCancelled() }
-        )
-    }
-
-    if (uiState.showAlertUnblockDialog) {
-        UnlockAppDialog(
-            onConfirm = { viewModel.onUnlockAppDialogConfirmed() },
-            onCancel = { viewModel.onUnlockAppDialogCancelled() }
-        )
-    }
-
-    if (uiState.showAlertWithoutTime) {
-        InsufficientTimeDialog(
-            onCancel = { viewModel.onInsufficientTimeDialogClicked() }
-        )
-    }
+    AppStatusDialogs(dialogState = uiState.dialogState, deckViewModel = viewModel)
 }

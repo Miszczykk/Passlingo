@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.home.components.decks
+package com.miszczyk.passlingo.ui.screens.home.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,14 +23,14 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
-fun DialogComponent(dialog: DialogItem) {
+fun DialogComponent(dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> Unit) {
     val onConfirmTextColor = if (dialog.onCancelText != null) {
         MaterialTheme.colorScheme.secondary
     } else {
         MaterialTheme.colorScheme.background
     }
     AlertDialog(
-        onDismissRequest = dialog.onCancel,
+        onDismissRequest = onCancel,
         title = {
             Text(
                 text = dialog.title, fontSize = 25.sp,
@@ -64,7 +64,7 @@ fun DialogComponent(dialog: DialogItem) {
             ) {
                 if (dialog.onCancelText != null) {
                     TextButton(
-                        onClick = dialog.onCancel,
+                        onClick = onCancel,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.onBackground
                         ),
@@ -84,7 +84,7 @@ fun DialogComponent(dialog: DialogItem) {
                 }
 
                 TextButton(
-                    onClick = dialog.onConfirm,
+                    onClick = onConfirm,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
                     ),

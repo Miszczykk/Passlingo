@@ -18,13 +18,13 @@ import com.miszczyk.passlingo.ui.screens.home.components.BalanceBox
 import com.miszczyk.passlingo.ui.screens.home.components.CreateBox
 import com.miszczyk.passlingo.ui.screens.home.components.Header
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DecksBox
-import com.miszczyk.passlingo.ui.screens.home.viewmodel.HomeViewModel
+import com.miszczyk.passlingo.ui.screens.home.viewmodel.DeckViewModel
 import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, viewModel: HomeViewModel = viewModel()) {
+fun HomeScreen(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {

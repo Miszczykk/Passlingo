@@ -192,7 +192,7 @@ fun AppLockBottomSheet(
                 )
 
                 val textDescription =
-                    if (selectedApps.isNotEmpty()) "Block selected (+${(selectedApps.size * 900L) / 60}m)" else "Select apps to block"
+                    if (selectedApps.isNotEmpty()) "Lock selected (+${(selectedApps.size * 900L) / 60}m)" else "Select apps to block"
 
                 Button(
                     modifier = Modifier

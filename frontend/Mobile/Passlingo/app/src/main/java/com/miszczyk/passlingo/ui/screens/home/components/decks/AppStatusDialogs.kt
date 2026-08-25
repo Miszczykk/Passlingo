@@ -17,59 +17,65 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.miszczyk.passlingo.ui.screens.home.components.DialogComponent
 import com.miszczyk.passlingo.ui.screens.home.datastore.COST_TIME
 import com.miszczyk.passlingo.ui.screens.home.model.DialogItem
+import com.miszczyk.passlingo.ui.screens.home.model.DialogState
 import com.miszczyk.passlingo.ui.screens.home.util.convertTimeToString
 import com.miszczyk.passlingo.ui.screens.home.util.formatDuration
+import com.miszczyk.passlingo.ui.screens.home.viewmodel.DeckViewModel
 import com.miszczyk.passlingo.ui.theme.vagRoundedBlack
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
-fun LockAppDialog(onConfirm: () -> Unit, onCancel: () -> Unit) {
-    DialogComponent(
-        dialog = DialogItem(
+fun AppStatusDialogs(
+    dialogState: DialogState,
+    deckViewModel: DeckViewModel
+){
+
+    val dialogItem = when(dialogState){
+        is DialogState.None -> return
+        is DialogState.ConfirmLock -> lockAppDialog()
+        is DialogState.ConfirmUnlock -> unlockAppDialog()
+        is DialogState.InsufficientTime -> insufficientTimeDialog()
+    }
+
+    DialogComponent(dialog = dialogItem, onConfirm = { deckViewModel.onDialogConfirmed()}, onCancel = {deckViewModel.onDialogCancelled()})
+}
+@Composable
+fun lockAppDialog() : DialogItem {
+    return DialogItem(
             title = "Are you sure?",
             message = "Locked apps will be unavailable until you correctly study a specific number of flashcards. This cannot be bypassed!",
-            onConfirm = onConfirm,
             onConfirmText = "Lock",
-            onCancel = onCancel,
             onCancelText = "Cancel",
         )
-    )
 }
 
 @Composable
-fun UnlockAppDialog(onConfirm: () -> Unit, onCancel: () -> Unit) {
-    DialogComponent(
-        dialog = DialogItem(
+fun unlockAppDialog() : DialogItem {
+    return DialogItem(
             title = "Unlock app?",
             message = "Unlocking this app requires you to pay with you earned study time.",
-            onConfirm = onConfirm,
             onConfirmText = "Pay & Unlock",
-            onCancel = onCancel,
             onCancelText = "Cancel",
-            extraContent = { TimerBlock("COST TO UNLOCK", formatDuration(COST_TIME)) }
+            extraContent = { timerBlock("COST TO UNLOCK", formatDuration(COST_TIME)) }
         )
-    )
 }
 
 @Composable
-fun InsufficientTimeDialog(onCancel: () -> Unit) {
-    DialogComponent(
-        dialog = DialogItem(
+fun insufficientTimeDialog() : DialogItem {
+    return DialogItem(
             title = "Not enough time",
             message = "You don't have enough earned study time to unlock this app.",
             onConfirmText = "Keep studying",
-            onCancel = onCancel,
-            onConfirm = onCancel,
-            extraContent = { TimerBlock("REQUIRES", formatDuration(COST_TIME)) }
+            extraContent = { timerBlock("REQUIRES", formatDuration(COST_TIME)) }
         )
-    )
 }
 
 
 @Composable
-private fun TimerBlock(title: String, time: String) {
+private fun timerBlock(title: String, time: String) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
