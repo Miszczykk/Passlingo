@@ -13,8 +13,8 @@ object Dimens {
     val iconSmall = 16.dp
     val iconMedium = 24.dp
     val iconLarge = 40.dp
-    val animatedRadiusSmall = 200.dp
-    val animatedRadiusLarge = 250.dp
+    val animatedRadiusSmall = 80.dp
+    val animatedRadiusLarge = 100.dp
 
     val spaceNone = 0.dp
     val spaceExtraSmall = 5.dp
