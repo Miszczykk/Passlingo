@@ -16,24 +16,24 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.miszczyk.passlingo.ui.screens.home.model.DialogItem
+import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusSmall
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceMedium
+import com.miszczyk.passlingo.ui.theme.TextSize.body
+import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
 fun DialogComponent(dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> Unit) {
-    val onConfirmTextColor = if (dialog.onCancelText != null) {
-        MaterialTheme.colorScheme.secondary
-    } else {
-        MaterialTheme.colorScheme.background
-    }
+    val confirmTextColor = dialog.onConfirmTextColor ?: MaterialTheme.colorScheme.secondary
     AlertDialog(
         onDismissRequest = onCancel,
         title = {
             Text(
-                text = dialog.title, fontSize = 25.sp,
+                text = dialog.title, fontSize = titleLarge,
                 color = MaterialTheme.colorScheme.primary,
                 fontFamily = vagRoundedBold,
                 textAlign = TextAlign.Center,
@@ -41,16 +41,16 @@ fun DialogComponent(dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> U
             )
         },
         text = {
-            Column() {
+            Column {
                 Text(
                     text = dialog.message,
-                    fontSize = 15.sp,
+                    fontSize = body,
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontFamily = vagRoundedLight,
                     textAlign = TextAlign.Center,
                 )
                 if (dialog.extraContent != null) {
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(spaceMedium))
 
                     dialog.extraContent()
                 }
@@ -60,7 +60,7 @@ fun DialogComponent(dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> U
         confirmButton = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
+                horizontalArrangement = Arrangement.spacedBy(spaceLarge)
             ) {
                 if (dialog.onCancelText != null) {
                     TextButton(
@@ -71,14 +71,14 @@ fun DialogComponent(dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> U
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),
-                        shape = RoundedCornerShape(10.dp)
+                        shape = RoundedCornerShape(cornerRadiusSmall)
                     ) {
                         Text(
                             text = dialog.onCancelText,
-                            fontSize = 15.sp,
+                            fontSize = body,
                             color = MaterialTheme.colorScheme.primary,
                             fontFamily = vagRoundedBold,
-                            modifier = Modifier.padding(vertical = 5.dp)
+                            modifier = Modifier.padding(vertical = spaceExtraSmall)
                         )
                     }
                 }
@@ -91,14 +91,14 @@ fun DialogComponent(dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> U
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(cornerRadiusSmall)
                 ) {
                     Text(
                         text = dialog.onConfirmText,
-                        fontSize = 15.sp,
-                        color = onConfirmTextColor,
+                        fontSize = body,
+                        color = confirmTextColor,
                         fontFamily = vagRoundedBold,
-                        modifier = Modifier.padding(vertical = 5.dp)
+                        modifier = Modifier.padding(vertical = spaceExtraSmall)
                     )
                 }
             }

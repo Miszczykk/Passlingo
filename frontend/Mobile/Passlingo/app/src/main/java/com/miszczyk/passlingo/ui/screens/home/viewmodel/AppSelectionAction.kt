@@ -1,15 +1,15 @@
 package com.miszczyk.passlingo.ui.screens.home.viewmodel
 
-import com.miszczyk.passlingo.ui.screens.home.datastore.COST_TIME
-import com.miszczyk.passlingo.ui.screens.home.model.DecksUiState
+import com.miszczyk.passlingo.ui.screens.home.model.DeckUiState
 import com.miszczyk.passlingo.ui.screens.home.model.DialogState
+import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
 class AppSelectionAction(
-    private val uiStateFlow: MutableStateFlow<DecksUiState>,
+    private val uiStateFlow: MutableStateFlow<DeckUiState>,
 ) {
-    private fun toggleAppSelection(state: DecksUiState, packageName: String): Set<String> {
+    private fun toggleAppSelection(state: DeckUiState, packageName: String): Set<String> {
         return if (state.selectedApps.contains(packageName)) {
             state.selectedApps - packageName
         } else {
@@ -17,9 +17,9 @@ class AppSelectionAction(
         }
     }
 
-    private fun resolveUnlockDialogState(state: DecksUiState, packageName: String): DialogState {
+    private fun resolveUnlockDialogState(state: DeckUiState, packageName: String): DialogState {
         return if (state.balanceTime < COST_TIME) {
-            DialogState.InsufficientTime
+            DialogState.InsufficientTime(packageName)
         } else {
             DialogState.ConfirmUnlock(packageName)
         }
@@ -35,10 +35,12 @@ class AppSelectionAction(
         }
     }
 
-    fun onBlockSelectedClicked() {
-        if (uiStateFlow.value.selectedApps.isNotEmpty()) {
-            uiStateFlow.update { state ->
+    fun onLockSelectedClicked() {
+        uiStateFlow.update { state ->
+            if (state.selectedApps.isNotEmpty()) {
                 state.copy(dialogState = DialogState.ConfirmLock)
+            } else {
+                state
             }
         }
     }

@@ -21,9 +21,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.theme.PasslingoTheme
+import com.miszczyk.passlingo.ui.theme.TextSize.displayHuge
+import com.miszczyk.passlingo.ui.theme.TextSize.displayMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import kotlinx.coroutines.delay
 
@@ -48,17 +49,29 @@ fun LoadingScreen(modifier: Modifier = Modifier, onAnimationFinished: () -> Unit
     }
 
     val annotatedText = buildAnnotatedString {
-        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary, fontSize = 75.sp)){
+        withStyle(
+            style = SpanStyle(
+                color = MaterialTheme.colorScheme.primary,
+                fontSize = displayMedium
+            )
+        ) {
             append(stringResource(R.string.app_name))
         }
-        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary, fontSize = 150.sp)){
+        withStyle(
+            style = SpanStyle(
+                color = MaterialTheme.colorScheme.secondary,
+                fontSize = displayHuge
+            )
+        ) {
             append('.')
         }
     }
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
             text = annotatedText,
-            modifier = modifier.fillMaxWidth().graphicsLayer { translationY = offsetY.value },
+            modifier = modifier
+                .fillMaxWidth()
+                .graphicsLayer { translationY = offsetY.value },
             textAlign = TextAlign.Center,
             fontFamily = vagRoundedBold,
         )

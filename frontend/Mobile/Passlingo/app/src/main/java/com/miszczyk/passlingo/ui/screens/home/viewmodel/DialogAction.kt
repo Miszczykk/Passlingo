@@ -1,21 +1,20 @@
 package com.miszczyk.passlingo.ui.screens.home.viewmodel
 
-import com.miszczyk.passlingo.ui.screens.home.data.LockedAppsRepository
-import com.miszczyk.passlingo.ui.screens.home.data.TimeRepository
-import com.miszczyk.passlingo.ui.screens.home.datastore.COST_TIME
-import com.miszczyk.passlingo.ui.screens.home.model.DecksUiState
+import com.miszczyk.passlingo.ui.screens.home.data.Repository
+import com.miszczyk.passlingo.ui.screens.home.model.DeckUiState
 import com.miszczyk.passlingo.ui.screens.home.model.DialogState
+import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME
+import com.miszczyk.passlingo.ui.screens.home.util.earnedTimeFor
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DialogAction(
-    private val uiStateFlow: MutableStateFlow<DecksUiState>,
-    private val viewModelScope: CoroutineScope,
-    private val lockedAppsRepository: LockedAppsRepository,
-    private val timeRepository: TimeRepository
-
+    private val uiStateFlow: MutableStateFlow<DeckUiState>,
+    private val externalScope: CoroutineScope,
+    private val lockedAppsAndEarnedTimeRepository: Repository,
 ) {
     fun onDialogCancelled() {
         uiStateFlow.update { state -> state.copy(dialogState = DialogState.None) }
@@ -23,27 +22,25 @@ class DialogAction(
 
     private fun onLockAppDialogConfirmed() {
         val selection = uiStateFlow.value.selectedApps
-        val timeEarned = (COST_TIME / 4) * selection.size
-
-        viewModelScope.launch {
-            lockedAppsRepository.addLockedApps(selection)
-            timeRepository.addTime(timeEarned)
-        }
-
-        uiStateFlow.update { state ->
-            state.copy(dialogState = DialogState.None, selectedApps = emptySet())
-        }
+        executeDialogTask(
+            task = {
+                lockedAppsAndEarnedTimeRepository.lockAppsAndAddCreditTime(selection, earnedTimeFor(selection.size))
+            },
+            onSuccessStateUpdate = { state ->
+                state.copy(dialogState = DialogState.None, selectedApps = emptySet())
+            }
+        )
     }
 
     private fun onUnlockAppDialogConfirmed(packageName: String) {
-        viewModelScope.launch {
-            lockedAppsRepository.removeSingleLockedApp(setOf(packageName))
-            timeRepository.substractTime(COST_TIME)
-        }
-
-        uiStateFlow.update { state ->
-            state.copy(dialogState = DialogState.None)
-        }
+        executeDialogTask(
+            task = {
+                lockedAppsAndEarnedTimeRepository.unlockAppAndSubtractCreditTime(packageName, COST_TIME)
+            },
+            onSuccessStateUpdate = { state ->
+                state.copy(dialogState = DialogState.None)
+            }
+        )
     }
 
     private fun onInsufficientTimeDialogConfirmed() {
@@ -61,6 +58,25 @@ class DialogAction(
             is DialogState.ConfirmLock -> onLockAppDialogConfirmed()
             is DialogState.ConfirmUnlock -> onUnlockAppDialogConfirmed(currentState.packageName)
             is DialogState.InsufficientTime -> onInsufficientTimeDialogConfirmed()
+            is DialogState.Error -> onDialogCancelled()
+        }
+    }
+
+    private fun executeDialogTask(
+        task: suspend () -> Unit,
+        onSuccessStateUpdate: (DeckUiState) -> DeckUiState
+    ) {
+        externalScope.launch {
+            runCatching {
+                task()
+            }.onSuccess {
+                uiStateFlow.update { state -> onSuccessStateUpdate(state) }
+            }.onFailure { exception ->
+                if (exception is CancellationException) throw exception
+                uiStateFlow.update { state ->
+                    state.copy(dialogState = DialogState.Error(exception.localizedMessage ?: "Unknown error occurred"))
+                }
+            }
         }
     }
 }

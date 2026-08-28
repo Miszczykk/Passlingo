@@ -4,7 +4,10 @@ import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.core.graphics.drawable.toBitmap
 import com.miszczyk.passlingo.ui.screens.home.model.AppItem
+import com.miszczyk.passlingo.ui.screens.home.util.Constants.ONE_MONTH_MILLIS
 
 class AppUsageProvider(private val context: Context) {
     fun getInstalledAppsWithUsage(): List<AppItem> {
@@ -13,7 +16,8 @@ class AppUsageProvider(private val context: Context) {
             context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
 
         val endTime = System.currentTimeMillis()
-        val startTime = endTime - (30L * 24 * 60 * 60 * 1000)
+
+        val startTime = endTime - ONE_MONTH_MILLIS
         val statsMap = usageStatsManager.queryAndAggregateUsageStats(startTime, endTime)
 
         val myPackageName = context.packageName
@@ -24,7 +28,7 @@ class AppUsageProvider(private val context: Context) {
                         app.packageName != myPackageName
             }.map { app ->
                 val appName = app.loadLabel(packageManager).toString()
-                val icon = packageManager.getApplicationIcon(app)
+                val icon = packageManager.getApplicationIcon(app).toBitmap().asImageBitmap()
                 val timeUsed = statsMap[app.packageName]?.totalTimeInForeground ?: 0L
 
                 AppItem(

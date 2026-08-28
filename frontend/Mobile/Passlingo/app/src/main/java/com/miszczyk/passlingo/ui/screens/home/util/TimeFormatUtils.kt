@@ -8,6 +8,8 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
+import com.miszczyk.passlingo.ui.screens.home.util.Constants.EARN_TIME
+import java.util.Locale
 
 @Composable
 fun convertTimeToString(
@@ -47,24 +49,25 @@ fun convertTimeToString(
     return annotatedTime
 }
 
-fun convertIntToTime(totalSeconds: Long): String{
+fun formatTime(totalSeconds: Long, forceFullFormat: Boolean = true): String {
     val hours = totalSeconds / 3600
     val minutes = (totalSeconds % 3600) / 60
     val seconds = totalSeconds % 60
 
-    return String.format("%02dh %02dm %02ds", hours, minutes, seconds)
+    return when {
+        forceFullFormat || hours > 0L -> String.format(
+            Locale.US,
+            "%02dh %02dm %02ds",
+            hours,
+            minutes,
+            seconds
+        )
+
+        minutes > 0L -> String.format(Locale.US, "%02dm %02ds", minutes, seconds)
+        else -> String.format(Locale.US, "%02ds", seconds)
+    }
 }
 
-fun formatDuration(totalSeconds: Long): String {
-    val hours = totalSeconds / 3600
-    val minutes = (totalSeconds % 3600) / 60
-    val seconds = totalSeconds % 60
-
-    return if (hours > 0) {
-        String.format("%02dh %02dm %02ds", hours, minutes, seconds)
-    } else if (minutes > 0) {
-        String.format("%02dm %02ds", minutes, seconds)
-    } else {
-        String.format("%02ds", seconds)
-    }
+fun earnedTimeFor(numberOfApplication: Int): Long {
+    return EARN_TIME * numberOfApplication
 }

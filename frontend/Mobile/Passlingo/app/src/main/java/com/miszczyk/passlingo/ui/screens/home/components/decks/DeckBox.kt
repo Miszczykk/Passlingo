@@ -27,20 +27,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.ui.screens.home.components.app.AppLockBottomSheet
+import com.miszczyk.passlingo.ui.screens.home.components.app.AppStatusDialogs
+import com.miszczyk.passlingo.ui.screens.home.model.HasPackageName
 import com.miszczyk.passlingo.ui.screens.home.util.requestUsageStatsPermission
 import com.miszczyk.passlingo.ui.screens.home.viewmodel.DeckViewModel
+import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DecksBox(viewModel: DeckViewModel = viewModel()) {
+fun DeckBox(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     val sheetState = rememberModalBottomSheetState()
     val context = LocalContext.current
@@ -73,28 +80,29 @@ fun DecksBox(viewModel: DeckViewModel = viewModel()) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 30.dp), horizontalArrangement = Arrangement.SpaceBetween,
+            .padding(horizontal = spaceExtraLarge),
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            "Earn from Decks",
+            text = stringResource(R.string.label_earn_from_decks),
             color = MaterialTheme.colorScheme.primary,
-            fontSize = 25.sp,
+            fontSize = titleLarge,
             fontFamily = vagRoundedBold,
         )
 
         IconButton(
             onClick = { viewModel.onLockIconClicked() },
             modifier = Modifier
-                .padding(15.dp)
+                .padding(spaceMediumLarge)
                 .background(
                     MaterialTheme.colorScheme.onBackground,
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(cornerRadiusDefault)
                 )
         ) {
             Icon(
                 imageVector = Icons.Default.Lock,
-                contentDescription = "Lock",
+                contentDescription = stringResource(R.string.content_desc_lock),
                 tint = animatedColorLock,
                 modifier = Modifier.scale(animatedScaleMultiplier)
             )
@@ -105,15 +113,31 @@ fun DecksBox(viewModel: DeckViewModel = viewModel()) {
         AppLockBottomSheet(
             sheetState = sheetState,
             hasUsagePermission = uiState.hasUsagePermission,
+            isLoadingApps = uiState.isLoadingApps,
             userApps = uiState.userApps,
             selectedApps = uiState.selectedApps,
-            blockedApps = uiState.lockedApps,
+            lockedApps = uiState.lockedApps,
             onAppToggled = { viewModel.onAppToggled(it) },
-            onBlockClicked = { viewModel.onBlockSelectedClicked() },
-            onRequestPermission = { requestUsageStatsPermission(context) },
+            onLockClicked = { viewModel.onLockSelectedClicked() },
+            onRequestPermission = {
+                requestUsageStatsPermission(
+                    context,
+                    onError = { errorMessage -> viewModel.showPermissionError(errorMessage) })
+            },
             onDismissRequest = { viewModel.onSheetDismissed() }
         )
     }
 
-    AppStatusDialogs(dialogState = uiState.dialogState, deckViewModel = viewModel)
+    val appName = when (val state = uiState.dialogState) {
+        is HasPackageName -> uiState.userApps.find { it.packageName == state.packageName }?.name
+            ?: ""
+
+        else -> ""
+    }
+
+    AppStatusDialogs(
+        dialogState = uiState.dialogState,
+        deckViewModel = viewModel,
+        appName = appName
+    )
 }

@@ -1,8 +1,10 @@
 package com.miszczyk.passlingo
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +19,7 @@ import com.miszczyk.passlingo.ui.screens.loading.LoadingScreen
 import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
 
 

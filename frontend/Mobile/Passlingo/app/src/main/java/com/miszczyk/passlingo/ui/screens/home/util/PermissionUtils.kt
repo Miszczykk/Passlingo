@@ -4,9 +4,10 @@ import android.app.AppOpsManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Process
 import android.provider.Settings
+import androidx.core.net.toUri
+import com.miszczyk.passlingo.R
 
 fun hasUsageStatsPermission(context: Context): Boolean {
     val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
@@ -18,14 +19,17 @@ fun hasUsageStatsPermission(context: Context): Boolean {
     return mode == AppOpsManager.MODE_ALLOWED
 }
 
-fun requestUsageStatsPermission(context: Context){
-    try{
-        val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).apply {
-            data = Uri.parse("package:${context.packageName}")
-        }
+fun requestUsageStatsPermission(context: Context,  onError: (String) -> Unit) {
+    val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).apply {
+        data = "package:${context.packageName}".toUri()
+    }
+    try {
         context.startActivity(intent)
-    }catch (e: ActivityNotFoundException){
-        val fallbackIntent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-        context.startActivity(fallbackIntent)
+    } catch (_: ActivityNotFoundException) {
+        try {
+            context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+        } catch (_: ActivityNotFoundException) {
+            onError(context.getString(R.string.toast_cannot_open_settings))
+        }
     }
 }

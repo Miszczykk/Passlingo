@@ -5,8 +5,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.ui.theme.TextSize.bodyLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.letterSpacingDefault
+import com.miszczyk.passlingo.ui.theme.TextSize.lineHeightDefault
 
 // Set of Material typography styles to start with
 val vagRoundedBlack = FontFamily(
@@ -22,9 +24,9 @@ val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
+        fontSize = bodyLarge,
+        lineHeight = lineHeightDefault,
+        letterSpacing = letterSpacingDefault
     )
     /* Other default text styles to override
     titleLarge = TextStyle(

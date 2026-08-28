@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.home.components.decks
+package com.miszczyk.passlingo.ui.screens.home.components.app
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -26,34 +26,47 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.graphics.drawable.toBitmap
+import androidx.compose.ui.res.stringResource
+import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.screens.home.model.AppItem
+import com.miszczyk.passlingo.ui.screens.home.model.AppRowState
 import com.miszczyk.passlingo.ui.screens.home.util.convertTimeToString
-import com.miszczyk.passlingo.ui.screens.home.util.formatDuration
+import com.miszczyk.passlingo.ui.screens.home.util.formatTime
+import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
+import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
+import com.miszczyk.passlingo.ui.theme.Dimens.iconLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.iconMedium
+import com.miszczyk.passlingo.ui.theme.Dimens.iconSmall
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.body
+import com.miszczyk.passlingo.ui.theme.TextSize.caption
+import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun AppListItem(app: AppItem, isChecked: Boolean, isBlocked: Boolean, onClick: () -> Unit) {
+fun AppListItem(
+    modifier: Modifier = Modifier,
+    app: AppItem,
+    appRowState: AppRowState,
+    onClick: () -> Unit
+) {
     val checkboxScale by animateFloatAsState(
-        targetValue = if (isChecked) 1.2f else 1.0f,
+        targetValue = if (appRowState == AppRowState.Selected) 1.2f else 1.0f,
         animationSpec = tween(durationMillis = 300),
         label = "CheckboxScale"
     )
 
     val rowBackgroundColor by animateColorAsState(
-        targetValue = if (isBlocked) {
+        targetValue = if (appRowState == AppRowState.Locked) {
             MaterialTheme.colorScheme.onBackground
         } else {
-            if (isChecked) MaterialTheme.colorScheme.secondary.copy(
+            if (appRowState == AppRowState.Selected) MaterialTheme.colorScheme.secondary.copy(
                 alpha = 0.15f
             ) else Color.Transparent
         },
@@ -62,38 +75,37 @@ fun AppListItem(app: AppItem, isChecked: Boolean, isBlocked: Boolean, onClick: (
     )
 
     val circleColor by animateColorAsState(
-        targetValue = if (isChecked) MaterialTheme.colorScheme.secondary else Color.Transparent,
+        targetValue = if (appRowState == AppRowState.Selected) MaterialTheme.colorScheme.secondary else Color.Transparent,
         label = "CircleColor"
     )
     val borderColor by animateColorAsState(
-        targetValue = if (isChecked) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground,
+        targetValue = if (appRowState == AppRowState.Selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground,
         label = "BorderColor"
     )
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(cornerRadiusDefault))
             .background(rowBackgroundColor)
             .clickable {
                 onClick()
             }
             .border(
-                width = 2.dp,
+                width = borderDefault,
                 color = MaterialTheme.colorScheme.onBackground,
-                shape = RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(cornerRadiusDefault)
             )
-            .padding(20.dp), verticalAlignment = Alignment.CenterVertically
+            .padding(spaceLarge), verticalAlignment = Alignment.CenterVertically
     ) {
-        val bitmap = remember(app.icon) { app.icon.toBitmap().asImageBitmap() }
 
         Image(
-            bitmap = bitmap,
+            bitmap = app.icon,
             contentDescription = app.name,
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier.size(iconLarge)
         )
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(spaceDefault))
 
 
         Column(
@@ -104,14 +116,14 @@ fun AppListItem(app: AppItem, isChecked: Boolean, isBlocked: Boolean, onClick: (
             Text(
                 text = app.name,
                 fontFamily = vagRoundedBold,
-                fontSize = 20.sp,
+                fontSize = titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
                 text = convertTimeToString(
-                    rawTime = formatDuration(app.timeInForeground / 1000),
-                    numberFont = 15.sp,
-                    textFont = 12.sp
+                    rawTime = formatTime(app.timeInForeground / 1000, false),
+                    numberFont = body,
+                    textFont = caption
                 ),
                 fontFamily = vagRoundedBold,
             )
@@ -120,28 +132,31 @@ fun AppListItem(app: AppItem, isChecked: Boolean, isBlocked: Boolean, onClick: (
 
         Box(
             modifier = Modifier
-                .size(24.dp)
+                .size(iconMedium)
                 .scale(checkboxScale)
-                .border(width = 2.dp, color = borderColor, shape = CircleShape)
+                .border(width = borderDefault, color = borderColor, shape = CircleShape)
                 .background(color = circleColor, shape = CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            if (isBlocked) {
-                Icon(
+
+            when(appRowState){
+                AppRowState.Locked -> {
+                    Icon(
                     imageVector = Icons.Default.Lock,
-                    contentDescription = "Locked",
+                    contentDescription = stringResource(R.string.content_desc_locked),
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(iconSmall)
                 )
-            } else {
-                if (isChecked) {
+                }
+                AppRowState.Selected -> {
                     Icon(
                         imageVector = Icons.Default.Check,
-                        contentDescription = "Checked",
+                        contentDescription = stringResource(R.string.content_desc_checked),
                         tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(iconSmall)
                     )
                 }
+                else -> {}
             }
         }
     }

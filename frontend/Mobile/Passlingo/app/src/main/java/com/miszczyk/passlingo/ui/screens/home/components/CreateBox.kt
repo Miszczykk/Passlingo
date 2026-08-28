@@ -34,15 +34,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.ui.theme.Dimens.animatedRadiusLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.animatedRadiusSmall
+import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
+import com.miszczyk.passlingo.ui.theme.Dimens.elevationMedium
+import com.miszczyk.passlingo.ui.theme.Dimens.iconLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceNone
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceSmall
+import com.miszczyk.passlingo.ui.theme.TextSize.headline
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateBox() {
+fun CreateBox(modifier: Modifier = Modifier) {
     var isAnimating by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
@@ -75,26 +85,26 @@ fun CreateBox() {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 30.dp),
-            shape = RoundedCornerShape(16.dp),
+                .padding(horizontal = spaceExtraLarge),
+            shape = RoundedCornerShape(cornerRadiusDefault),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             elevation = ButtonDefaults.buttonElevation(
-                defaultElevation = 6.dp,
-                pressedElevation = 6.dp
+                defaultElevation = elevationMedium,
+                pressedElevation = elevationMedium
             ),
-            contentPadding = PaddingValues(0.dp)
+            contentPadding = PaddingValues(spaceNone)
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 val circleColor = MaterialTheme.colorScheme.secondary.copy(alpha = animatedAlpha)
                 Canvas(modifier = Modifier.matchParentSize()) {
                     drawCircle(
                         color = circleColor,
-                        radius = 250f * animatedRadiusMultiplier,
+                        radius = animatedRadiusLarge.toPx() * animatedRadiusMultiplier,
                         center = Offset(x = size.width, y = 0f)
                     )
                     drawCircle(
                         color = circleColor,
-                        radius = 200f * animatedRadiusMultiplier,
+                        radius = animatedRadiusSmall.toPx() * animatedRadiusMultiplier,
                         center = Offset(x = 0f, y = size.height)
                     )
                 }
@@ -103,7 +113,7 @@ fun CreateBox() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 30.dp)
+                        .padding(vertical = spaceExtraLarge)
                 ) {
                     Box(
                         contentAlignment = Alignment.Center,
@@ -112,22 +122,22 @@ fun CreateBox() {
                                 color = MaterialTheme.colorScheme.secondary,
                                 shape = CircleShape
                             )
-                            .padding(8.dp)
+                            .padding(spaceSmall)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = "Create flashcards",
+                            contentDescription = stringResource(R.string.action_create_flashcards),
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier
-                                .size(40.dp)
+                                .size(iconLarge)
                                 .rotate(animatedRotation)
                         )
                     }
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(spaceLarge))
                     Text(
-                        text = "Create flashcards",
+                        text = stringResource(R.string.action_create_flashcards),
                         color = MaterialTheme.colorScheme.background,
-                        fontSize = 30.sp,
+                        fontSize = headline,
                         fontFamily = vagRoundedBold,
                     )
                 }
