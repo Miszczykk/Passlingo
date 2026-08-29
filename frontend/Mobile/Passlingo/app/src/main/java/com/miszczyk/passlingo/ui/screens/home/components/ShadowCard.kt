@@ -69,6 +69,7 @@ fun TimeToCard(
         textAlign = TextAlign.Center,
         fontFamily = vagRoundedBlack,
         maxLines = 1,
+        lineHeight = numberFontSize,
         modifier = modifier,
     )
 }

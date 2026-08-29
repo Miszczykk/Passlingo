@@ -131,7 +131,6 @@ fun DeckBox(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewModel(
     val appName = when (val state = uiState.dialogState) {
         is HasPackageName -> uiState.userApps.find { it.packageName == state.packageName }?.name
             ?: ""
-
         else -> ""
     }
 

@@ -22,7 +22,6 @@ import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceHuge
 import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 
-
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewModel()) {
@@ -38,7 +37,6 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewMod
         DeckBox()
     }
 }
-
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Preview(showBackground = true)
