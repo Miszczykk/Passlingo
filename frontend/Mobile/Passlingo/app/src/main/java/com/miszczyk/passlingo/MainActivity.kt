@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.miszczyk.passlingo.ui.screens.createDeck.CreateDeckScreen
 import com.miszczyk.passlingo.ui.screens.home.HomeScreen
 import com.miszczyk.passlingo.ui.screens.loading.LoadingScreen
 import com.miszczyk.passlingo.ui.theme.PasslingoTheme
@@ -21,7 +22,6 @@ import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
-
 
         super.onCreate(savedInstanceState)
         setContent {
@@ -33,7 +33,8 @@ class MainActivity : ComponentActivity() {
                     containerColor = MaterialTheme.colorScheme.background
                 ) { innerPadding ->
                     if (isLoadingFinished) {
-                        HomeScreen(modifier = Modifier.padding(innerPadding))
+//                        HomeScreen(modifier = Modifier.padding(innerPadding)) TODO CHANGE AFTER MAKE
+                        CreateDeckScreen(modifier = Modifier.padding(innerPadding))
                     } else {
                         LoadingScreen(
                             modifier = Modifier.padding(innerPadding),
