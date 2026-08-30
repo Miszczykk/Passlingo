@@ -24,7 +24,7 @@ import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewModel()) {
+fun HomeScreen(modifier: Modifier = Modifier, onCreateDeckClicked: () -> Unit, viewModel: DeckViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -32,7 +32,7 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewMod
         Spacer(modifier = Modifier.height(spaceExtraLarge))
         BalanceBox(balanceTime = uiState.balanceTime)
         Spacer(modifier = Modifier.height(spaceHuge))
-        CreateBox()
+        CreateBox(onClick = onCreateDeckClicked)
         Spacer(modifier = Modifier.height(spaceHuge))
         DeckBox()
     }
@@ -43,6 +43,6 @@ fun HomeScreen(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewMod
 @Composable
 fun HomePreview() {
     PasslingoTheme {
-        HomeScreen()
+        HomeScreen(onCreateDeckClicked = {})
     }
 }

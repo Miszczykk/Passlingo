@@ -28,13 +28,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.elevationSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceVeryLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
@@ -57,7 +58,7 @@ fun DeckDetailsSection(modifier: Modifier = Modifier) {
                 ),
                 textStyle = TextStyle(
                     fontFamily = vagRoundedLight,
-                    fontSize = 21.sp,
+                    fontSize = titleMedium,
                     color = MaterialTheme.colorScheme.primary
                 ),
                 decorator = { innerTextField ->
@@ -73,18 +74,18 @@ fun DeckDetailsSection(modifier: Modifier = Modifier) {
                                 RoundedCornerShape(cornerRadiusDefault)
                             )
                             .border(
-                                1.dp,
+                                borderThin,
                                 MaterialTheme.colorScheme.onBackground,
                                 RoundedCornerShape(cornerRadiusDefault)
                             )
-                            .padding(horizontal = 30.dp, vertical = 25.dp),
+                            .padding(horizontal = spaceExtraLarge, vertical = spaceVeryLarge),
                         contentAlignment = Alignment.CenterStart
                     ) {
                         Text(
                             text = "e.g, Spanish Verbs A1",
                             color = MaterialTheme.colorScheme.onSecondary,
                             fontFamily = vagRoundedLight,
-                            fontSize = 21.sp,
+                            fontSize = titleMedium,
                             modifier = Modifier.alpha(if (state.text.isEmpty()) 1f else 0f)
 
                         )
@@ -94,7 +95,7 @@ fun DeckDetailsSection(modifier: Modifier = Modifier) {
             )
         }
 
-        Spacer(modifier = Modifier.width(30.dp))
+        Spacer(modifier = Modifier.width(spaceExtraLarge))
 
         LabeledContent(modifier, "ICON", Alignment.CenterHorizontally) {
             IconButton(

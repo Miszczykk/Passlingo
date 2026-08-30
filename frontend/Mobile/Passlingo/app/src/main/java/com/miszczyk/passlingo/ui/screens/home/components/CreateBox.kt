@@ -52,25 +52,25 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateBox(modifier: Modifier = Modifier) {
+fun CreateBox(modifier: Modifier = Modifier, onClick: () -> Unit) {
     var isAnimating by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
     val animatedAlpha by animateFloatAsState(
         targetValue = if (isAnimating) 0.2f else 0.15f,
-        animationSpec = tween(durationMillis = 300),
+        animationSpec = tween(durationMillis = 150),
         label = "AlphaAnimation"
     )
 
     val animatedRadiusMultiplier by animateFloatAsState(
         targetValue = if (isAnimating) 1.5f else 1.0f,
-        animationSpec = tween(durationMillis = 300),
+        animationSpec = tween(durationMillis = 150),
         label = "RadiusAnimation"
     )
 
     val animatedRotation by animateFloatAsState(
         targetValue = if (isAnimating) 45f else 0f,
-        animationSpec = tween(durationMillis = 300),
+        animationSpec = tween(durationMillis = 150),
         label = "RotationAnimation"
     )
 
@@ -79,8 +79,9 @@ fun CreateBox(modifier: Modifier = Modifier) {
             onClick = {
                 coroutineScope.launch {
                     isAnimating = true
-                    delay(300)
+                    delay(150)
                     isAnimating = false
+                    onClick()
                 }
             },
             modifier = Modifier

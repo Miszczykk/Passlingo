@@ -15,22 +15,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.sp
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.headline
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun Header() {
+fun Header(onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = spaceExtraLarge)
     ) {
         IconButton(
-            onClick = { },
+            onClick = { onClick() },
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .padding(spaceMediumLarge)
@@ -49,7 +49,7 @@ fun Header() {
             modifier = Modifier.align(Alignment.Center),
             text = "Create Deck",
             color = MaterialTheme.colorScheme.primary,
-            fontSize = 30.sp,
+            fontSize = headline,
             fontFamily = vagRoundedBold,
         )
     }

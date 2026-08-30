@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.miszczyk.passlingo.ui.screens.createDeck.CreateDeckScreen
 import com.miszczyk.passlingo.ui.screens.home.HomeScreen
+import com.miszczyk.passlingo.ui.screens.home.model.Screen
 import com.miszczyk.passlingo.ui.screens.loading.LoadingScreen
 import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 
@@ -26,20 +27,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PasslingoTheme {
-                var isLoadingFinished by remember { mutableStateOf(false) }
+                var currentScreen by remember { mutableStateOf<Screen>(Screen.Loading) }
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     containerColor = MaterialTheme.colorScheme.background
                 ) { innerPadding ->
-                    if (isLoadingFinished) {
-//                        HomeScreen(modifier = Modifier.padding(innerPadding)) TODO CHANGE AFTER MAKE
-                        CreateDeckScreen(modifier = Modifier.padding(innerPadding))
-                    } else {
-                        LoadingScreen(
-                            modifier = Modifier.padding(innerPadding),
-                            onAnimationFinished = { isLoadingFinished = true }
-                        )
+                    when(currentScreen){
+                        Screen.Loading -> LoadingScreen(modifier = Modifier.padding(innerPadding), onAnimationFinished = { currentScreen = Screen.Home })
+                        Screen.Home ->  HomeScreen(modifier = Modifier.padding(innerPadding), onCreateDeckClicked = { currentScreen = Screen.CreateDeck })
+                        Screen.CreateDeck -> CreateDeckScreen(modifier = Modifier.padding(innerPadding), onBack = { currentScreen = Screen.Home })
                     }
                 }
             }
