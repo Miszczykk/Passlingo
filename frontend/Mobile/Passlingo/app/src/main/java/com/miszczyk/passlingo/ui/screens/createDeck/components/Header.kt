@@ -26,14 +26,12 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 fun Header(onClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = spaceExtraLarge)
+            .fillMaxWidth().padding(horizontal = spaceExtraLarge)
     ) {
         IconButton(
             onClick = { onClick() },
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(spaceMediumLarge)
                 .background(
                     MaterialTheme.colorScheme.onBackground,
                     shape = RoundedCornerShape(cornerRadiusDefault)

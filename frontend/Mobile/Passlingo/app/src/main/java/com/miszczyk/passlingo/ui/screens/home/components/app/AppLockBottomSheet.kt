@@ -92,7 +92,7 @@ fun AppLockBottomSheet(
                 }
             }
 
-            Spacer(modifier = Modifier.height(spaceMedium))
+            Spacer(modifier = Modifier.height(spaceMediumLarge))
 
             Text(
                 stringResource(R.string.prompt_app_lock_description),
@@ -128,7 +128,6 @@ fun AppLockBottomSheet(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BottomSheetHeader(onCloseClicked: () -> Unit) {
-
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -146,7 +145,6 @@ private fun BottomSheetHeader(onCloseClicked: () -> Unit) {
                 onCloseClicked()
             },
             modifier = Modifier
-                .padding(spaceMediumLarge)
                 .background(
                     MaterialTheme.colorScheme.onBackground,
                     shape = CircleShape

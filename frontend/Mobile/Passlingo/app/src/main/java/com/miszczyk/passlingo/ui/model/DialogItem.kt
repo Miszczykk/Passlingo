@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.home.model
+package com.miszczyk.passlingo.ui.model
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color

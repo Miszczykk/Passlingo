@@ -13,7 +13,8 @@ private val LightColorScheme = lightColorScheme(
     primary = navy,
     secondary = yellow,
     onSecondary = mono500,
-    onBackground = mono200
+    onBackground = mono200,
+    error = red
 )
 
 @Composable

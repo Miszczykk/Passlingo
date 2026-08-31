@@ -23,7 +23,6 @@ import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContent {
             PasslingoTheme {
@@ -43,4 +42,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-

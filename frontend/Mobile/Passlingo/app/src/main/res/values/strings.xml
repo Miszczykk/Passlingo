@@ -1,11 +1,13 @@
 <resources>
+    <!--    stringResource(R.string.)   -->
     <string name="app_name">Passlingo</string>
-<!--    Content Description-->
+    <!--    Content Description-->
     <string name="content_desc_close">Close</string>
     <string name="content_desc_accessibility">Accessibility</string>
     <string name="content_desc_lock">Lock</string>
     <string name="content_desc_locked">Locked</string>
     <string name="content_desc_checked">Checked</string>
+    <string name="content_desc_deck_icon">Deck Icon</string>
 
     <!-- Actions / Buttons -->
     <string name="action_grant_permission">Grant Permission</string>
@@ -16,6 +18,11 @@
     <string name="action_pay_and_unlock">Pay &amp; Unlock</string>
     <string name="action_keep_studying">Keep studying</string>
     <string name="action_create_flashcards">Create flashcards</string>
+    <string name="action_save_deck">Save Deck</string>
+    <string name="action_enter_name_add_cards">Enter name &amp; add cards</string>
+    <string name="action_add_cards_first">Add cards first</string>
+    <string name="action_enter_deck_name">Enter deck name</string>
+    <string name="action_confirm">Confirm</string>
 
     <!-- Labels / Titles -->
     <string name="label_app_lock">App Lock</string>
@@ -23,11 +30,16 @@
     <string name="label_requires">REQUIRES</string>
     <string name="label_earn_from_decks">Earn from Decks</string>
     <string name="label_available_balance">AVAILABLE BALANCE</string>
+    <string name="label_deck_cards">Deck Cards</string>
+    <string name="label_cards_added">%1$d added</string>
+    <string name="label_deck_name">DECK NAME</string>
+    <string name="label_icon">ICON</string>
 
     <!-- Prompts & Messages -->
     <string name="prompt_app_lock_description">Select apps you want to restrict access to.\nUnlocking them will require studying!</string>
     <string name="prompt_usage_access_required">Usage access is required to lock apps!</string>
     <string name="prompt_select_apps_to_lock">Select apps to lock</string>
+    <string name="prompt_deck_name_hint">e.g., Spanish Verbs A1</string>
     <string name="toast_cannot_open_settings">Cannot open settings</string>
 
     <!-- Dialogs -->
@@ -41,5 +53,11 @@
     <string name="dialog_message_insufficient_time">You don\'t have enough earned study time to unlock %1$s.</string>
 
     <string name="dialog_title_error">An error occurred</string>
+
+    <string name="dialog_title_confirm_save">Save Deck?</string>
+    <string name="dialog_message_confirm_save">Are you sure you want to save this deck? Once saved, it will be added to your personal library on the home screen. You\'ll be able to review these flashcards whenever you are ready to study.</string>
+
+    <string name="dialog_title_discard_changes">Discard changes?</string>
+    <string name="dialog_message_discard_changes">Are you sure you want to leave? Your unsaved flashcards and deck details will be lost.</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.home.components
+package com.miszczyk.passlingo.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.miszczyk.passlingo.ui.screens.home.model.DialogItem
+import com.miszczyk.passlingo.ui.model.DialogItem
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge

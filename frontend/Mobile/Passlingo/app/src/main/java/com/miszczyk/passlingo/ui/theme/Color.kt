@@ -15,3 +15,4 @@ val mono900 = Color(0xFF18181b)
 
 val yellow = Color(0xFFddea0c)
 val navy = Color(0xFF021623)
+val red = Color(0xFFE7000B)

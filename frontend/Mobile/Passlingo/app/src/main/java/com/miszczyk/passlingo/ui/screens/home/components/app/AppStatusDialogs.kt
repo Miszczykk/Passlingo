@@ -9,11 +9,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
-import com.miszczyk.passlingo.ui.screens.home.components.DialogComponent
+import com.miszczyk.passlingo.ui.components.DialogComponent
 import com.miszczyk.passlingo.ui.screens.home.components.ShadowCard
 import com.miszczyk.passlingo.ui.screens.home.components.TimeToCard
 import com.miszczyk.passlingo.ui.screens.home.components.TitleToCard
-import com.miszczyk.passlingo.ui.screens.home.model.DialogItem
+import com.miszczyk.passlingo.ui.model.DialogItem
 import com.miszczyk.passlingo.ui.screens.home.model.DialogState
 import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME
 import com.miszczyk.passlingo.ui.screens.home.util.formatTime

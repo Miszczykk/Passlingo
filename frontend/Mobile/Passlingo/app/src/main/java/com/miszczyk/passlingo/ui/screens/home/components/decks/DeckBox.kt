@@ -94,7 +94,6 @@ fun DeckBox(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewModel(
         IconButton(
             onClick = { viewModel.onLockIconClicked() },
             modifier = Modifier
-                .padding(spaceMediumLarge)
                 .background(
                     MaterialTheme.colorScheme.onBackground,
                     shape = RoundedCornerShape(cornerRadiusDefault)

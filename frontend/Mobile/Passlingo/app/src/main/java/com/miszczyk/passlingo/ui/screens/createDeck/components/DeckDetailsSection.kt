@@ -11,9 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
-import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +26,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
@@ -39,23 +37,18 @@ import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
-fun DeckDetailsSection(modifier: Modifier = Modifier) {
+fun DeckDetailsSection(modifier: Modifier = Modifier, state: TextFieldState) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = spaceExtraLarge),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        LabeledContent(modifier.weight(1f), "DECK NAME") {
-            val state = rememberTextFieldState("")
+
+
+        LabeledContent(modifier.weight(1f), stringResource(R.string.label_deck_name)) {
             BasicTextField(
                 state = state,
                 lineLimits = TextFieldLineLimits.SingleLine,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    autoCorrectEnabled = false
-                ),
                 textStyle = TextStyle(
                     fontFamily = vagRoundedLight,
                     fontSize = titleMedium,
@@ -82,7 +75,7 @@ fun DeckDetailsSection(modifier: Modifier = Modifier) {
                         contentAlignment = Alignment.CenterStart
                     ) {
                         Text(
-                            text = "e.g, Spanish Verbs A1",
+                            text = stringResource(R.string.prompt_deck_name_hint),
                             color = MaterialTheme.colorScheme.onSecondary,
                             fontFamily = vagRoundedLight,
                             fontSize = titleMedium,
@@ -97,7 +90,11 @@ fun DeckDetailsSection(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.width(spaceExtraLarge))
 
-        LabeledContent(modifier, "ICON", Alignment.CenterHorizontally) {
+        LabeledContent(
+            modifier,
+            stringResource(R.string.label_icon),
+            Alignment.CenterHorizontally
+        ) {
             IconButton(
                 onClick = { },
                 modifier = Modifier
@@ -110,11 +107,11 @@ fun DeckDetailsSection(modifier: Modifier = Modifier) {
             ) {
                 Icon(
                     painter = painterResource(R.drawable.deck_animal_penguinopithecus),
-                    contentDescription = stringResource(R.string.content_desc_lock), //TODO to change
+                    contentDescription = stringResource(R.string.content_desc_deck_icon),
                     tint = MaterialTheme.colorScheme.secondary,
-
-                    )
+                )
             }
         }
+
     }
 }
