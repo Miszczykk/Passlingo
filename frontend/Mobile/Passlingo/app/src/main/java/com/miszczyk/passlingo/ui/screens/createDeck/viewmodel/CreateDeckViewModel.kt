@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.screens.createDeck.model.CreateDeckDialogState
 import com.miszczyk.passlingo.ui.screens.createDeck.model.CreateDeckUiState
+import com.miszczyk.passlingo.ui.screens.createDeck.model.Flashcard
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,26 +22,29 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
     private val _navigateBack = Channel<Unit>(Channel.BUFFERED)
     val navigateBack = _navigateBack.receiveAsFlow()
 
-    private val dialogAction = CreateDeckDialogAction(_uiState, viewModelScope, _navigateBack)
+    private val dialogAction = CreateDeckDialogAction(_uiState, viewModelScope, _navigateBack, clearScreen = {clearScreen()})
+
+    val deckName: TextFieldState = TextFieldState("")
+    val frontCreateCardState: TextFieldState = TextFieldState("")
+    val backCreateCardState: TextFieldState = TextFieldState("")
 
 
     fun onDialogCancelled() = dialogAction.onDialogCancelled()
     fun onDialogConfirmed() = dialogAction.onDialogConfirmed()
     fun onBack() = dialogAction.onDiscardDialogConfirmed()
 
-    fun onSaveDeckClicked(deckName: String, addedCards: Int) {
-        if (deckName.isNotBlank() && addedCards > 0) {
+    fun onSaveDeckClicked() {
+        if (deckName.text.toString().isNotBlank() && _uiState.value.cards.isNotEmpty()) {
             _uiState.update { it.copy(dialogState = CreateDeckDialogState.SaveDeck) }
         }
     }
 
-    fun onBackClicked(deckName: String, addedCards: Int) {
-        if(deckName.isNotBlank() || addedCards > 0){
+    fun onBackClicked() {
+        if(deckName.text.toString().isNotBlank() || _uiState.value.cards.isNotEmpty()){
             _uiState.update { it.copy(dialogState = CreateDeckDialogState.DiscardChanges) }
         }else{
             onBack()
         }
-
     }
 
     fun onSelectIconClicked() {
@@ -52,14 +56,18 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
         onSheetDismissed()
     }
 
-    fun onAddToDeckClicked(addedCards: Int, frontCardState: TextFieldState, backCardState: TextFieldState) {
-        if (frontCardState.text.toString().isNotBlank() && backCardState.text.toString()
-                .isNotBlank()
-        ) {
-            _uiState.update { it.copy(addedCards = addedCards + 1) }
-
-            frontCardState.edit { replace(0, length, "") }
-            backCardState.edit { replace(0, length, "") }
+    fun onAddToDeckClicked() {
+        val frontText = frontCreateCardState.text.toString()
+        val backText = backCreateCardState.text.toString()
+        if (frontCreateCardState.text.toString().isNotBlank() && backCreateCardState.text.toString().isNotBlank()) {
+            val newCard = Flashcard(front = frontText, back = backText)
+            _uiState.update { currentState ->
+                currentState.copy(
+                    cards = currentState.cards + newCard
+                )
+            }
+            frontCreateCardState.edit { replace(0, length, "") }
+            backCreateCardState.edit { replace(0, length, "") }
         } else {
             _uiState.update { it.copy(dialogState = CreateDeckDialogState.Error(getApplication<Application>().getString(R.string.dialog_message_incomplete_flashcards))) }
         }
@@ -67,5 +75,12 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
 
     fun onSheetDismissed() {
         _uiState.update { it.copy(showBottomSheet = false) }
+    }
+
+    fun clearScreen(){
+        _uiState.update { it.copy(cards = emptyList()) }
+        deckName.edit { replace(0, length, "") }
+        frontCreateCardState.edit { replace(0, length, "") }
+        backCreateCardState.edit { replace(0, length, "") }
     }
 }

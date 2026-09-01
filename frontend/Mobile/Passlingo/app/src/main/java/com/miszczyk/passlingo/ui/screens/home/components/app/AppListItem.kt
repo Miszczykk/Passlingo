@@ -127,7 +127,6 @@ fun AppListItem(
                 ),
                 fontFamily = vagRoundedBold,
             )
-
         }
 
         Box(
@@ -142,11 +141,11 @@ fun AppListItem(
             when(appRowState){
                 AppRowState.Locked -> {
                     Icon(
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = stringResource(R.string.content_desc_locked),
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(iconSmall)
-                )
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = stringResource(R.string.content_desc_locked),
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(iconSmall)
+                    )
                 }
                 AppRowState.Selected -> {
                     Icon(

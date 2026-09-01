@@ -11,13 +11,16 @@ import kotlinx.coroutines.launch
 class CreateDeckDialogAction(
     private val uiStateFlow: MutableStateFlow<CreateDeckUiState>,
     private val externalScope: CoroutineScope,
-    private val navigateBack :  Channel<Unit>
+    private val navigateBack:  Channel<Unit>,
+    private val clearScreen: () -> Unit
 ){
     fun onDialogCancelled() {
         uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
+
     }
 
     fun onDiscardDialogConfirmed(){
+        clearScreen()
         uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
         externalScope.launch {
             navigateBack.send(Unit)
@@ -26,7 +29,9 @@ class CreateDeckDialogAction(
 
     private fun onSaveDeckDialogConfirmed(){
         //TODO SAVE DECK
+        clearScreen()
         uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
+
 
         externalScope.launch {
             navigateBack.send(Unit)

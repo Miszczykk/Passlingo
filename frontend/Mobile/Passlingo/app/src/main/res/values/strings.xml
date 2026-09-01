@@ -9,6 +9,8 @@
     <string name="content_desc_checked">Checked</string>
     <string name="content_desc_deck_icon">Deck Icon</string>
     <string name="content_desc_back">Back</string>
+    <string name="content_desc_edit">Edit</string>
+    <string name="content_desc_delete">Delete</string>
 
     <!-- Actions / Buttons -->
     <string name="action_grant_permission">Grant Permission</string>
