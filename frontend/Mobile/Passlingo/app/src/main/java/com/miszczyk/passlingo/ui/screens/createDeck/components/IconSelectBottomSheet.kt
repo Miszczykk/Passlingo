@@ -16,11 +16,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
@@ -70,8 +66,6 @@ fun IconSelectBottomSheet(
 
             HorizontalDivider(MaterialTheme.colorScheme.onSecondary)
 
-            Spacer(modifier = Modifier.height(spaceExtraLarge))
-
             IconListContent(deckIconsList, currentIcon = currentIcon, onIconClicked = onIconClicked)
         }
     }
@@ -79,18 +73,16 @@ fun IconSelectBottomSheet(
 
 @Composable
 private fun IconListContent(icons: List<Int>, currentIcon: Int, onIconClicked: (Int) -> Unit) {
-    var selectedIcon by remember { mutableStateOf(currentIcon) }
-
     LazyVerticalGrid(
         columns = GridCells.Fixed(4),
-        contentPadding = PaddingValues(horizontal = spaceExtraLarge),
+        contentPadding = PaddingValues(spaceExtraLarge),
         horizontalArrangement = Arrangement.spacedBy(spaceExtraLarge),
         verticalArrangement = Arrangement.spacedBy(spaceExtraLarge)
     ) {
         items(icons) { iconRes ->
             IconItem(
                 iconResId = iconRes,
-                isSelected = selectedIcon == iconRes,
+                isSelected = iconRes == currentIcon,
                 onClick = {
                     onIconClicked(iconRes)
                 }

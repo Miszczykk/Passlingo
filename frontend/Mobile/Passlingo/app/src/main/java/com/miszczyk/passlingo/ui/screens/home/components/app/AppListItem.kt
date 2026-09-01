@@ -35,8 +35,8 @@ import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.screens.home.model.AppItem
 import com.miszczyk.passlingo.ui.screens.home.model.AppRowState
-import com.miszczyk.passlingo.ui.screens.home.util.convertTimeToString
-import com.miszczyk.passlingo.ui.screens.home.util.formatTime
+import com.miszczyk.passlingo.ui.util.convertTimeToString
+import com.miszczyk.passlingo.ui.util.formatTime
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.iconLarge

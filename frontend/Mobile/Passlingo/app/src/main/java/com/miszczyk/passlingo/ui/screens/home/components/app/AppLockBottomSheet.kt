@@ -39,7 +39,7 @@ import com.miszczyk.passlingo.ui.components.BottomSheetHeader
 import com.miszczyk.passlingo.ui.components.HorizontalDivider
 import com.miszczyk.passlingo.ui.screens.home.model.AppItem
 import com.miszczyk.passlingo.ui.screens.home.model.AppRowState
-import com.miszczyk.passlingo.ui.screens.home.util.earnedTimeFor
+import com.miszczyk.passlingo.ui.util.earnedTimeFor
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge

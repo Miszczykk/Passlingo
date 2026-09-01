@@ -4,7 +4,7 @@ import com.miszczyk.passlingo.ui.screens.home.data.Repository
 import com.miszczyk.passlingo.ui.screens.home.model.DeckUiState
 import com.miszczyk.passlingo.ui.screens.home.model.DialogState
 import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME
-import com.miszczyk.passlingo.ui.screens.home.util.earnedTimeFor
+import com.miszczyk.passlingo.ui.util.earnedTimeFor
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

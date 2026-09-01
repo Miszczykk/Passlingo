@@ -10,5 +10,7 @@ data class CreateDeckUiState(
     val deckName: TextFieldState = TextFieldState(""),
     val deckIcon: Int = R.drawable.deck_animal_bear,
 
-    val addedCards: Int = 0
+    val addedCards: Int = 0,
+    val frontCardWrite: TextFieldState = TextFieldState(""),
+    val backCardWrite: TextFieldState = TextFieldState(""),
 )

@@ -14,7 +14,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
-import com.miszczyk.passlingo.ui.screens.home.util.convertTimeToString
+import com.miszczyk.passlingo.ui.util.convertTimeToString
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.elevationSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge

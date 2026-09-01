@@ -11,19 +11,21 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.text.TextStyle
 import com.miszczyk.passlingo.ui.components.HorizontalDivider
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumPlus
+import com.miszczyk.passlingo.ui.theme.TextSize.body
+import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
+import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
 fun CardSideInput(
@@ -37,12 +39,12 @@ fun CardSideInput(
     Column(horizontalAlignment = Alignment.Start, modifier = modifier) {
         Text(
             text = label.uppercase(),
-            fontSize = 15.sp,
+            fontSize = body,
             color = MaterialTheme.colorScheme.primary,
             fontFamily = vagRoundedBold,
         )
 
-        Spacer(modifier = Modifier.height(13.dp))
+        Spacer(modifier = Modifier.height(spaceMediumPlus))
 
         BasicTextField(
             state = state,
@@ -52,7 +54,7 @@ fun CardSideInput(
             lineLimits = TextFieldLineLimits.SingleLine,
             textStyle = TextStyle(
                 fontFamily = vagRoundedBold,
-                fontSize = 20.sp,
+                fontSize = titleMedium,
                 color = MaterialTheme.colorScheme.primary
             ),
             decorator = { innerTextField ->
@@ -67,13 +69,13 @@ fun CardSideInput(
                             text = hintText,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = vagRoundedBold,
-                            fontSize = 20.sp,
+                            fontSize = titleMedium,
                             modifier = Modifier.alpha(if (state.text.isEmpty()) 1f else 0f)
                         )
                         innerTextField()
                     }
 
-                    Spacer(modifier = Modifier.height(5.dp))
+                    Spacer(modifier = Modifier.height(spaceExtraSmall))
                     HorizontalDivider(
                         (if (!isFocused) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.secondary),
                         3f

@@ -16,7 +16,7 @@ import com.miszczyk.passlingo.ui.components.TitleToCard
 import com.miszczyk.passlingo.ui.model.DialogItem
 import com.miszczyk.passlingo.ui.screens.home.model.DialogState
 import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME
-import com.miszczyk.passlingo.ui.screens.home.util.formatTime
+import com.miszczyk.passlingo.ui.util.formatTime
 import com.miszczyk.passlingo.ui.screens.home.viewmodel.DeckViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
 import com.miszczyk.passlingo.ui.theme.TextSize.small

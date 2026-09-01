@@ -3,6 +3,8 @@ package com.miszczyk.passlingo.ui.theme
 import androidx.compose.ui.unit.dp
 
 object Dimens {
+    val elevationNone = 0.dp
+    val elevationExtraSmall = 0.5.dp
     val borderThin = 1.dp
     val borderDefault = 2.dp
     val elevationSmall = 3.dp
@@ -14,6 +16,9 @@ object Dimens {
     val iconSmall = 16.dp
     val iconMedium = 24.dp
     val iconLarge = 40.dp
+    val iconExtraLarge = 48.dp
+    val iconHuge = 60.dp
+    val iconGiant = 75.dp
     val animatedRadiusSmall = 80.dp
     val animatedRadiusLarge = 100.dp
 
@@ -21,6 +26,7 @@ object Dimens {
     val spaceExtraSmall = 5.dp
     val spaceSmall = 8.dp
     val spaceMedium = 10.dp
+    val spaceMediumPlus = 13.dp
     val spaceMediumLarge = 15.dp
     val spaceDefault = 16.dp
     val spaceLarge = 20.dp

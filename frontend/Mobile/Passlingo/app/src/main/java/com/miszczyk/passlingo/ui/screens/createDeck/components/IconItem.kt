@@ -15,10 +15,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
+import com.miszczyk.passlingo.ui.theme.Dimens.elevationNone
 import com.miszczyk.passlingo.ui.theme.Dimens.elevationSmall
+import com.miszczyk.passlingo.ui.theme.Dimens.iconExtraLarge
 
 @Composable
 fun IconItem(
@@ -37,14 +39,14 @@ fun IconItem(
         onClick = { onClick() },
         modifier = Modifier
             .shadow(
-                elevation = if (isSelected) elevationSmall else 0.dp,
+                elevation = if (isSelected) elevationSmall else elevationNone,
                 shape = RoundedCornerShape(cornerRadiusDefault)
             )
             .aspectRatio(1f)
             .clip(RoundedCornerShape(cornerRadiusDefault))
             .background(backgroundColor)
             .border(
-                width = 2.dp,
+                width = borderDefault,
                 color = borderColor,
                 shape = RoundedCornerShape(cornerRadiusDefault)
             )
@@ -53,7 +55,7 @@ fun IconItem(
             painter = painterResource(id = iconResId),
             contentDescription = stringResource(R.string.content_desc_deck_icon),
             tint = iconColor,
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier.size(iconExtraLarge)
         )
     }
 }

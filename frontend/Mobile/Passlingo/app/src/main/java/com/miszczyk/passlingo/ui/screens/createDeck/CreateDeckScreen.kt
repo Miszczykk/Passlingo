@@ -30,6 +30,7 @@ import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
+import com.miszczyk.passlingo.ui.util.DeckIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +46,7 @@ fun CreateDeckScreen(modifier: Modifier = Modifier, onBack: () -> Unit, viewMode
 
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(spaceLarge))
-        Header(onClick = {viewModel.onBackClicked()})
+        Header(onClick = {viewModel.onBackClicked(uiState.deckName.text.toString(), uiState.addedCards)})
         Spacer(modifier = Modifier.height(spaceExtraLarge))
 
         Column(
@@ -59,7 +60,7 @@ fun CreateDeckScreen(modifier: Modifier = Modifier, onBack: () -> Unit, viewMode
             HorizontalDivider(MaterialTheme.colorScheme.onSecondary)
 
             Spacer(modifier = Modifier.height(spaceHuge))
-            AddCardSection(addedCards = uiState.addedCards, stateFront = viewModel.frontCardState, stateBack = viewModel.backCardState , onAddToDeckClicked = {viewModel.onAddToDeckClicked(addedCards = uiState.addedCards)})
+            AddCardSection(addedCards = uiState.addedCards, stateFront = uiState.frontCardWrite, stateBack = uiState.backCardWrite , onAddToDeckClicked = {viewModel.onAddToDeckClicked(addedCards = uiState.addedCards, frontCardState = uiState.frontCardWrite, backCardState = uiState.backCardWrite)})
 
             Spacer(modifier = Modifier.height(spaceExtraHuge))
             CardsContainer(addedCards = uiState.addedCards)
@@ -78,7 +79,7 @@ fun CreateDeckScreen(modifier: Modifier = Modifier, onBack: () -> Unit, viewMode
             currentIcon = uiState.deckIcon,
             onIconClicked = { iconId -> viewModel.onIconClicked(iconId) },
             onDismissRequest = {viewModel.onSheetDismissed()},
-            deckIconsList = viewModel.deckIconsList,
+            deckIconsList = DeckIcons.all,
         )
     }
 

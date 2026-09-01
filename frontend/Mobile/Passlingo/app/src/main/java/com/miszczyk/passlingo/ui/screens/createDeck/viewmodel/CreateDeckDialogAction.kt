@@ -17,7 +17,7 @@ class CreateDeckDialogAction(
         uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
     }
 
-    private fun onDiscardDialogConfirmed(){
+    fun onDiscardDialogConfirmed(){
         uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
         externalScope.launch {
             navigateBack.send(Unit)
@@ -34,7 +34,7 @@ class CreateDeckDialogAction(
     }
 
     fun onDialogConfirmed(){
-        when(val currentState = uiStateFlow.value.dialogState){
+        when(uiStateFlow.value.dialogState){
             is CreateDeckDialogState.None -> error("onDialogConfirmed called with no dialog visible")
             is CreateDeckDialogState.SaveDeck -> onSaveDeckDialogConfirmed()
             is CreateDeckDialogState.DiscardChanges -> onDiscardDialogConfirmed()

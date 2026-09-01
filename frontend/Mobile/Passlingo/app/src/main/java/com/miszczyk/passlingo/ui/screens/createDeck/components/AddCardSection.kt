@@ -22,10 +22,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
+import com.miszczyk.passlingo.ui.theme.Dimens.elevationExtraSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
@@ -33,6 +33,7 @@ import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.body
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.titleMediumLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
@@ -79,16 +80,16 @@ fun AddCardSection(modifier: Modifier = Modifier, addedCards: Int, stateFront: T
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .shadow(elevation = 0.5.dp, shape = RoundedCornerShape(cornerRadiusDefault))
+                .shadow(elevation = elevationExtraSmall, shape = RoundedCornerShape(cornerRadiusDefault))
                 .background(
                     color = MaterialTheme.colorScheme.background,
                     shape = RoundedCornerShape(cornerRadiusDefault)
                 )
-                .border(1.dp, color = MaterialTheme.colorScheme.onBackground, RoundedCornerShape(cornerRadiusDefault)),
+                .border(borderThin, color = MaterialTheme.colorScheme.onBackground, RoundedCornerShape(cornerRadiusDefault)),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            CardSideInput(Modifier.padding(spaceExtraLarge),stringResource(R.string.label_front_word),stringResource(R.string.prompt_front_hint)  , stateFront)
-            CardSideInput(Modifier.padding(horizontal = spaceExtraLarge),stringResource(R.string.label_back_meaning), stringResource(R.string.label_back_meaning), stateBack)
+            CardSideInput(Modifier.padding(spaceExtraLarge),stringResource(R.string.label_front_word),stringResource(R.string.prompt_front_hint), stateFront)
+            CardSideInput(Modifier.padding(horizontal = spaceExtraLarge),stringResource(R.string.label_back_meaning), stringResource(R.string.prompt_back_hint), stateBack)
             //TODO ADD IMAGE
 
             Button(
@@ -104,7 +105,7 @@ fun AddCardSection(modifier: Modifier = Modifier, addedCards: Int, stateFront: T
                 }) {
                 Text(
                     text = stringResource(R.string.action_add_to_deck),
-                    fontSize = 23.sp,
+                    fontSize = titleMediumLarge,
                     color = MaterialTheme.colorScheme.primary,
                     fontFamily = vagRoundedBold,
                     modifier = Modifier.padding(vertical = spaceDefault)

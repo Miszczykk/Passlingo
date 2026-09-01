@@ -12,7 +12,7 @@ import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.ShadowCard
 import com.miszczyk.passlingo.ui.components.TimeToCard
 import com.miszczyk.passlingo.ui.components.TitleToCard
-import com.miszczyk.passlingo.ui.screens.home.util.formatTime
+import com.miszczyk.passlingo.ui.util.formatTime
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceMedium
 import com.miszczyk.passlingo.ui.theme.TextSize.displayMedium
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge

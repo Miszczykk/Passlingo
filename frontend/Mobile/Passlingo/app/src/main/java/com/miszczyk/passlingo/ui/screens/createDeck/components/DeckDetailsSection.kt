@@ -27,11 +27,14 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.dp
 import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.ui.components.LabeledContent
+import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.elevationSmall
+import com.miszczyk.passlingo.ui.theme.Dimens.iconGiant
+import com.miszczyk.passlingo.ui.theme.Dimens.iconHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceVeryLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
@@ -105,11 +108,11 @@ fun DeckDetailsSection(
                         elevation = elevationSmall,
                         shape = RoundedCornerShape(cornerRadiusDefault)
                     )
-                    .size(75.dp)
+                    .size(iconGiant)
                     .clip(RoundedCornerShape(cornerRadiusDefault))
                     .background(MaterialTheme.colorScheme.primary)
                     .border(
-                        width = 2.dp,
+                        width = borderDefault,
                         color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(cornerRadiusDefault)
                     )
@@ -118,7 +121,7 @@ fun DeckDetailsSection(
                     painter = painterResource(icon),
                     contentDescription = stringResource(R.string.content_desc_deck_icon),
                     tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.size(60.dp)
+                    modifier = Modifier.size(iconHuge)
                 )
             }
         }
