@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
-import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.headline
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 

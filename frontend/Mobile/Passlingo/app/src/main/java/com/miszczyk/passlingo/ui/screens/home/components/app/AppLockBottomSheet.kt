@@ -3,8 +3,6 @@ package com.miszczyk.passlingo.ui.screens.home.components.app
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,18 +15,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Accessibility
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -38,9 +33,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.ui.components.BottomSheetHeader
+import com.miszczyk.passlingo.ui.components.HorizontalDivider
 import com.miszczyk.passlingo.ui.screens.home.model.AppItem
 import com.miszczyk.passlingo.ui.screens.home.model.AppRowState
 import com.miszczyk.passlingo.ui.screens.home.util.earnedTimeFor
@@ -81,11 +77,10 @@ fun AppLockBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = spaceExtraLarge)
         ) {
             val coroutineScope = rememberCoroutineScope()
 
-            BottomSheetHeader {
+            BottomSheetHeader(stringResource(R.string.label_app_lock)) {
                 coroutineScope.launch {
                     sheetState.hide()
                     onDismissRequest()
@@ -98,19 +93,13 @@ fun AppLockBottomSheet(
                 stringResource(R.string.prompt_app_lock_description),
                 fontSize = body,
                 color = MaterialTheme.colorScheme.onSecondary,
-                fontFamily = vagRoundedLight
+                fontFamily = vagRoundedLight,
+                modifier = Modifier.padding(horizontal = spaceExtraLarge)
             )
 
             Spacer(modifier = Modifier.height(spaceExtraLarge))
-            val lineColor = MaterialTheme.colorScheme.onSecondary
-            Canvas(modifier = Modifier.fillMaxWidth()) {
-                drawLine(
-                    start = Offset(x = 0f, y = 0f),
-                    end = Offset(x = size.width, y = 0f),
-                    color = lineColor,
-                    strokeWidth = 1f
-                )
-            }
+
+            HorizontalDivider(MaterialTheme.colorScheme.onSecondary)
 
             Spacer(modifier = Modifier.height(spaceExtraLarge))
 
@@ -125,45 +114,13 @@ fun AppLockBottomSheet(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun BottomSheetHeader(onCloseClicked: () -> Unit) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            stringResource(R.string.label_app_lock),
-            fontSize = titleLarge,
-            color = MaterialTheme.colorScheme.primary,
-            fontFamily = vagRoundedBold
-        )
-
-        IconButton(
-            onClick = {
-                onCloseClicked()
-            },
-            modifier = Modifier
-                .background(
-                    MaterialTheme.colorScheme.onBackground,
-                    shape = CircleShape
-                )
-        ) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = stringResource(R.string.content_desc_close),
-                tint = MaterialTheme.colorScheme.onSecondary,
-            )
-        }
-    }
-}
-
 @Composable
 private fun PermissionRequiredContent(onRequestPermission: () -> Unit) {
     Column(
         modifier = Modifier
-            .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth()
+            .padding(horizontal = spaceExtraLarge),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = stringResource(R.string.prompt_usage_access_required), fontSize = titleMedium,
@@ -208,7 +165,12 @@ private fun PermissionRequiredContent(onRequestPermission: () -> Unit) {
 
 @Composable
 private fun LoadingAppsContent() {
-    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = spaceExtraLarge),
+        contentAlignment = Alignment.Center
+    ) {
         CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
     }
 }
@@ -224,6 +186,7 @@ private fun ColumnScope.AppListContent(
         verticalArrangement = Arrangement.spacedBy(spaceLarge),
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = spaceExtraLarge)
             .weight(1f)
     ) {
         items(items = userApps, key = { it.packageName }) { app ->
@@ -255,12 +218,14 @@ private fun ColumnScope.AppListContent(
     val textDescription =
         if (selectedApps.isNotEmpty()) stringResource(
             R.string.action_lock_selected,
-            ( earnedTimeFor(selectedApps.size) / 60).toInt() ) else stringResource(R.string.prompt_select_apps_to_lock)
+            (earnedTimeFor(selectedApps.size) / 60).toInt()
+        ) else stringResource(R.string.prompt_select_apps_to_lock)
 
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = spaceDefault),
+            .padding(vertical = spaceDefault)
+            .padding(horizontal = spaceExtraLarge),
         shape = RoundedCornerShape(cornerRadiusDefault),
         colors = ButtonDefaults.buttonColors(
             containerColor = buttonColor

@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.home.components
+package com.miszczyk.passlingo.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.TextUnit
 import com.miszczyk.passlingo.ui.screens.home.util.convertTimeToString
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.elevationSmall
-import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.letterSpacingLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBlack
@@ -32,7 +31,6 @@ fun ShadowCard(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = spaceExtraLarge)
             .shadow(elevation = elevationSmall, shape = RoundedCornerShape(cornerRadiusDefault))
             .background(
                 color = MaterialTheme.colorScheme.background,

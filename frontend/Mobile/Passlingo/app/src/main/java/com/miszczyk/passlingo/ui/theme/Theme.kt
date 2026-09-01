@@ -14,6 +14,7 @@ private val LightColorScheme = lightColorScheme(
     secondary = yellow,
     onSecondary = mono500,
     onBackground = mono200,
+    onSurface = mono400,
     error = red
 )
 

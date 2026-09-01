@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -21,30 +22,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.elevationSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
-import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceVeryLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
-fun DeckDetailsSection(modifier: Modifier = Modifier, state: TextFieldState) {
+fun DeckDetailsSection(
+    modifier: Modifier = Modifier,
+    state: TextFieldState,
+    onSelectIconClicked: () -> Unit,
+    icon: Int
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-
         LabeledContent(modifier.weight(1f), stringResource(R.string.label_deck_name)) {
             BasicTextField(
                 state = state,
@@ -76,11 +80,10 @@ fun DeckDetailsSection(modifier: Modifier = Modifier, state: TextFieldState) {
                     ) {
                         Text(
                             text = stringResource(R.string.prompt_deck_name_hint),
-                            color = MaterialTheme.colorScheme.onSecondary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = vagRoundedLight,
                             fontSize = titleMedium,
                             modifier = Modifier.alpha(if (state.text.isEmpty()) 1f else 0f)
-
                         )
                         innerTextField()
                     }
@@ -96,22 +99,28 @@ fun DeckDetailsSection(modifier: Modifier = Modifier, state: TextFieldState) {
             Alignment.CenterHorizontally
         ) {
             IconButton(
-                onClick = { },
+                onClick = { onSelectIconClicked() },
                 modifier = Modifier
-                    .padding(spaceMediumLarge)
-                    .scale(1.6f)
-                    .background(
-                        MaterialTheme.colorScheme.primary,
+                    .shadow(
+                        elevation = elevationSmall,
+                        shape = RoundedCornerShape(cornerRadiusDefault)
+                    )
+                    .size(75.dp)
+                    .clip(RoundedCornerShape(cornerRadiusDefault))
+                    .background(MaterialTheme.colorScheme.primary)
+                    .border(
+                        width = 2.dp,
+                        color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(cornerRadiusDefault)
                     )
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.deck_animal_penguinopithecus),
+                    painter = painterResource(icon),
                     contentDescription = stringResource(R.string.content_desc_deck_icon),
                     tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(60.dp)
                 )
             }
         }
-
     }
 }

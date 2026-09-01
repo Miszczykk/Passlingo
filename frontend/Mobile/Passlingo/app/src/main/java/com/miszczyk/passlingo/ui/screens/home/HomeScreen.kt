@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,7 +28,7 @@ import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 fun HomeScreen(modifier: Modifier = Modifier, onCreateDeckClicked: () -> Unit, viewModel: DeckViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
-    Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = modifier.fillMaxSize().padding(horizontal = spaceExtraLarge), horizontalAlignment = Alignment.CenterHorizontally) {
         Header()
         Spacer(modifier = Modifier.height(spaceExtraLarge))
         BalanceBox(balanceTime = uiState.balanceTime)

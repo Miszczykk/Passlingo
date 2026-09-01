@@ -9,7 +9,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -39,8 +38,6 @@ import com.miszczyk.passlingo.ui.screens.home.model.HasPackageName
 import com.miszczyk.passlingo.ui.screens.home.util.requestUsageStatsPermission
 import com.miszczyk.passlingo.ui.screens.home.viewmodel.DeckViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
-import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
-import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
@@ -79,8 +76,7 @@ fun DeckBox(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewModel(
 
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = spaceExtraLarge),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -130,6 +126,7 @@ fun DeckBox(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewModel(
     val appName = when (val state = uiState.dialogState) {
         is HasPackageName -> uiState.userApps.find { it.packageName == state.packageName }?.name
             ?: ""
+
         else -> ""
     }
 

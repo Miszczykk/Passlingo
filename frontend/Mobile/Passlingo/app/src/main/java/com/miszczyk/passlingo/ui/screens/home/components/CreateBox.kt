@@ -85,8 +85,7 @@ fun CreateBox(modifier: Modifier = Modifier, onClick: () -> Unit) {
                 }
             },
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = spaceExtraLarge),
+                .fillMaxWidth(),
             shape = RoundedCornerShape(cornerRadiusDefault),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             elevation = ButtonDefaults.buttonElevation(
