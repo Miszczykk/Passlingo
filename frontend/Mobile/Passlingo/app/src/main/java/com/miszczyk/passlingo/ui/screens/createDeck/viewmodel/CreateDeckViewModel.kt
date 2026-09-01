@@ -2,6 +2,8 @@ package com.miszczyk.passlingo.ui.screens.createDeck.viewmodel
 
 import android.app.Application
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.miszczyk.passlingo.R
@@ -81,6 +83,7 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
         onSheetDismissed()
     }
 
+    @Composable
     fun onAddToDeckClicked(addedCards: Int) {
         if (frontCardState.text.toString().isNotBlank() && backCardState.text.toString()
                 .isNotBlank()
@@ -90,7 +93,7 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
             frontCardState.edit { replace(0, length, "") }
             backCardState.edit { replace(0, length, "") }
         } else {
-            _uiState.update { it.copy(dialogState = CreateDeckDialogState.Error("Please fill in both the Front and Back of the flashcard before adding.")) }
+            _uiState.update { it.copy(dialogState = CreateDeckDialogState.Error(stringResource(R.string.dialog_message_incomplete_flashcards))) }
         }
     }
 

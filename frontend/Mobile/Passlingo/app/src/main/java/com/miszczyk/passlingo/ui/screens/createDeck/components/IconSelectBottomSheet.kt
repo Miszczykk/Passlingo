@@ -22,6 +22,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.BottomSheetHeader
 import com.miszczyk.passlingo.ui.components.HorizontalDivider
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
@@ -47,7 +49,7 @@ fun IconSelectBottomSheet(
             modifier = Modifier.fillMaxWidth()
         ) {
             val coroutineScope = rememberCoroutineScope()
-            BottomSheetHeader("Select Cover Icon") {
+            BottomSheetHeader(stringResource(R.string.label_select_cover_icon)) {
                 coroutineScope.launch {
                     sheetState.hide()
                     onDismissRequest()
@@ -57,7 +59,7 @@ fun IconSelectBottomSheet(
             Spacer(modifier = Modifier.height(spaceMediumLarge))
 
             Text(
-                text = "Choose an icon that best represents the subject of your flashcards.",
+                text = stringResource(R.string.prompt_select_icon_description),
                 fontSize = body,
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontFamily = vagRoundedLight,

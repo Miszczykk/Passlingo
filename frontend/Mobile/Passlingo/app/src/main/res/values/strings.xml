@@ -23,6 +23,7 @@
     <string name="action_add_cards_first">Add cards first</string>
     <string name="action_enter_deck_name">Enter deck name</string>
     <string name="action_confirm">Confirm</string>
+    <string name="action_add_to_deck">Add to deck</string>
 
     <!-- Labels / Titles -->
     <string name="label_app_lock">App Lock</string>
@@ -34,6 +35,10 @@
     <string name="label_cards_added">%1$d added</string>
     <string name="label_deck_name">DECK NAME</string>
     <string name="label_icon">ICON</string>
+    <string name="label_front_word">FRONT (WORD)</string>
+    <string name="label_back_meaning">BACK (MEANING)</string>
+    <string name="label_create_deck">Create Deck</string>
+    <string name="label_select_cover_icon">Select Cover Icon</string>
 
     <!-- Prompts & Messages -->
     <string name="prompt_app_lock_description">Select apps you want to restrict access to.\nUnlocking them will require studying!</string>
@@ -41,6 +46,10 @@
     <string name="prompt_select_apps_to_lock">Select apps to lock</string>
     <string name="prompt_deck_name_hint">e.g., Spanish Verbs A1</string>
     <string name="toast_cannot_open_settings">Cannot open settings</string>
+    <string name="prompt_front_hint">Zrozumieć</string>
+    <string name="prompt_back_hint">To understand</string>
+    <string name="prompt_no_cards_added">No cards added yet. Add manually!</string>
+    <string name="prompt_select_icon_description">Choose an icon that best represents the subject of your flashcards.</string>
 
     <!-- Dialogs -->
     <string name="dialog_title_confirm_lock">Are you sure?</string>
@@ -59,5 +68,7 @@
 
     <string name="dialog_title_discard_changes">Discard changes?</string>
     <string name="dialog_message_discard_changes">Are you sure you want to leave? Your unsaved flashcards and deck details will be lost.</string>
+
+    <string name="dialog_message_incomplete_flashcards">Please fill in both the Front and Back of the flashcard before adding.</string>
 
 </resources>

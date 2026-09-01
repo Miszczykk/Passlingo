@@ -44,7 +44,7 @@ fun Header(onClick: () -> Unit) {
         }
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = "Create Deck",
+            text = stringResource(R.string.label_create_deck),
             color = MaterialTheme.colorScheme.primary,
             fontSize = headline,
             fontFamily = vagRoundedBold,

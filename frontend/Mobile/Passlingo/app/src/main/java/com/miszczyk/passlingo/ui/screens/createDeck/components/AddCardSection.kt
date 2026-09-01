@@ -87,8 +87,8 @@ fun AddCardSection(modifier: Modifier = Modifier, addedCards: Int, stateFront: T
                 .border(1.dp, color = MaterialTheme.colorScheme.onBackground, RoundedCornerShape(cornerRadiusDefault)),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            CardSideInput(Modifier.padding(spaceExtraLarge),"FRONT (WORD)", "Zrozumieć", stateFront)
-            CardSideInput(Modifier.padding(horizontal = spaceExtraLarge),"BACK (MEANING)", "To understand", stateBack)
+            CardSideInput(Modifier.padding(spaceExtraLarge),stringResource(R.string.label_front_word),stringResource(R.string.prompt_front_hint)  , stateFront)
+            CardSideInput(Modifier.padding(horizontal = spaceExtraLarge),stringResource(R.string.label_back_meaning), stringResource(R.string.label_back_meaning), stateBack)
             //TODO ADD IMAGE
 
             Button(
@@ -103,7 +103,7 @@ fun AddCardSection(modifier: Modifier = Modifier, addedCards: Int, stateFront: T
                     onAddToDeckClicked()
                 }) {
                 Text(
-                    text = "Add to deck",
+                    text = stringResource(R.string.action_add_to_deck),
                     fontSize = 23.sp,
                     color = MaterialTheme.colorScheme.primary,
                     fontFamily = vagRoundedBold,
@@ -112,5 +112,4 @@ fun AddCardSection(modifier: Modifier = Modifier, addedCards: Int, stateFront: T
             }
         }
     }
-
 }

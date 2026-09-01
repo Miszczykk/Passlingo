@@ -14,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.elevationSmall
 
@@ -49,7 +51,7 @@ fun IconItem(
     ) {
         Icon(
             painter = painterResource(id = iconResId),
-            contentDescription = "Deck icon",
+            contentDescription = stringResource(R.string.content_desc_deck_icon),
             tint = iconColor,
             modifier = Modifier.size(48.dp)
         )
