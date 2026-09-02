@@ -35,7 +35,7 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
-fun FlashcardItem(frontText: String, backText: String){
+fun FlashcardItem(frontText: String, backText: String, onEditClicked: () -> Unit, onDeleteClicked: () -> Unit){
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -75,7 +75,7 @@ fun FlashcardItem(frontText: String, backText: String){
 
         Row(){
             IconButton(
-                onClick = {}
+                onClick = {onEditClicked()}
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
@@ -86,7 +86,7 @@ fun FlashcardItem(frontText: String, backText: String){
             }
 
             IconButton(
-                onClick = {}
+                onClick = {onDeleteClicked()}
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,

@@ -12,7 +12,9 @@ class CreateDeckDialogAction(
     private val uiStateFlow: MutableStateFlow<CreateDeckUiState>,
     private val externalScope: CoroutineScope,
     private val navigateBack:  Channel<Unit>,
-    private val clearScreen: () -> Unit
+    private val clearScreen: () -> Unit,
+    private val onEditCardConfirmed: (String) -> Unit,
+    private val onDeleteConfirmed: (String) -> Unit,
 ){
     fun onDialogCancelled() {
         uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
@@ -38,12 +40,24 @@ class CreateDeckDialogAction(
         }
     }
 
+    private fun onDeleteCardDialogConfirmed(id: String){
+        onDeleteConfirmed(id)
+        uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
+    }
+
+    private fun onEditCardDialogConfirmed(id: String){
+        onEditCardConfirmed(id)
+        uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
+    }
+
     fun onDialogConfirmed(){
-        when(uiStateFlow.value.dialogState){
+        when(val currentState = uiStateFlow.value.dialogState){
             is CreateDeckDialogState.None -> error("onDialogConfirmed called with no dialog visible")
             is CreateDeckDialogState.SaveDeck -> onSaveDeckDialogConfirmed()
             is CreateDeckDialogState.DiscardChanges -> onDiscardDialogConfirmed()
             is CreateDeckDialogState.Error -> onDialogCancelled()
+            is CreateDeckDialogState.DeleteFlashcard -> onDeleteCardDialogConfirmed(currentState.id)
+            is CreateDeckDialogState.EditFlashcard -> onEditCardDialogConfirmed(currentState.id)
         }
     }
 }

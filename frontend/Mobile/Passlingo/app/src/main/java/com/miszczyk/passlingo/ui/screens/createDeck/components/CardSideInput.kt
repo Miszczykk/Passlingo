@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import com.miszczyk.passlingo.ui.components.HorizontalDivider
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
@@ -32,7 +33,8 @@ fun CardSideInput(
     modifier: Modifier = Modifier,
     label: String,
     hintText: String,
-    state: TextFieldState
+    state: TextFieldState,
+    colorLine: Color = MaterialTheme.colorScheme.onBackground
 ) {
     var isFocused by remember { mutableStateOf(false) }
 
@@ -77,7 +79,7 @@ fun CardSideInput(
 
                     Spacer(modifier = Modifier.height(spaceExtraSmall))
                     HorizontalDivider(
-                        (if (!isFocused) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.secondary),
+                        (if (!isFocused) colorLine else MaterialTheme.colorScheme.secondary),
                         3f
                     )
                 }

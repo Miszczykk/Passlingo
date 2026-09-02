@@ -25,11 +25,25 @@ import com.miszczyk.passlingo.ui.theme.TextSize.body
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
+import androidx.compose.ui.window.DialogProperties
 
 @Composable
 fun DialogComponent(dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> Unit) {
     val confirmTextColor = dialog.onConfirmTextColor ?: MaterialTheme.colorScheme.secondary
+    val dialogProperties = if(dialog.isWide){
+        DialogProperties(usePlatformDefaultWidth = false)
+    }else{
+        DialogProperties()
+    }
+    val dialogModifier = if (dialog.isWide) {
+        Modifier.fillMaxWidth(0.92f)
+    } else {
+        Modifier
+    }
+
     AlertDialog(
+        properties = dialogProperties,
+        modifier = dialogModifier,
         onDismissRequest = onCancel,
         title = {
             Text(

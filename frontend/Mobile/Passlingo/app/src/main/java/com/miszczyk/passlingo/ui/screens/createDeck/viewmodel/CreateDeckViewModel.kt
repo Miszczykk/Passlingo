@@ -22,11 +22,20 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
     private val _navigateBack = Channel<Unit>(Channel.BUFFERED)
     val navigateBack = _navigateBack.receiveAsFlow()
 
-    private val dialogAction = CreateDeckDialogAction(_uiState, viewModelScope, _navigateBack, clearScreen = {clearScreen()})
+    private val dialogAction = CreateDeckDialogAction(
+        _uiState,
+        viewModelScope,
+        _navigateBack,
+        clearScreen = { clearScreen() },
+        onEditCardConfirmed = {id -> editCard(id = id, newFrontText = editFrontState.text.toString(),  newBackText = editBackState.text.toString())},
+        onDeleteConfirmed = { id -> deleteCard(id) })
 
     val deckName: TextFieldState = TextFieldState("")
     val frontCreateCardState: TextFieldState = TextFieldState("")
     val backCreateCardState: TextFieldState = TextFieldState("")
+
+    val editFrontState: TextFieldState = TextFieldState("")
+    val editBackState: TextFieldState = TextFieldState("")
 
 
     fun onDialogCancelled() = dialogAction.onDialogCancelled()
@@ -40,9 +49,9 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun onBackClicked() {
-        if(deckName.text.toString().isNotBlank() || _uiState.value.cards.isNotEmpty()){
+        if (deckName.text.toString().isNotBlank() || _uiState.value.cards.isNotEmpty()) {
             _uiState.update { it.copy(dialogState = CreateDeckDialogState.DiscardChanges) }
-        }else{
+        } else {
             onBack()
         }
     }
@@ -59,7 +68,9 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
     fun onAddToDeckClicked() {
         val frontText = frontCreateCardState.text.toString()
         val backText = backCreateCardState.text.toString()
-        if (frontCreateCardState.text.toString().isNotBlank() && backCreateCardState.text.toString().isNotBlank()) {
+        if (frontCreateCardState.text.toString().isNotBlank() && backCreateCardState.text.toString()
+                .isNotBlank()
+        ) {
             val newCard = Flashcard(front = frontText, back = backText)
             _uiState.update { currentState ->
                 currentState.copy(
@@ -69,7 +80,61 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
             frontCreateCardState.edit { replace(0, length, "") }
             backCreateCardState.edit { replace(0, length, "") }
         } else {
-            _uiState.update { it.copy(dialogState = CreateDeckDialogState.Error(getApplication<Application>().getString(R.string.dialog_message_incomplete_flashcards))) }
+            _uiState.update {
+                it.copy(
+                    dialogState = CreateDeckDialogState.Error(
+                        getApplication<Application>().getString(
+                            R.string.dialog_message_incomplete_flashcards
+                        )
+                    )
+                )
+            }
+        }
+    }
+
+    fun onEditCardClicked(card: Flashcard) {
+        editFrontState.edit { replace(0, length, card.front) }
+        editBackState.edit { replace(0, length, card.back) }
+
+        _uiState.update {
+            it.copy(
+                dialogState = CreateDeckDialogState.EditFlashcard(
+                    id = card.id,
+                    frontText = card.front,
+                    backText = card.back
+                )
+            )
+        }
+    }
+    private fun editCard(id: String, newFrontText: String, newBackText: String){
+        _uiState.update { state ->
+            state.copy(
+                cards = state.cards.map { card ->
+                    if(card.id == id){
+                        card.copy(front = newFrontText, back = newBackText)
+                    }else{
+                        card
+                    }
+                }
+            )
+        }
+    }
+
+    fun onDeleteCardClicked(card: Flashcard) {
+        _uiState.update {
+            it.copy(
+                dialogState = CreateDeckDialogState.DeleteFlashcard(
+                    id = card.id,
+                    frontText = card.front,
+                    backText = card.back
+                )
+            )
+        }
+    }
+
+    private fun deleteCard(id: String) {
+        _uiState.update { state ->
+            state.copy(cards = state.cards.filterNot { it.id == id })
         }
     }
 
@@ -77,7 +142,7 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
         _uiState.update { it.copy(showBottomSheet = false) }
     }
 
-    fun clearScreen(){
+    fun clearScreen() {
         _uiState.update { it.copy(cards = emptyList()) }
         deckName.edit { replace(0, length, "") }
         frontCreateCardState.edit { replace(0, length, "") }

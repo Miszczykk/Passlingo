@@ -84,7 +84,7 @@ fun CreateDeckScreen(
 
             if (uiState.cards.isNotEmpty()) {
                 items(items = uiState.cards, key = { it.id }) { card ->
-                    FlashcardItem(frontText = card.front, backText = card.back)
+                    FlashcardItem(frontText = card.front, backText = card.back, onEditClicked = { viewModel.onEditCardClicked(card) }, onDeleteClicked = { viewModel.onDeleteCardClicked(card) })
                     Spacer(modifier = Modifier.height(spaceLarge))
                 }
             } else {

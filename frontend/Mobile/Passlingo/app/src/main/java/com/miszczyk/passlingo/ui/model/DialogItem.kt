@@ -9,5 +9,6 @@ data class DialogItem(
     val onConfirmText: String,
     val onCancelText: String? = null,
     val onConfirmTextColor: Color? = null,
-    val extraContent: @Composable (() -> Unit)? = null
+    val extraContent: @Composable (() -> Unit)? = null,
+    val isWide: Boolean = false
 )
