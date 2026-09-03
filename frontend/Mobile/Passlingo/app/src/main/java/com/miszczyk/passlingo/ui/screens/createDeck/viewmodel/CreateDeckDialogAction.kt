@@ -12,6 +12,7 @@ class CreateDeckDialogAction(
     private val uiStateFlow: MutableStateFlow<CreateDeckUiState>,
     private val externalScope: CoroutineScope,
     private val navigateBack:  Channel<Unit>,
+    private val saveDeck: suspend () -> Unit,
     private val clearScreen: () -> Unit,
     private val onEditCardConfirmed: (String) -> Unit,
     private val onDeleteConfirmed: (String) -> Unit,
@@ -30,13 +31,18 @@ class CreateDeckDialogAction(
     }
 
     private fun onSaveDeckDialogConfirmed(){
-        //TODO SAVE DECK
-        clearScreen()
-        uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
-
-
         externalScope.launch {
-            navigateBack.send(Unit)
+            runCatching {
+                saveDeck()
+            }.onSuccess {
+                clearScreen()
+                uiStateFlow.update { it.copy(dialogState = CreateDeckDialogState.None) }
+                navigateBack.send(Unit)
+            }.onFailure { exception ->
+                uiStateFlow.update {
+                    it.copy(dialogState = CreateDeckDialogState.Error(exception.localizedMessage ?: "Failed to save deck"))
+                }
+            }
         }
     }
 

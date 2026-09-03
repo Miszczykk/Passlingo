@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.data.repository.DeckRepository
 import com.miszczyk.passlingo.ui.screens.createDeck.model.CreateDeckDialogState
 import com.miszczyk.passlingo.ui.screens.createDeck.model.CreateDeckUiState
 import com.miszczyk.passlingo.ui.screens.createDeck.model.Flashcard
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 
 class CreateDeckViewModel(application: Application) : AndroidViewModel(application) {
+    private val deckRepository = DeckRepository(application)
     private val _uiState = MutableStateFlow(CreateDeckUiState())
     val uiState: StateFlow<CreateDeckUiState> = _uiState.asStateFlow()
 
@@ -23,9 +25,10 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
     val navigateBack = _navigateBack.receiveAsFlow()
 
     private val dialogAction = CreateDeckDialogAction(
-        _uiState,
-        viewModelScope,
-        _navigateBack,
+        uiStateFlow = _uiState,
+        externalScope = viewModelScope,
+        navigateBack = _navigateBack,
+        saveDeck = {saveDeckToDatabase() },
         clearScreen = { clearScreen() },
         onEditCardConfirmed = {id -> editCard(id = id, newFrontText = editFrontState.text.toString(),  newBackText = editBackState.text.toString())},
         onDeleteConfirmed = { id -> deleteCard(id) })
@@ -36,6 +39,14 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
 
     val editFrontState: TextFieldState = TextFieldState("")
     val editBackState: TextFieldState = TextFieldState("")
+
+    private suspend fun saveDeckToDatabase(){
+        deckRepository.saveDeck(
+            name = deckName.text.toString(),
+            iconResId = _uiState.value.deckIcon,
+            cards = _uiState.value.cards
+        )
+    }
 
 
     fun onDialogCancelled() = dialogAction.onDialogCancelled()
