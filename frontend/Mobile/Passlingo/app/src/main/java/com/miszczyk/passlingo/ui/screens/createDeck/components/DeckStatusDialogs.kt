@@ -91,9 +91,9 @@ private fun errorDialog(errorMessage: String): DialogItem {
 @Composable
 private fun deleteFlashcard(frontText: String, backText: String): DialogItem {
     return DialogItem(
-        title = "Delete flashcard?",
-        message = "Are you sure you want to delete this flashcard? This action cannot be undone.",
-        onConfirmText = "Delete",
+        title = stringResource(id = R.string.dialog_title_delete_flashcard),
+        message = stringResource(id = R.string.dialog_message_delete_flashcard),
+        onConfirmText = stringResource(id = R.string.action_delete),
         onConfirmTextColor = MaterialTheme.colorScheme.background, //temporary
         onCancelText = stringResource(id = R.string.action_cancel), //TODO RED BUTTON,
         extraContent = {
@@ -110,7 +110,7 @@ private fun deleteFlashcard(frontText: String, backText: String): DialogItem {
                     .padding(all = spaceLarge)
             ) {
                 Text(
-                    text = "CARD TO DELETE",
+                    text = stringResource(id = R.string.label_card_to_delete),
                     fontFamily = vagRoundedBold,
                     fontSize = small,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -141,9 +141,9 @@ private fun deleteFlashcard(frontText: String, backText: String): DialogItem {
 @Composable
 private fun editFlashcard(stateFront: TextFieldState, stateBack: TextFieldState): DialogItem {
     return DialogItem(
-        title = "Edit Flashcard",
-        message = "Update the word, meaning, or cover image of your flashcard.",
-        onConfirmText = "Save",
+        title = stringResource(id = R.string.dialog_title_edit_flashcard),
+        message = stringResource(id = R.string.dialog_message_edit_flashcard),
+        onConfirmText = stringResource(id = R.string.action_save),
         onConfirmTextColor = MaterialTheme.colorScheme.secondary,
         onCancelText = stringResource(id = R.string.action_cancel),
         extraContent = {
@@ -164,7 +164,8 @@ private fun editFlashcard(stateFront: TextFieldState, stateBack: TextFieldState)
                     state = stateBack,
                     colorLine = MaterialTheme.colorScheme.onSurface
                 )
-                Spacer(modifier = Modifier.height(height = spaceExtraLarge)
+                Spacer(
+                    modifier = Modifier.height(height = spaceExtraLarge)
                 )
             }
         },

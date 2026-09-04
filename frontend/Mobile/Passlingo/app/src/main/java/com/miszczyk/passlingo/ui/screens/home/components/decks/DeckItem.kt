@@ -94,7 +94,7 @@ fun DeckItem(
                 fontFamily = vagRoundedBold,
             )
             Text(
-                text = "$flashcardCount card(s)",
+                text = stringResource(id = R.plurals.label_cards_count, flashcardCount),
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = body,
                 fontFamily = vagRoundedBold,

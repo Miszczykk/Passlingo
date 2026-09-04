@@ -166,7 +166,7 @@ private fun Header(
                     fontFamily = vagRoundedBold,
                 )
                 Text(
-                    text = "$flashcardCount card(s)",
+                    text = stringResource(id = R.plurals.label_cards_count, flashcardCount),
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = body,
                     fontFamily = vagRoundedBold,
@@ -207,8 +207,7 @@ private fun OptionButton(
                 width = borderDefault,
                 color = borderColor,
                 shape = RoundedCornerShape(size = cornerRadiusDefault)
-            )
-        ,
+            ),
         shape = RoundedCornerShape(size = cornerRadiusDefault),
         colors = ButtonDefaults.buttonColors(
             containerColor = backgroundColor
@@ -228,8 +227,7 @@ private fun OptionButton(
                 imageVector = icon,
                 contentDescription = stringResource(id = R.string.content_desc_deck_icon),
                 tint = iconColor,
-                modifier = Modifier
-                    .size(size = iconMedium)
+                modifier = Modifier.size(size = iconMedium)
             )
 
             Spacer(modifier = Modifier.width(width = spaceMedium))

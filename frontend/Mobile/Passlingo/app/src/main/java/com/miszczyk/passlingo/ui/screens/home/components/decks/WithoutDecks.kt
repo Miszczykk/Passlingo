@@ -68,14 +68,14 @@ fun WithoutDecks() {
         }
         Spacer(modifier = Modifier.height(height = spaceLarge))
         Text(
-            text = "No decks yet",
+            text = stringResource(id = R.string.prompt_no_decks_yet),
             color = MaterialTheme.colorScheme.primary,
             fontSize = titleMedium,
             fontFamily = vagRoundedBold,
         )
         Spacer(modifier = Modifier.height(height = spaceExtraSmall))
         Text(
-            text = "Create your first deck to start earning time.",
+            text = stringResource(id = R.string.prompt_create_first_deck),
             color = MaterialTheme.colorScheme.onSecondary,
             fontSize = body,
             fontFamily = vagRoundedLight,
