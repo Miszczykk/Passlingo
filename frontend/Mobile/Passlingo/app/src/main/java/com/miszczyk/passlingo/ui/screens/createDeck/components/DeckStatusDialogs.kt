@@ -73,17 +73,18 @@ private fun discardChangesDialog(): DialogItem {
         title = stringResource(id = R.string.dialog_title_discard_changes),
         message = stringResource(id = R.string.dialog_message_discard_changes),
         onConfirmText = stringResource(id = R.string.action_confirm),
-        onConfirmTextColor = MaterialTheme.colorScheme.background, //temporary
-        onCancelText = stringResource(id = R.string.action_cancel), //TODO RED BUTTON
+        onConfirmTextColor = MaterialTheme.colorScheme.background,
+        onConfirmBackgroundColor = MaterialTheme.colorScheme.error,
+        onCancelText = stringResource(id = R.string.action_cancel),
     )
 }
 
 @Composable
 private fun errorDialog(errorMessage: String): DialogItem {
     return DialogItem(
-        title = stringResource(R.string.dialog_title_error),
+        title = stringResource(id = R.string.dialog_title_error),
         message = errorMessage,
-        onConfirmText = stringResource(R.string.action_close),
+        onConfirmText = stringResource(id = R.string.action_close),
         onConfirmTextColor = MaterialTheme.colorScheme.background
     )
 }
@@ -94,8 +95,9 @@ private fun deleteFlashcard(frontText: String, backText: String): DialogItem {
         title = stringResource(id = R.string.dialog_title_delete_flashcard),
         message = stringResource(id = R.string.dialog_message_delete_flashcard),
         onConfirmText = stringResource(id = R.string.action_delete),
-        onConfirmTextColor = MaterialTheme.colorScheme.background, //temporary
-        onCancelText = stringResource(id = R.string.action_cancel), //TODO RED BUTTON,
+        onConfirmTextColor = MaterialTheme.colorScheme.background,
+        onConfirmBackgroundColor = MaterialTheme.colorScheme.error,
+        onCancelText = stringResource(id = R.string.action_cancel),
         extraContent = {
             Column(
                 modifier = Modifier

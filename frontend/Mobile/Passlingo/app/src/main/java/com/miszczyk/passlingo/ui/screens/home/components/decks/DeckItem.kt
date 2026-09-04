@@ -1,6 +1,8 @@
 package com.miszczyk.passlingo.ui.screens.home.components.decks
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,11 +21,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
@@ -44,10 +48,16 @@ fun DeckItem(
     isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
-    val borderColor =
-        if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
-    val iconBackgroundColor =
-        if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
+    val borderColor by animateColorAsState(
+        targetValue = if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground,
+        animationSpec = tween(durationMillis = 350),
+        label = "BorderColor"
+    )
+    val iconBackgroundColor by animateColorAsState(
+        targetValue = if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground,
+        animationSpec = tween(durationMillis = 350),
+        label = "IconBackgroundColor"
+    )
 
     Row(
         modifier = Modifier
@@ -94,7 +104,7 @@ fun DeckItem(
                 fontFamily = vagRoundedBold,
             )
             Text(
-                text = stringResource(id = R.plurals.label_cards_count, flashcardCount),
+                text = pluralStringResource(id = R.plurals.label_cards_count, count = flashcardCount, flashcardCount),
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = body,
                 fontFamily = vagRoundedBold,

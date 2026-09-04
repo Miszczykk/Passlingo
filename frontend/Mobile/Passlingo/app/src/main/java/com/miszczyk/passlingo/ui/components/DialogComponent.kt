@@ -29,9 +29,10 @@ import androidx.compose.ui.window.DialogProperties
 
 @Composable
 fun DialogComponent(
-    dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> Unit
+    dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> Unit,
 ) {
     val confirmTextColor = dialog.onConfirmTextColor ?: MaterialTheme.colorScheme.secondary
+    val confirmBackgroundColor = dialog.onConfirmBackgroundColor ?: MaterialTheme.colorScheme.primary
 
     val dialogProperties = if (dialog.isWide) {
         DialogProperties(usePlatformDefaultWidth = false)
@@ -103,7 +104,7 @@ fun DialogComponent(
                 TextButton(
                     onClick = onConfirm,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
+                        containerColor = confirmBackgroundColor
                     ),
                     modifier = Modifier
                         .fillMaxWidth()

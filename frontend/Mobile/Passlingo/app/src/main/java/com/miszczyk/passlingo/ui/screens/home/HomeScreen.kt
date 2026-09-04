@@ -91,7 +91,7 @@ fun HomeScreen(
                 },
                 onStudyClicked = {},
                 onEditClicked = {},
-                onDeleteClicked = {}
+                onDeleteClicked = { homeViewModel.deleteDeck() }
             )
         }
     }

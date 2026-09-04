@@ -128,39 +128,41 @@ private fun PermissionRequiredContent(
             color = MaterialTheme.colorScheme.onSecondary,
             fontFamily = vagRoundedBold
         )
-    }
 
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = spaceDefault),
-        shape = RoundedCornerShape(size = cornerRadiusDefault),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary
-        ),
-        onClick = onRequestPermission
-    ) {
-        Row(
+        Spacer(modifier = Modifier.height(height = spaceDefault))
+
+        Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(all = spaceDefault),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+                .padding(vertical = spaceDefault),
+            shape = RoundedCornerShape(size = cornerRadiusDefault),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary
+            ),
+            onClick = onRequestPermission
         ) {
-            Icon(
-                imageVector = Icons.Default.Accessibility,
-                contentDescription = stringResource(R.string.content_desc_accessibility),
-                tint = MaterialTheme.colorScheme.secondary,
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = spaceDefault),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Accessibility,
+                    contentDescription = stringResource(R.string.content_desc_accessibility),
+                    tint = MaterialTheme.colorScheme.secondary,
+                )
 
-            Spacer(modifier = Modifier.width(width = spaceMedium))
+                Spacer(modifier = Modifier.width(width = spaceMedium))
 
-            Text(
-                text = stringResource(R.string.action_grant_permission),
-                fontSize = titleLarge,
-                color = MaterialTheme.colorScheme.background,
-                fontFamily = vagRoundedBold
-            )
+                Text(
+                    text = stringResource(R.string.action_grant_permission),
+                    fontSize = titleLarge,
+                    color = MaterialTheme.colorScheme.background,
+                    fontFamily = vagRoundedBold
+                )
+            }
         }
     }
 }

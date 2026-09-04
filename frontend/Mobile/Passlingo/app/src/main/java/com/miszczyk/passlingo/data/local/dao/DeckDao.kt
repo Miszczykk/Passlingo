@@ -28,6 +28,9 @@ interface DeckDao {
     @Query("SELECT * FROM decks ORDER BY createdAt DESC")
     fun getAllDecksWithFlashcards(): Flow<List<DeckWithFlashcards>>
 
+    @Query("SELECT * FROM decks WHERE id = :deckId")
+    suspend fun getDeckById(deckId: String): DeckEntity?
+
     @Delete
     suspend fun deleteDeck(deck: DeckEntity)
 }

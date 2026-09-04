@@ -35,7 +35,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.HorizontalDivider
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
@@ -122,6 +124,8 @@ fun DeckBottomSheet(
                 backgroundColor = MaterialTheme.colorScheme.error,
                 onClick = { onDeleteClicked() }
             )
+
+            Spacer(modifier = Modifier.height(height = spaceDefault))
         }
     }
 }
@@ -137,7 +141,7 @@ private fun Header(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row {
+        Row(modifier = Modifier.weight(weight = 1f, fill = false),) {
             Box(
                 contentAlignment = Alignment.Center, modifier = Modifier.background(
                     color = MaterialTheme.colorScheme.onBackground,
@@ -157,6 +161,7 @@ private fun Header(
             Spacer(modifier = Modifier.width(width = spaceLarge))
 
             Column(
+                modifier = Modifier.weight(weight = 1f, fill = false),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
@@ -164,15 +169,18 @@ private fun Header(
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = titleMedium,
                     fontFamily = vagRoundedBold,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = stringResource(id = R.plurals.label_cards_count, flashcardCount),
+                    text = pluralStringResource(id = R.plurals.label_cards_count, count = flashcardCount, flashcardCount),
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = body,
                     fontFamily = vagRoundedBold,
                 )
             }
         }
+        Spacer(modifier = Modifier.width(spaceLarge))
+
         IconButton(
             onClick = {
                 onCloseClicked()

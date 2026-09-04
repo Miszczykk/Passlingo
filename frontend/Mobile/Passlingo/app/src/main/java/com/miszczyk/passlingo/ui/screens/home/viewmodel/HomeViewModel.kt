@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val deckRepository = DeckRepository(context = application)
@@ -33,11 +34,22 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         _isBottomSheetVisible.value = false
     }
 
-
     fun selectDeck(id: String) {
         _selectedDeckId.value = id
         showBottomSheet()
     }
 
+    fun deleteDeck() {
+        val deckId = _selectedDeckId.value ?: return
 
+        viewModelScope.launch {
+            runCatching {
+                deckRepository.deleteDeck(deckId)
+            }.onSuccess {
+                hideBottomSheet()
+            }.onFailure { exception ->
+//                HomeDialogState.Error(exception.localizedMessage ?: "Failed to delete deck")
+            }
+        }
+    }
 }
