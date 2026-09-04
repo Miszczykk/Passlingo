@@ -17,30 +17,37 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 
 class CreateDeckViewModel(application: Application) : AndroidViewModel(application) {
-    private val deckRepository = DeckRepository(application)
-    private val _uiState = MutableStateFlow(CreateDeckUiState())
+    private val deckRepository = DeckRepository(context = application)
+    private val _uiState = MutableStateFlow(value = CreateDeckUiState())
     val uiState: StateFlow<CreateDeckUiState> = _uiState.asStateFlow()
 
-    private val _navigateBack = Channel<Unit>(Channel.BUFFERED)
+    private val _navigateBack = Channel<Unit>(capacity = Channel.BUFFERED)
     val navigateBack = _navigateBack.receiveAsFlow()
 
     private val dialogAction = CreateDeckDialogAction(
         uiStateFlow = _uiState,
         externalScope = viewModelScope,
         navigateBack = _navigateBack,
-        saveDeck = {saveDeckToDatabase() },
+        saveDeck = { saveDeckToDatabase() },
         clearScreen = { clearScreen() },
-        onEditCardConfirmed = {id -> editCard(id = id, newFrontText = editFrontState.text.toString(),  newBackText = editBackState.text.toString())},
-        onDeleteConfirmed = { id -> deleteCard(id) })
+        onEditCardConfirmed = { id ->
+            editCard(
+                id = id,
+                newFrontText = editFrontState.text.toString(),
+                newBackText = editBackState.text.toString()
+            )
+        },
+        onDeleteConfirmed = { id -> deleteCard(id) }
+    )
 
-    val deckName: TextFieldState = TextFieldState("")
-    val frontCreateCardState: TextFieldState = TextFieldState("")
-    val backCreateCardState: TextFieldState = TextFieldState("")
+    val deckName: TextFieldState = TextFieldState(initialText = "")
+    val frontCreateCardState: TextFieldState = TextFieldState(initialText = "")
+    val backCreateCardState: TextFieldState = TextFieldState(initialText = "")
 
-    val editFrontState: TextFieldState = TextFieldState("")
-    val editBackState: TextFieldState = TextFieldState("")
+    val editFrontState: TextFieldState = TextFieldState(initialText = "")
+    val editBackState: TextFieldState = TextFieldState(initialText = "")
 
-    private suspend fun saveDeckToDatabase(){
+    private suspend fun saveDeckToDatabase() {
         deckRepository.saveDeck(
             name = deckName.text.toString(),
             iconResId = _uiState.value.deckIcon,
@@ -88,13 +95,13 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
                     cards = currentState.cards + newCard
                 )
             }
-            frontCreateCardState.edit { replace(0, length, "") }
-            backCreateCardState.edit { replace(0, length, "") }
+            frontCreateCardState.edit { replace(start = 0, end = length, text = "") }
+            backCreateCardState.edit { replace(start = 0, end = length, text = "") }
         } else {
             _uiState.update {
                 it.copy(
                     dialogState = CreateDeckDialogState.Error(
-                        getApplication<Application>().getString(
+                        message = getApplication<Application>().getString(
                             R.string.dialog_message_incomplete_flashcards
                         )
                     )
@@ -104,26 +111,25 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun onEditCardClicked(card: Flashcard) {
-        editFrontState.edit { replace(0, length, card.front) }
-        editBackState.edit { replace(0, length, card.back) }
+        editFrontState.edit { replace(start = 0, end = length, text = card.front) }
+        editBackState.edit { replace(start = 0, end = length, text = card.back) }
 
         _uiState.update {
             it.copy(
                 dialogState = CreateDeckDialogState.EditFlashcard(
-                    id = card.id,
-                    frontText = card.front,
-                    backText = card.back
+                    id = card.id, frontText = card.front, backText = card.back
                 )
             )
         }
     }
-    private fun editCard(id: String, newFrontText: String, newBackText: String){
+
+    private fun editCard(id: String, newFrontText: String, newBackText: String) {
         _uiState.update { state ->
             state.copy(
                 cards = state.cards.map { card ->
-                    if(card.id == id){
+                    if (card.id == id) {
                         card.copy(front = newFrontText, back = newBackText)
-                    }else{
+                    } else {
                         card
                     }
                 }
@@ -135,9 +141,7 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
         _uiState.update {
             it.copy(
                 dialogState = CreateDeckDialogState.DeleteFlashcard(
-                    id = card.id,
-                    frontText = card.front,
-                    backText = card.back
+                    id = card.id, frontText = card.front, backText = card.back
                 )
             )
         }
@@ -155,8 +159,8 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
 
     fun clearScreen() {
         _uiState.update { it.copy(cards = emptyList()) }
-        deckName.edit { replace(0, length, "") }
-        frontCreateCardState.edit { replace(0, length, "") }
-        backCreateCardState.edit { replace(0, length, "") }
+        deckName.edit { replace(start = 0, end = length, text = "") }
+        frontCreateCardState.edit { replace(start = 0, end = length, text = "") }
+        backCreateCardState.edit { replace(start = 0, end = length, text = "") }
     }
 }

@@ -12,8 +12,7 @@ import androidx.datastore.preferences.preferencesDataStore
 
 object SettingsDataStore {
     val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
-        name = "passlingo_settings",
-        corruptionHandler = ReplaceFileCorruptionHandler { exception ->
+        name = "passlingo_settings", corruptionHandler = ReplaceFileCorruptionHandler { exception ->
             Log.e("SettingsDataStore", "File DataStore is corruption!", exception)
             emptyPreferences()
         }

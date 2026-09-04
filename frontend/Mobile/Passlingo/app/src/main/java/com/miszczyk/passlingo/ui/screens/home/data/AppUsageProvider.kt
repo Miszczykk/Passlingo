@@ -9,7 +9,9 @@ import androidx.core.graphics.drawable.toBitmap
 import com.miszczyk.passlingo.ui.screens.home.model.AppItem
 import com.miszczyk.passlingo.ui.screens.home.util.Constants.ONE_MONTH_MILLIS
 
-class AppUsageProvider(private val context: Context) {
+class AppUsageProvider(
+    private val context: Context
+) {
     fun getInstalledAppsWithUsage(): List<AppItem> {
         val packageManager = context.packageManager
         val usageStatsManager =
@@ -22,10 +24,8 @@ class AppUsageProvider(private val context: Context) {
 
         val myPackageName = context.packageName
 
-        return packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
-            .filter { app ->
-                (app.flags and ApplicationInfo.FLAG_SYSTEM) == 0 &&
-                        app.packageName != myPackageName
+        return packageManager.getInstalledApplications(PackageManager.GET_META_DATA).filter { app ->
+                (app.flags and ApplicationInfo.FLAG_SYSTEM) == 0 && app.packageName != myPackageName
             }.map { app ->
                 val appName = app.loadLabel(packageManager).toString()
                 val icon = packageManager.getApplicationIcon(app).toBitmap().asImageBitmap()

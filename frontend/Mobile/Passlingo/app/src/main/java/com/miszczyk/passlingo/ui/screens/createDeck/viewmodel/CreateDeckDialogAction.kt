@@ -11,53 +11,57 @@ import kotlinx.coroutines.launch
 class CreateDeckDialogAction(
     private val uiStateFlow: MutableStateFlow<CreateDeckUiState>,
     private val externalScope: CoroutineScope,
-    private val navigateBack:  Channel<Unit>,
+    private val navigateBack: Channel<Unit>,
     private val saveDeck: suspend () -> Unit,
     private val clearScreen: () -> Unit,
     private val onEditCardConfirmed: (String) -> Unit,
     private val onDeleteConfirmed: (String) -> Unit,
-){
+) {
     fun onDialogCancelled() {
         uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
 
     }
 
-    fun onDiscardDialogConfirmed(){
+    fun onDiscardDialogConfirmed() {
         clearScreen()
         uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
         externalScope.launch {
-            navigateBack.send(Unit)
+            navigateBack.send(element = Unit)
         }
     }
 
-    private fun onSaveDeckDialogConfirmed(){
+    private fun onSaveDeckDialogConfirmed() {
         externalScope.launch {
             runCatching {
                 saveDeck()
             }.onSuccess {
                 clearScreen()
                 uiStateFlow.update { it.copy(dialogState = CreateDeckDialogState.None) }
-                navigateBack.send(Unit)
+                navigateBack.send(element = Unit)
             }.onFailure { exception ->
                 uiStateFlow.update {
-                    it.copy(dialogState = CreateDeckDialogState.Error(exception.localizedMessage ?: "Failed to save deck"))
+                    it.copy(
+                        dialogState = CreateDeckDialogState.Error(
+                            message = exception.localizedMessage ?: "Failed to save deck"
+                        )
+                    )
                 }
             }
         }
     }
 
-    private fun onDeleteCardDialogConfirmed(id: String){
+    private fun onDeleteCardDialogConfirmed(id: String) {
         onDeleteConfirmed(id)
         uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
     }
 
-    private fun onEditCardDialogConfirmed(id: String){
+    private fun onEditCardDialogConfirmed(id: String) {
         onEditCardConfirmed(id)
         uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
     }
 
-    fun onDialogConfirmed(){
-        when(val currentState = uiStateFlow.value.dialogState){
+    fun onDialogConfirmed() {
+        when (val currentState = uiStateFlow.value.dialogState) {
             is CreateDeckDialogState.None -> error("onDialogConfirmed called with no dialog visible")
             is CreateDeckDialogState.SaveDeck -> onSaveDeckDialogConfirmed()
             is CreateDeckDialogState.DiscardChanges -> onDiscardDialogConfirmed()

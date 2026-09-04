@@ -51,10 +51,7 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
 fun AppListItem(
-    modifier: Modifier = Modifier,
-    app: AppItem,
-    appRowState: AppRowState,
-    onClick: () -> Unit
+    modifier: Modifier = Modifier, app: AppItem, appRowState: AppRowState, onClick: () -> Unit
 ) {
     val checkboxScale by animateFloatAsState(
         targetValue = if (appRowState == AppRowState.Selected) 1.2f else 1.0f,
@@ -69,9 +66,7 @@ fun AppListItem(
             if (appRowState == AppRowState.Selected) MaterialTheme.colorScheme.secondary.copy(
                 alpha = 0.15f
             ) else Color.Transparent
-        },
-        animationSpec = tween(durationMillis = 300),
-        label = "RowBackground"
+        }, animationSpec = tween(durationMillis = 300), label = "RowBackground"
     )
 
     val circleColor by animateColorAsState(
@@ -86,7 +81,7 @@ fun AppListItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(cornerRadiusDefault))
+            .clip(shape = RoundedCornerShape(size = cornerRadiusDefault))
             .background(rowBackgroundColor)
             .clickable {
                 onClick()
@@ -94,24 +89,22 @@ fun AppListItem(
             .border(
                 width = borderDefault,
                 color = MaterialTheme.colorScheme.onBackground,
-                shape = RoundedCornerShape(cornerRadiusDefault)
+                shape = RoundedCornerShape(size = cornerRadiusDefault)
             )
-            .padding(spaceLarge), verticalAlignment = Alignment.CenterVertically
-    ) {
-
+            .padding(all = spaceLarge), verticalAlignment = Alignment.CenterVertically) {
         Image(
             bitmap = app.icon,
             contentDescription = app.name,
-            modifier = Modifier.size(iconLarge)
+            modifier = Modifier.size(size = iconLarge)
         )
 
-        Spacer(modifier = Modifier.width(spaceDefault))
+        Spacer(modifier = Modifier.width(width = spaceDefault))
 
 
         Column(
             modifier = Modifier
                 .fillMaxHeight()
-                .weight(1f)
+                .weight(weight = 1f)
         ) {
             Text(
                 text = app.name,
@@ -121,9 +114,9 @@ fun AppListItem(
             )
             Text(
                 text = convertTimeToString(
-                    rawTime = formatTime(app.timeInForeground / 1000, false),
-                    numberFont = body,
-                    textFont = caption
+                    rawTime = formatTime(
+                        totalSeconds = app.timeInForeground / 1000, forceFullFormat = false
+                    ), numberFont = body, textFont = caption
                 ),
                 fontFamily = vagRoundedBold,
             )
@@ -131,14 +124,14 @@ fun AppListItem(
 
         Box(
             modifier = Modifier
-                .size(iconMedium)
+                .size(size = iconMedium)
                 .scale(checkboxScale)
                 .border(width = borderDefault, color = borderColor, shape = CircleShape)
                 .background(color = circleColor, shape = CircleShape),
             contentAlignment = Alignment.Center
         ) {
 
-            when(appRowState){
+            when (appRowState) {
                 AppRowState.Locked -> {
                     Icon(
                         imageVector = Icons.Default.Lock,

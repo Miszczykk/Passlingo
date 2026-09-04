@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.miszczyk.passlingo.ui.screens.home.data.AppUsageProvider
-import com.miszczyk.passlingo.ui.screens.home.data.Repository
-import com.miszczyk.passlingo.ui.screens.home.model.DeckUiState
+import com.miszczyk.passlingo.ui.screens.home.data.RepositoryTimeAndApps
+import com.miszczyk.passlingo.ui.screens.home.model.AppUiState
 import com.miszczyk.passlingo.ui.screens.home.model.DialogState
 import com.miszczyk.passlingo.ui.screens.home.util.hasUsageStatsPermission
 import kotlinx.coroutines.Dispatchers
@@ -25,14 +25,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class DeckViewModel(application: Application) : AndroidViewModel(application) {
-    private val appUsageProvider = AppUsageProvider(application)
-    private val repository = Repository(application)
-    private val _uiState = MutableStateFlow(DeckUiState())
-    val uiState: StateFlow<DeckUiState> = _uiState.asStateFlow()
-    private val dialogAction =
-        DialogAction(_uiState, viewModelScope, repository)
-    private val appSelectionAction = AppSelectionAction(_uiState)
+class AppViewModel(application: Application) : AndroidViewModel(application) {
+    private val appUsageProvider = AppUsageProvider(context = application)
+    private val repositoryTimeAndApps = RepositoryTimeAndApps(context = application)
+    private val _uiState = MutableStateFlow(value = AppUiState())
+    val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
+    private val dialogAction = DialogAction(uiStateFlow = _uiState, externalScope = viewModelScope, lockedAppsAndEarnedTimeRepositoryTimeAndApps = repositoryTimeAndApps)
+    private val appSelectionAction = AppSelectionAction(uiStateFlow = _uiState)
 
     private var observationJob: Job? = null
 
@@ -44,14 +43,13 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
         observationJob?.cancel()
 
         observationJob = combine(
-            repository.lockedApps,
-            repository.balanceTime
+            flow = repositoryTimeAndApps.lockedApps, flow2 =  repositoryTimeAndApps.balanceTime
         ) { locked, time ->
             locked to time
         }.onEach { (locked, time) ->
             _uiState.update { it.copy(lockedApps = locked, balanceTime = time) }
         }.retry(retries = 3) { _ ->
-            delay(1000)
+            delay(timeMillis = 1000)
             true
         }.catch { e ->
             val errorMessage = e.localizedMessage ?: "Failed to load data"
@@ -64,27 +62,23 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.update { it.copy(isLoadingApps = true) }
         viewModelScope.launch {
             val result = runCatching {
-                withContext(Dispatchers.IO) {
+                withContext(context = Dispatchers.IO) {
                     appUsageProvider.getInstalledAppsWithUsage()
                 }
             }
-            result.fold(
-                onSuccess = { apps ->
-                    _uiState.update { it.copy(userApps = apps, isLoadingApps = false) }
-                },
-                onFailure = { error ->
-                    Log.e("error", error.localizedMessage ?: "Failed to load apps")
-                    _uiState.update {
-                        it.copy(
-                            isLoadingApps = false,
-                            dialogState = DialogState.Error(
-                                error.localizedMessage ?: "Failed to load apps"
-                            )
+            result.fold(onSuccess = { apps ->
+                _uiState.update { it.copy(userApps = apps, isLoadingApps = false) }
+            }, onFailure = { error ->
+                Log.e("error", error.localizedMessage ?: "Failed to load apps")
+                _uiState.update {
+                    it.copy(
+                        isLoadingApps = false, dialogState = DialogState.Error(
+                            message = error.localizedMessage ?: "Failed to load apps"
                         )
+                    )
 
-                    }
                 }
-            )
+            })
         }
     }
 
@@ -120,7 +114,7 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun onRetryErrorClicked(){
+    fun onRetryErrorClicked() {
         _uiState.update { it.copy(dialogState = DialogState.None) }
         startObservingData()
     }

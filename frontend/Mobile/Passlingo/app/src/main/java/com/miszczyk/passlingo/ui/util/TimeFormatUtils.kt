@@ -13,9 +13,7 @@ import java.util.Locale
 
 @Composable
 fun convertTimeToString(
-    rawTime: String,
-    numberFont: TextUnit,
-    textFont: TextUnit
+    rawTime: String, numberFont: TextUnit, textFont: TextUnit
 ): AnnotatedString {
     val annotatedTime = buildAnnotatedString {
         rawTime.forEach { char ->
@@ -56,15 +54,11 @@ fun formatTime(totalSeconds: Long, forceFullFormat: Boolean = true): String {
 
     return when {
         forceFullFormat || hours > 0L -> String.format(
-            Locale.US,
-            "%02dh %02dm %02ds",
-            hours,
-            minutes,
-            seconds
+            Locale.US, format = "%02dh %02dm %02ds", hours, minutes, seconds
         )
 
-        minutes > 0L -> String.format(Locale.US, "%02dm %02ds", minutes, seconds)
-        else -> String.format(Locale.US, "%02ds", seconds)
+        minutes > 0L -> String.format(Locale.US, format = "%02dm %02ds", minutes, seconds)
+        else -> String.format(Locale.US, format = "%02ds", seconds)
     }
 }
 

@@ -28,15 +28,19 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 import androidx.compose.ui.window.DialogProperties
 
 @Composable
-fun DialogComponent(dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> Unit) {
+fun DialogComponent(
+    dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> Unit
+) {
     val confirmTextColor = dialog.onConfirmTextColor ?: MaterialTheme.colorScheme.secondary
-    val dialogProperties = if(dialog.isWide){
+
+    val dialogProperties = if (dialog.isWide) {
         DialogProperties(usePlatformDefaultWidth = false)
-    }else{
+    } else {
         DialogProperties()
     }
+
     val dialogModifier = if (dialog.isWide) {
-        Modifier.fillMaxWidth(0.92f)
+        Modifier.fillMaxWidth(fraction = 0.92f)
     } else {
         Modifier
     }
@@ -47,7 +51,8 @@ fun DialogComponent(dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> U
         onDismissRequest = onCancel,
         title = {
             Text(
-                text = dialog.title, fontSize = titleLarge,
+                text = dialog.title,
+                fontSize = titleLarge,
                 color = MaterialTheme.colorScheme.primary,
                 fontFamily = vagRoundedBold,
                 textAlign = TextAlign.Center,
@@ -64,12 +69,10 @@ fun DialogComponent(dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> U
                     textAlign = TextAlign.Center,
                 )
                 if (dialog.extraContent != null) {
-                    Spacer(modifier = Modifier.height(spaceMedium))
-
+                    Spacer(modifier = Modifier.height(height = spaceMedium))
                     dialog.extraContent()
                 }
             }
-
         },
         confirmButton = {
             Row(
@@ -84,8 +87,8 @@ fun DialogComponent(dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> U
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f),
-                        shape = RoundedCornerShape(cornerRadiusSmall)
+                            .weight(weight = 1f),
+                        shape = RoundedCornerShape(size = cornerRadiusSmall)
                     ) {
                         Text(
                             text = dialog.onCancelText,
@@ -105,7 +108,7 @@ fun DialogComponent(dialog: DialogItem, onConfirm: () -> Unit, onCancel: () -> U
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
-                    shape = RoundedCornerShape(cornerRadiusSmall)
+                    shape = RoundedCornerShape(size = cornerRadiusSmall)
                 ) {
                     Text(
                         text = dialog.onConfirmText,

@@ -20,7 +20,9 @@ import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun CreateDeckBottomBar(deckName: String, addedCards: Int, onSaveDeckClicked: () -> Unit) {
+fun CreateDeckBottomBar(
+    deckName: String, addedCards: Int, onSaveDeckClicked: () -> Unit
+) {
     val check = deckName.isNotBlank() && addedCards > 0
 
     val buttonColor by animateColorAsState(
@@ -33,17 +35,17 @@ fun CreateDeckBottomBar(deckName: String, addedCards: Int, onSaveDeckClicked: ()
         label = "buttonColor"
     )
 
-    val textDescription = when{
-        (deckName.isBlank() && addedCards > 0) -> stringResource(R.string.action_enter_deck_name)
-        (deckName.isNotBlank() && addedCards == 0) -> stringResource(R.string.action_add_cards_first)
-        !check -> stringResource(R.string.action_enter_name_add_cards)
-        else -> stringResource(R.string.action_save_deck)
+    val textDescription = when {
+        (deckName.isBlank() && addedCards > 0) -> stringResource(id = R.string.action_enter_deck_name)
+        (deckName.isNotBlank() && addedCards == 0) -> stringResource(id = R.string.action_add_cards_first)
+        !check -> stringResource(id = R.string.action_enter_name_add_cards)
+        else -> stringResource(id = R.string.action_save_deck)
     }
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = spaceExtraLarge),
-        shape = RoundedCornerShape(cornerRadiusDefault),
+        shape = RoundedCornerShape(size = cornerRadiusDefault),
         colors = ButtonDefaults.buttonColors(
             containerColor = buttonColor
         ),
@@ -51,7 +53,8 @@ fun CreateDeckBottomBar(deckName: String, addedCards: Int, onSaveDeckClicked: ()
             onSaveDeckClicked()
         }) {
         Text(
-            text = textDescription, fontSize = titleLarge,
+            text = textDescription,
+            fontSize = titleLarge,
             color = textColor,
             fontFamily = vagRoundedBold,
             modifier = Modifier.padding(vertical = spaceDefault)

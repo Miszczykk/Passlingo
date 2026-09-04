@@ -40,27 +40,25 @@ import com.miszczyk.passlingo.ui.util.DeckIcons
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateDeckScreen(
-    modifier: Modifier = Modifier,
-    onBack: () -> Unit,
-    viewModel: CreateDeckViewModel = viewModel()
+    modifier: Modifier = Modifier, onBack: () -> Unit, viewModel: CreateDeckViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val sheetState = rememberModalBottomSheetState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(key1 = Unit) {
         viewModel.navigateBack.collect {
             onBack()
         }
     }
 
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(modifier = Modifier.height(spaceLarge))
+        Spacer(modifier = Modifier.height(height = spaceLarge))
         Header(onClick = { viewModel.onBackClicked() })
-        Spacer(modifier = Modifier.height(spaceExtraLarge))
+        Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
         LazyColumn(
             modifier = Modifier
-                .weight(1f)
+                .weight(weight = 1f)
                 .padding(horizontal = spaceExtraLarge),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -70,22 +68,26 @@ fun CreateDeckScreen(
                     onSelectIconClicked = { viewModel.onSelectIconClicked() },
                     icon = uiState.deckIcon
                 )
-                Spacer(modifier = Modifier.height(spaceExtraHuge))
-                HorizontalDivider(MaterialTheme.colorScheme.onSecondary)
-                Spacer(modifier = Modifier.height(spaceHuge))
+                Spacer(modifier = Modifier.height(height = spaceExtraHuge))
+                HorizontalDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
+                Spacer(modifier = Modifier.height(height = spaceHuge))
                 AddCardSection(
                     addedCards = uiState.cards.size,
                     stateFront = viewModel.frontCreateCardState,
                     stateBack = viewModel.backCreateCardState,
                     onAddToDeckClicked = { viewModel.onAddToDeckClicked() })
 
-                Spacer(modifier = Modifier.height(spaceExtraHuge))
+                Spacer(modifier = Modifier.height(height = spaceExtraHuge))
             }
 
             if (uiState.cards.isNotEmpty()) {
                 items(items = uiState.cards, key = { it.id }) { card ->
-                    FlashcardItem(frontText = card.front, backText = card.back, onEditClicked = { viewModel.onEditCardClicked(card) }, onDeleteClicked = { viewModel.onDeleteCardClicked(card) })
-                    Spacer(modifier = Modifier.height(spaceLarge))
+                    FlashcardItem(
+                        frontText = card.front,
+                        backText = card.back,
+                        onEditClicked = { viewModel.onEditCardClicked(card) },
+                        onDeleteClicked = { viewModel.onDeleteCardClicked(card) })
+                    Spacer(modifier = Modifier.height(height = spaceLarge))
                 }
             } else {
                 item {
@@ -99,31 +101,30 @@ fun CreateDeckScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.height(spaceHuge))
+                Spacer(modifier = Modifier.height(height = spaceHuge))
             }
         }
 
-        HorizontalDivider(MaterialTheme.colorScheme.onSecondary)
-        Spacer(modifier = Modifier.height(spaceExtraLarge))
+        HorizontalDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
+        Spacer(modifier = Modifier.height(height = spaceExtraLarge))
         CreateDeckBottomBar(
             deckName = viewModel.deckName.text.toString(),
             addedCards = uiState.cards.size,
             onSaveDeckClicked = { viewModel.onSaveDeckClicked() })
-        Spacer(modifier = Modifier.height(spaceLarge))
+        Spacer(modifier = Modifier.height(height = spaceLarge))
     }
 
     if (uiState.showBottomSheet) {
         IconSelectBottomSheet(
             sheetState = sheetState,
             currentIcon = uiState.deckIcon,
-            onIconClicked = { iconId -> viewModel.onIconClicked(iconId) },
+            onIconClicked = { iconId -> viewModel.onIconClicked(selectedIcon = iconId) },
             onDismissRequest = { viewModel.onSheetDismissed() },
             deckIconsList = DeckIcons.all,
         )
     }
 
     DeckStatusDialogs(
-        dialogState = uiState.dialogState,
-        createDeckViewModel = viewModel
+        dialogState = uiState.dialogState, createDeckViewModel = viewModel
     )
 }

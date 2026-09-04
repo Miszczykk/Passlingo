@@ -20,57 +20,64 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.elevationExtraSmall
+import com.miszczyk.passlingo.ui.theme.Dimens.iconHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.body
+import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
-fun WithoutDecks(){
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .shadow(elevation = elevationExtraSmall, shape = RoundedCornerShape(cornerRadiusDefault))
-        .background(
-            color = MaterialTheme.colorScheme.background,
-            shape = RoundedCornerShape(cornerRadiusDefault)
-        )
-        .border(borderThin, color = MaterialTheme.colorScheme.onBackground, RoundedCornerShape(cornerRadiusDefault)).padding(spaceExtraLarge),
+fun WithoutDecks() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = elevationExtraSmall,
+                shape = RoundedCornerShape(size = cornerRadiusDefault)
+            )
+            .background(
+                color = MaterialTheme.colorScheme.background,
+                shape = RoundedCornerShape(size = cornerRadiusDefault)
+            )
+            .border(
+                width = borderThin,
+                color = MaterialTheme.colorScheme.onBackground,
+                shape = RoundedCornerShape(size = cornerRadiusDefault)
+            )
+            .padding(all = spaceExtraLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .background(
-                    color = MaterialTheme.colorScheme.onBackground,
-                    shape = CircleShape
-                )
+            contentAlignment = Alignment.Center, modifier = Modifier.background(
+                color = MaterialTheme.colorScheme.onBackground, shape = CircleShape
+            )
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.write),
-                contentDescription = stringResource(R.string.action_create_flashcards),
+                contentDescription = stringResource(id = R.string.action_create_flashcards),
                 tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .size(60.dp)
+                modifier = Modifier.size(size = iconHuge)
             )
         }
-        Spacer(modifier = Modifier.height(spaceLarge))
+        Spacer(modifier = Modifier.height(height = spaceLarge))
         Text(
             text = "No decks yet",
             color = MaterialTheme.colorScheme.primary,
-            fontSize = 20.sp,
+            fontSize = titleMedium,
             fontFamily = vagRoundedBold,
         )
-        Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.height(height = spaceExtraSmall))
         Text(
             text = "Create your first deck to start earning time.",
             color = MaterialTheme.colorScheme.onSecondary,
-            fontSize = 15.sp,
+            fontSize = body,
             fontFamily = vagRoundedLight,
         )
     }

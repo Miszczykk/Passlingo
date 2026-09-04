@@ -25,77 +25,78 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.elevationExtraSmall
+import com.miszczyk.passlingo.ui.theme.Dimens.iconExtraHuge
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.body
+import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
 fun DeckItem(
     @DrawableRes icon: Int,
     nameDeck: String,
-    numberCards: Int,
+    flashcardCount: Int,
     isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
-    val textToQuantityCards = if (numberCards > 1) "$numberCards cards" else "$numberCards card"
-
-    val border = if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
-    val backgroundIcon = if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
+    val borderColor =
+        if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
+    val iconBackgroundColor =
+        if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .shadow(
                 elevation = elevationExtraSmall,
-                shape = RoundedCornerShape(cornerRadiusDefault)
+                shape = RoundedCornerShape(size = cornerRadiusDefault)
             )
             .background(
                 color = MaterialTheme.colorScheme.background,
-                shape = RoundedCornerShape(cornerRadiusDefault)
+                shape = RoundedCornerShape(size = cornerRadiusDefault)
             )
             .border(
-                borderThin,
-                color = border,
-                RoundedCornerShape(cornerRadiusDefault)
+                width = borderThin,
+                color = borderColor,
+                shape = RoundedCornerShape(size = cornerRadiusDefault)
             )
-            .clip(RoundedCornerShape(cornerRadiusDefault))
+            .clip(shape = RoundedCornerShape(size = cornerRadiusDefault))
             .clickable { onClick() }
-            .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+            .padding(all = spaceLarge), verticalAlignment = Alignment.CenterVertically) {
         Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .background(
-                    color = backgroundIcon,
-                    shape = RoundedCornerShape(cornerRadiusDefault)
-                )
+            contentAlignment = Alignment.Center, modifier = Modifier.background(
+                color = iconBackgroundColor, shape = RoundedCornerShape(size = cornerRadiusDefault)
+            )
         ) {
             Icon(
                 painter = painterResource(id = icon),
-                contentDescription = stringResource(R.string.content_desc_deck_icon),
+                contentDescription = stringResource(id = R.string.content_desc_deck_icon),
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(65.dp).padding(5.dp)
+                modifier = Modifier
+                    .size(size = iconExtraHuge)
+                    .padding(all = spaceExtraSmall)
             )
         }
-        Spacer(modifier = Modifier.width(20.dp))
+        Spacer(modifier = Modifier.width(width = spaceLarge))
 
-        Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween
+        Column(
+            modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = nameDeck,
                 color = MaterialTheme.colorScheme.primary,
-                fontSize = 20.sp,
+                fontSize = titleMedium,
                 fontFamily = vagRoundedBold,
             )
             Text(
-                text = textToQuantityCards,
+                text = "$flashcardCount card(s)",
                 color = MaterialTheme.colorScheme.onSecondary,
-                fontSize = 15.sp,
+                fontSize = body,
                 fontFamily = vagRoundedBold,
             )
         }

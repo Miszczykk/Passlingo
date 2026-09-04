@@ -24,9 +24,7 @@ import com.miszczyk.passlingo.ui.theme.Dimens.iconExtraLarge
 
 @Composable
 fun IconItem(
-    @DrawableRes iconResId: Int,
-    isSelected: Boolean,
-    onClick: () -> Unit
+    @DrawableRes iconResId: Int, isSelected: Boolean, onClick: () -> Unit
 ) {
     val backgroundColor =
         if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
@@ -36,26 +34,25 @@ fun IconItem(
         if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurface
 
     IconButton(
-        onClick = { onClick() },
-        modifier = Modifier
+        onClick = { onClick() }, modifier = Modifier
             .shadow(
                 elevation = if (isSelected) elevationSmall else elevationNone,
-                shape = RoundedCornerShape(cornerRadiusDefault)
+                shape = RoundedCornerShape(size = cornerRadiusDefault)
             )
-            .aspectRatio(1f)
-            .clip(RoundedCornerShape(cornerRadiusDefault))
+            .aspectRatio(ratio = 1f)
+            .clip(shape = RoundedCornerShape(size = cornerRadiusDefault))
             .background(backgroundColor)
             .border(
                 width = borderDefault,
                 color = borderColor,
-                shape = RoundedCornerShape(cornerRadiusDefault)
+                shape = RoundedCornerShape(size = cornerRadiusDefault)
             )
     ) {
         Icon(
             painter = painterResource(id = iconResId),
-            contentDescription = stringResource(R.string.content_desc_deck_icon),
+            contentDescription = stringResource(id = R.string.content_desc_deck_icon),
             tint = iconColor,
-            modifier = Modifier.size(iconExtraLarge)
+            modifier = Modifier.size(size = iconExtraLarge)
         )
     }
 }

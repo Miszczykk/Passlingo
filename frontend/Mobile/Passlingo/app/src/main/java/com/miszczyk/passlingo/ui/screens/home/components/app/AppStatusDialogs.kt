@@ -17,7 +17,7 @@ import com.miszczyk.passlingo.ui.model.DialogItem
 import com.miszczyk.passlingo.ui.screens.home.model.DialogState
 import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME
 import com.miszczyk.passlingo.ui.util.formatTime
-import com.miszczyk.passlingo.ui.screens.home.viewmodel.DeckViewModel
+import com.miszczyk.passlingo.ui.screens.home.viewmodel.AppViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
 import com.miszczyk.passlingo.ui.theme.TextSize.small
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
@@ -25,11 +25,8 @@ import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 
 @Composable
 fun AppStatusDialogs(
-    dialogState: DialogState,
-    deckViewModel: DeckViewModel,
-    appName: String
+    dialogState: DialogState, appViewModel: AppViewModel, appName: String
 ) {
-
     val dialogItem = when (dialogState) {
         is DialogState.None -> return
         is DialogState.ConfirmLock -> lockAppDialog()
@@ -38,10 +35,14 @@ fun AppStatusDialogs(
         is DialogState.Error -> errorDialog(errorMessage = dialogState.message)
     }
 
-    DialogComponent(
-        dialog = dialogItem,
-        onConfirm = { if(dialogState is DialogState.Error) {deckViewModel.onRetryErrorClicked()} else {deckViewModel.onDialogConfirmed()} },
-        onCancel = { deckViewModel.onDialogCancelled() })
+    DialogComponent(dialog = dialogItem, onConfirm = {
+        if (dialogState is DialogState.Error) {
+            appViewModel.onRetryErrorClicked()
+        } else {
+            appViewModel.onDialogConfirmed()
+        }
+    }, onCancel = { appViewModel.onDialogCancelled() }
+    )
 }
 
 @Composable
@@ -49,7 +50,7 @@ private fun lockAppDialog(): DialogItem {
     return DialogItem(
         title = stringResource(R.string.dialog_title_confirm_lock),
         message = stringResource(R.string.dialog_message_confirm_lock),
-        onConfirmText = stringResource(R.string.action_lock),
+        onConfirmText = stringResource(id = R.string.action_lock),
         onCancelText = stringResource(R.string.action_cancel),
     )
 }
@@ -63,8 +64,8 @@ private fun unlockAppDialog(appName: String): DialogItem {
         onCancelText = stringResource(R.string.action_cancel),
         extraContent = {
             TimerLock(
-                stringResource(R.string.label_cost_to_unlock),
-                formatTime(COST_TIME, false)
+                title = stringResource(R.string.label_cost_to_unlock),
+                time = formatTime(totalSeconds = COST_TIME, forceFullFormat = false)
             )
         }
     )
@@ -79,15 +80,15 @@ private fun insufficientTimeDialog(appName: String): DialogItem {
         onConfirmTextColor = MaterialTheme.colorScheme.background,
         extraContent = {
             TimerLock(
-                stringResource(R.string.label_requires),
-                formatTime(COST_TIME, false)
+                title = stringResource(R.string.label_requires),
+                time = formatTime(totalSeconds = COST_TIME, forceFullFormat = false)
             )
         }
     )
 }
 
 @Composable
-private fun errorDialog(errorMessage: String): DialogItem{
+private fun errorDialog(errorMessage: String): DialogItem {
     return DialogItem(
         title = stringResource(R.string.dialog_title_error),
         message = errorMessage,
@@ -100,11 +101,11 @@ private fun errorDialog(errorMessage: String): DialogItem{
 private fun TimerLock(title: String, time: String) {
     ShadowCard {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            TitleToCard(title, small)
+            TitleToCard(titleText = title, titleFontSize = small)
 
-            Spacer(modifier = Modifier.height(spaceExtraSmall))
+            Spacer(modifier = Modifier.height(height = spaceExtraSmall))
 
-            TimeToCard(time, titleLarge, titleMedium)
+            TimeToCard(timeText = time, numberFontSize = titleLarge, textFontSize = titleMedium)
         }
     }
 }

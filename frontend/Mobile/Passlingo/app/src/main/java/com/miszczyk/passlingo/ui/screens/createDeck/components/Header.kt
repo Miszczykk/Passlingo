@@ -22,29 +22,31 @@ import com.miszczyk.passlingo.ui.theme.TextSize.headline
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun Header(onClick: () -> Unit) {
+fun Header(
+    onClick: () -> Unit
+) {
     Box(
         modifier = Modifier
-            .fillMaxWidth().padding(horizontal = spaceExtraLarge)
+            .fillMaxWidth()
+            .padding(horizontal = spaceExtraLarge)
     ) {
         IconButton(
-            onClick = { onClick() },
-            modifier = Modifier
+            onClick = { onClick() }, modifier = Modifier
                 .align(Alignment.CenterStart)
                 .background(
-                    MaterialTheme.colorScheme.onBackground,
-                    shape = RoundedCornerShape(cornerRadiusDefault)
+                    color = MaterialTheme.colorScheme.onBackground,
+                    shape = RoundedCornerShape(size = cornerRadiusDefault)
                 )
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = stringResource(R.string.content_desc_back),
+                contentDescription = stringResource(id = R.string.content_desc_back),
                 tint = MaterialTheme.colorScheme.primary,
             )
         }
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = stringResource(R.string.label_create_deck),
+            text = stringResource(id = R.string.label_create_deck),
             color = MaterialTheme.colorScheme.primary,
             fontSize = headline,
             fontFamily = vagRoundedBold,

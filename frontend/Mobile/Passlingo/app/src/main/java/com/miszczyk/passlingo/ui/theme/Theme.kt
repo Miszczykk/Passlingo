@@ -32,7 +32,6 @@ fun PasslingoTheme(
             insetsController.isAppearanceLightStatusBars = true
         }
     }
-
     MaterialTheme(
         colorScheme = LightColorScheme,
         typography = Typography,

@@ -42,17 +42,16 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
 fun DeckDetailsSection(
-    modifier: Modifier = Modifier,
-    state: TextFieldState,
-    onSelectIconClicked: () -> Unit,
-    icon: Int
+    modifier: Modifier = Modifier, state: TextFieldState, onSelectIconClicked: () -> Unit, icon: Int
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        LabeledContent(modifier.weight(1f), stringResource(R.string.label_deck_name)) {
+        LabeledContent(
+            modifier.weight(weight = 1f), label = stringResource(R.string.label_deck_name)
+        ) {
             BasicTextField(
                 state = state,
                 lineLimits = TextFieldLineLimits.SingleLine,
@@ -67,16 +66,16 @@ fun DeckDetailsSection(
                             .fillMaxWidth()
                             .shadow(
                                 elevation = elevationSmall,
-                                shape = RoundedCornerShape(cornerRadiusDefault)
+                                shape = RoundedCornerShape(size = cornerRadiusDefault)
                             )
                             .background(
-                                MaterialTheme.colorScheme.background,
-                                RoundedCornerShape(cornerRadiusDefault)
+                                color = MaterialTheme.colorScheme.background,
+                                shape = RoundedCornerShape(size = cornerRadiusDefault)
                             )
                             .border(
-                                borderThin,
-                                MaterialTheme.colorScheme.onBackground,
-                                RoundedCornerShape(cornerRadiusDefault)
+                                width = borderThin,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                shape = RoundedCornerShape(size = cornerRadiusDefault)
                             )
                             .padding(horizontal = spaceExtraLarge, vertical = spaceVeryLarge),
                         contentAlignment = Alignment.CenterStart
@@ -86,7 +85,7 @@ fun DeckDetailsSection(
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = vagRoundedLight,
                             fontSize = titleMedium,
-                            modifier = Modifier.alpha(if (state.text.isEmpty()) 1f else 0f)
+                            modifier = Modifier.alpha(alpha = if (state.text.isEmpty()) 1f else 0f)
                         )
                         innerTextField()
                     }
@@ -94,34 +93,33 @@ fun DeckDetailsSection(
             )
         }
 
-        Spacer(modifier = Modifier.width(spaceExtraLarge))
+        Spacer(modifier = Modifier.width(width = spaceExtraLarge))
 
         LabeledContent(
             modifier,
-            stringResource(R.string.label_icon),
-            Alignment.CenterHorizontally
+            label = stringResource(R.string.label_icon),
+            horizontal = Alignment.CenterHorizontally
         ) {
             IconButton(
-                onClick = { onSelectIconClicked() },
-                modifier = Modifier
+                onClick = { onSelectIconClicked() }, modifier = Modifier
                     .shadow(
                         elevation = elevationSmall,
-                        shape = RoundedCornerShape(cornerRadiusDefault)
+                        shape = RoundedCornerShape(size = cornerRadiusDefault)
                     )
-                    .size(iconGiant)
-                    .clip(RoundedCornerShape(cornerRadiusDefault))
-                    .background(MaterialTheme.colorScheme.primary)
+                    .size(size = iconGiant)
+                    .clip(shape = RoundedCornerShape(size = cornerRadiusDefault))
+                    .background(color = MaterialTheme.colorScheme.primary)
                     .border(
                         width = borderDefault,
                         color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(cornerRadiusDefault)
+                        shape = RoundedCornerShape(size = cornerRadiusDefault)
                     )
             ) {
                 Icon(
-                    painter = painterResource(icon),
+                    painter = painterResource(id = icon),
                     contentDescription = stringResource(R.string.content_desc_deck_icon),
                     tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.size(iconHuge)
+                    modifier = Modifier.size(size = iconHuge)
                 )
             }
         }

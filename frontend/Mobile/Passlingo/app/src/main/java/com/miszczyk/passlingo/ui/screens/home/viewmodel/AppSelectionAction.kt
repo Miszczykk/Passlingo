@@ -1,15 +1,15 @@
 package com.miszczyk.passlingo.ui.screens.home.viewmodel
 
-import com.miszczyk.passlingo.ui.screens.home.model.DeckUiState
+import com.miszczyk.passlingo.ui.screens.home.model.AppUiState
 import com.miszczyk.passlingo.ui.screens.home.model.DialogState
 import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
 class AppSelectionAction(
-    private val uiStateFlow: MutableStateFlow<DeckUiState>,
+    private val uiStateFlow: MutableStateFlow<AppUiState>,
 ) {
-    private fun toggleAppSelection(state: DeckUiState, packageName: String): Set<String> {
+    private fun toggleAppSelection(state: AppUiState, packageName: String): Set<String> {
         return if (state.selectedApps.contains(packageName)) {
             state.selectedApps - packageName
         } else {
@@ -17,7 +17,7 @@ class AppSelectionAction(
         }
     }
 
-    private fun resolveUnlockDialogState(state: DeckUiState, packageName: String): DialogState {
+    private fun resolveUnlockDialogState(state: AppUiState, packageName: String): DialogState {
         return if (state.balanceTime < COST_TIME) {
             DialogState.InsufficientTime(packageName)
         } else {

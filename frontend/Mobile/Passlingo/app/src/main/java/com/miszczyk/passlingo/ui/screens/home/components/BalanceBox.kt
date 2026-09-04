@@ -19,17 +19,22 @@ import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 
 @Composable
-fun BalanceBox(modifier: Modifier = Modifier, balanceTime: Long) {
+fun BalanceBox(
+    modifier: Modifier = Modifier, balanceTime: Long
+) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        TitleToCard(stringResource(R.string.label_available_balance), titleMedium)
+        TitleToCard(
+            titleText = stringResource(R.string.label_available_balance),
+            titleFontSize = titleMedium
+        )
 
-        Spacer(modifier = Modifier.height(spaceMedium))
+        Spacer(modifier = Modifier.height(height = spaceMedium))
 
         ShadowCard {
             TimeToCard(
-                formatTime(balanceTime),
-                displayMedium,
-                titleLarge,
+                timeText = formatTime(totalSeconds = balanceTime),
+                numberFontSize = displayMedium,
+                textFontSize = titleLarge,
                 Modifier.offset(y = spaceMedium)
             )
         }

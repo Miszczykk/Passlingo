@@ -71,37 +71,35 @@ fun AppLockBottomSheet(
 ) {
 
     ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        sheetState = sheetState
+        onDismissRequest = onDismissRequest, sheetState = sheetState
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             val coroutineScope = rememberCoroutineScope()
 
-            BottomSheetHeader(stringResource(R.string.label_app_lock)) {
+            BottomSheetHeader(label = stringResource(R.string.label_app_lock)) {
                 coroutineScope.launch {
                     sheetState.hide()
                     onDismissRequest()
                 }
             }
 
-            Spacer(modifier = Modifier.height(spaceMediumLarge))
+            Spacer(modifier = Modifier.height(height = spaceMediumLarge))
 
             Text(
-                stringResource(R.string.prompt_app_lock_description),
+                text = stringResource(R.string.prompt_app_lock_description),
                 fontSize = body,
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontFamily = vagRoundedLight,
                 modifier = Modifier.padding(horizontal = spaceExtraLarge)
             )
 
-            Spacer(modifier = Modifier.height(spaceExtraLarge))
+            Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
-            HorizontalDivider(MaterialTheme.colorScheme.onSecondary)
+            HorizontalDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
 
-            Spacer(modifier = Modifier.height(spaceExtraLarge))
+            Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
             if (!hasUsagePermission) {
                 PermissionRequiredContent(onRequestPermission)
@@ -115,7 +113,9 @@ fun AppLockBottomSheet(
 }
 
 @Composable
-private fun PermissionRequiredContent(onRequestPermission: () -> Unit) {
+private fun PermissionRequiredContent(
+    onRequestPermission: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -123,7 +123,8 @@ private fun PermissionRequiredContent(onRequestPermission: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = stringResource(R.string.prompt_usage_access_required), fontSize = titleMedium,
+            text = stringResource(R.string.prompt_usage_access_required),
+            fontSize = titleMedium,
             color = MaterialTheme.colorScheme.onSecondary,
             fontFamily = vagRoundedBold
         )
@@ -133,7 +134,7 @@ private fun PermissionRequiredContent(onRequestPermission: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = spaceDefault),
-        shape = RoundedCornerShape(cornerRadiusDefault),
+        shape = RoundedCornerShape(size = cornerRadiusDefault),
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary
         ),
@@ -142,7 +143,7 @@ private fun PermissionRequiredContent(onRequestPermission: () -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(spaceDefault),
+                .padding(all = spaceDefault),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -152,10 +153,11 @@ private fun PermissionRequiredContent(onRequestPermission: () -> Unit) {
                 tint = MaterialTheme.colorScheme.secondary,
             )
 
-            Spacer(modifier = Modifier.width(spaceMedium))
+            Spacer(modifier = Modifier.width(width = spaceMedium))
 
             Text(
-                text = stringResource(R.string.action_grant_permission), fontSize = titleLarge,
+                text = stringResource(R.string.action_grant_permission),
+                fontSize = titleLarge,
                 color = MaterialTheme.colorScheme.background,
                 fontFamily = vagRoundedBold
             )
@@ -187,7 +189,7 @@ private fun ColumnScope.AppListContent(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = spaceExtraLarge)
-            .weight(1f)
+            .weight(weight = 1f)
     ) {
         items(items = userApps, key = { it.packageName }) { app ->
             val rowState = when {
@@ -196,9 +198,7 @@ private fun ColumnScope.AppListContent(
                 else -> AppRowState.Normal
             }
             AppListItem(
-                app = app,
-                appRowState = rowState,
-                onClick = {
+                app = app, appRowState = rowState, onClick = {
                     onAppToggled(app.packageName)
                 }
             )
@@ -215,18 +215,17 @@ private fun ColumnScope.AppListContent(
         label = "buttonColor"
     )
 
-    val textDescription =
-        if (selectedApps.isNotEmpty()) stringResource(
-            R.string.action_lock_selected,
-            (earnedTimeFor(selectedApps.size) / 60).toInt()
-        ) else stringResource(R.string.prompt_select_apps_to_lock)
+    val textDescription = if (selectedApps.isNotEmpty()) stringResource(
+        R.string.action_lock_selected,
+        (earnedTimeFor(numberOfApplication = selectedApps.size) / 60).toInt()
+    ) else stringResource(R.string.prompt_select_apps_to_lock)
 
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = spaceDefault)
             .padding(horizontal = spaceExtraLarge),
-        shape = RoundedCornerShape(cornerRadiusDefault),
+        shape = RoundedCornerShape(size = cornerRadiusDefault),
         colors = ButtonDefaults.buttonColors(
             containerColor = buttonColor
         ),
@@ -236,7 +235,7 @@ private fun ColumnScope.AppListContent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(spaceDefault),
+                .padding(all = spaceDefault),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -246,10 +245,11 @@ private fun ColumnScope.AppListContent(
                 tint = MaterialTheme.colorScheme.secondary,
             )
 
-            Spacer(modifier = Modifier.width(spaceMedium))
+            Spacer(modifier = Modifier.width(width = spaceMedium))
 
             Text(
-                text = textDescription, fontSize = titleLarge,
+                text = textDescription,
+                fontSize = titleLarge,
                 color = textColor,
                 fontFamily = vagRoundedBold
             )

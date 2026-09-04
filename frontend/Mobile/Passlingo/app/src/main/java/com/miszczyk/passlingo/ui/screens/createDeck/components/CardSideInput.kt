@@ -36,7 +36,7 @@ fun CardSideInput(
     state: TextFieldState,
     colorLine: Color = MaterialTheme.colorScheme.onBackground
 ) {
-    var isFocused by remember { mutableStateOf(false) }
+    var isFocused by remember { mutableStateOf(value = false) }
 
     Column(horizontalAlignment = Alignment.Start, modifier = modifier) {
         Text(
@@ -46,41 +46,36 @@ fun CardSideInput(
             fontFamily = vagRoundedBold,
         )
 
-        Spacer(modifier = Modifier.height(spaceMediumPlus))
+        Spacer(modifier = Modifier.height(height = spaceMediumPlus))
 
         BasicTextField(
-            state = state,
-            modifier = Modifier.onFocusChanged { focusState ->
+            state = state, modifier = Modifier.onFocusChanged { focusState ->
                 isFocused = focusState.isFocused
-            },
-            lineLimits = TextFieldLineLimits.SingleLine,
-            textStyle = TextStyle(
+            }, lineLimits = TextFieldLineLimits.SingleLine, textStyle = TextStyle(
                 fontFamily = vagRoundedBold,
                 fontSize = titleMedium,
                 color = MaterialTheme.colorScheme.primary
-            ),
-            decorator = { innerTextField ->
+            ), decorator = { innerTextField ->
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth(), contentAlignment = Alignment.CenterStart
+                        modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart
                     ) {
                         Text(
                             text = hintText,
                             color = MaterialTheme.colorScheme.onSurface,
                             fontFamily = vagRoundedBold,
                             fontSize = titleMedium,
-                            modifier = Modifier.alpha(if (state.text.isEmpty()) 1f else 0f)
+                            modifier = Modifier.alpha(alpha = if (state.text.isEmpty()) 1f else 0f)
                         )
                         innerTextField()
                     }
 
-                    Spacer(modifier = Modifier.height(spaceExtraSmall))
+                    Spacer(modifier = Modifier.height(height = spaceExtraSmall))
                     HorizontalDivider(
                         (if (!isFocused) colorLine else MaterialTheme.colorScheme.secondary),
-                        3f
+                        strokeWidth = 3f
                     )
                 }
             }

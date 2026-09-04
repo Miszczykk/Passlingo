@@ -24,17 +24,17 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
 fun ShadowCard(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    modifier: Modifier = Modifier, content: @Composable () -> Unit
 ) {
     Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
+        contentAlignment = Alignment.Center, modifier = modifier
             .fillMaxWidth()
-            .shadow(elevation = elevationSmall, shape = RoundedCornerShape(cornerRadiusDefault))
+            .shadow(
+                elevation = elevationSmall, shape = RoundedCornerShape(size = cornerRadiusDefault)
+            )
             .background(
                 color = MaterialTheme.colorScheme.background,
-                shape = RoundedCornerShape(cornerRadiusDefault)
+                shape = RoundedCornerShape(size = cornerRadiusDefault)
             )
             .padding(vertical = spaceLarge)
     ) {
@@ -43,7 +43,9 @@ fun ShadowCard(
 }
 
 @Composable
-fun TitleToCard(titleText: String, titleFontSize: TextUnit) {
+fun TitleToCard(
+    titleText: String, titleFontSize: TextUnit
+) {
     Text(
         text = titleText,
         fontSize = titleFontSize,
@@ -63,7 +65,7 @@ fun TimeToCard(
     modifier: Modifier = Modifier
 ) {
     Text(
-        text = convertTimeToString(timeText, numberFontSize, textFontSize),
+        text = convertTimeToString(rawTime = timeText, numberFontSize, textFontSize),
         textAlign = TextAlign.Center,
         fontFamily = vagRoundedBlack,
         maxLines = 1,

@@ -24,9 +24,13 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetHeader(label: String, onCloseClicked: () -> Unit) {
+fun BottomSheetHeader(
+    label: String, onCloseClicked: () -> Unit
+) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = spaceExtraLarge),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = spaceExtraLarge),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -39,12 +43,9 @@ fun BottomSheetHeader(label: String, onCloseClicked: () -> Unit) {
         IconButton(
             onClick = {
                 onCloseClicked()
-            },
-            modifier = Modifier
-                .background(
-                    MaterialTheme.colorScheme.onBackground,
-                    shape = CircleShape
-                )
+            }, modifier = Modifier.background(
+                color = MaterialTheme.colorScheme.onBackground, shape = CircleShape
+            )
         ) {
             Icon(
                 imageVector = Icons.Default.Close,

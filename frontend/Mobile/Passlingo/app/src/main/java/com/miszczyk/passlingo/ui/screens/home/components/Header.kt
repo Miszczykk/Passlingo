@@ -15,15 +15,16 @@ import com.miszczyk.passlingo.ui.theme.TextSize.displaySmall
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun Header(modifier: Modifier = Modifier) {
+fun Header(
+    modifier: Modifier = Modifier
+) {
     val annotatedText = buildAnnotatedString {
         withStyle(
             style = SpanStyle(
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = displaySmall
+                color = MaterialTheme.colorScheme.primary, fontSize = displaySmall
             )
         ) {
-            append(stringResource(R.string.app_name))
+            append(stringResource(id = R.string.app_name))
         }
         withStyle(
             style = SpanStyle(

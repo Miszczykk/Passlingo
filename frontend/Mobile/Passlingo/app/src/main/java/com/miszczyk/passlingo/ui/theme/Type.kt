@@ -12,13 +12,13 @@ import com.miszczyk.passlingo.ui.theme.TextSize.lineHeightDefault
 
 // Set of Material typography styles to start with
 val vagRoundedBlack = FontFamily(
-    Font(R.font.vag_rounded_black)
+    Font(resId = R.font.vag_rounded_black)
 )
 val vagRoundedBold = FontFamily(
-    Font(R.font.vag_rounded_bold)
+    Font(resId = R.font.vag_rounded_bold)
 )
 val vagRoundedLight = FontFamily(
-    Font(R.font.vag_rounded_light)
+    Font(resId = R.font.vag_rounded_light)
 )
 val Typography = Typography(
     bodyLarge = TextStyle(

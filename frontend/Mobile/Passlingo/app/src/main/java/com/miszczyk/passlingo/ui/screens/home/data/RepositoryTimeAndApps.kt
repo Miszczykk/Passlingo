@@ -8,7 +8,9 @@ import com.miszczyk.passlingo.ui.screens.home.datastore.SettingsDataStore.dataSt
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class Repository(private val context: Context){
+class RepositoryTimeAndApps(
+    private val context: Context
+) {
     val lockedApps: Flow<Set<String>> = context.dataStore.data.map { prefs ->
         prefs[LOCKED_APPS_KEY] ?: emptySet()
     }
@@ -17,14 +19,14 @@ class Repository(private val context: Context){
         prefs[BALANCE_TIME_KEY] ?: 0L
     }
 
-    suspend fun lockAppsAndAddCreditTime(packageNames: Set<String>, secondsEarned: Long){
+    suspend fun lockAppsAndAddCreditTime(packageNames: Set<String>, secondsEarned: Long) {
         context.dataStore.edit { prefs ->
             prefs[LOCKED_APPS_KEY] = (prefs[LOCKED_APPS_KEY] ?: emptySet()) + packageNames
             prefs[BALANCE_TIME_KEY] = (prefs[BALANCE_TIME_KEY] ?: 0L) + secondsEarned
         }
     }
 
-    suspend fun unlockAppAndSubtractCreditTime(packageName: String, secondsLost: Long){
+    suspend fun unlockAppAndSubtractCreditTime(packageName: String, secondsLost: Long) {
         context.dataStore.edit { prefs ->
             val newTime = (prefs[BALANCE_TIME_KEY] ?: 0L) - secondsLost
 

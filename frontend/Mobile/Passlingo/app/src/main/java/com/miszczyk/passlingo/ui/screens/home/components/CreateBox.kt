@@ -52,8 +52,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateBox(modifier: Modifier = Modifier, onClick: () -> Unit) {
-    var isAnimating by remember { mutableStateOf(false) }
+fun CreateBox(
+    modifier: Modifier = Modifier, onClick: () -> Unit
+) {
+    var isAnimating by remember { mutableStateOf(value = false) }
     val coroutineScope = rememberCoroutineScope()
 
     val animatedAlpha by animateFloatAsState(
@@ -74,25 +76,23 @@ fun CreateBox(modifier: Modifier = Modifier, onClick: () -> Unit) {
         label = "RotationAnimation"
     )
 
-    CompositionLocalProvider(LocalRippleConfiguration provides null) {
+    CompositionLocalProvider(value = LocalRippleConfiguration provides null) {
         Button(
             onClick = {
                 coroutineScope.launch {
                     isAnimating = true
-                    delay(150)
+                    delay(timeMillis = 150)
                     isAnimating = false
                     onClick()
                 }
             },
-            modifier = Modifier
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(cornerRadiusDefault),
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(size = cornerRadiusDefault),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             elevation = ButtonDefaults.buttonElevation(
-                defaultElevation = elevationMedium,
-                pressedElevation = elevationMedium
+                defaultElevation = elevationMedium, pressedElevation = elevationMedium
             ),
-            contentPadding = PaddingValues(spaceNone)
+            contentPadding = PaddingValues(all = spaceNone)
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 val circleColor = MaterialTheme.colorScheme.secondary.copy(alpha = animatedAlpha)
@@ -116,26 +116,24 @@ fun CreateBox(modifier: Modifier = Modifier, onClick: () -> Unit) {
                         .padding(vertical = spaceExtraLarge)
                 ) {
                     Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
+                        contentAlignment = Alignment.Center, modifier = Modifier
                             .background(
-                                color = MaterialTheme.colorScheme.secondary,
-                                shape = CircleShape
+                                color = MaterialTheme.colorScheme.secondary, shape = CircleShape
                             )
                             .padding(spaceSmall)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = stringResource(R.string.action_create_flashcards),
+                            contentDescription = stringResource(id = R.string.action_create_flashcards),
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier
-                                .size(iconLarge)
-                                .rotate(animatedRotation)
+                                .size(size = iconLarge)
+                                .rotate(degrees = animatedRotation)
                         )
                     }
-                    Spacer(modifier = Modifier.height(spaceLarge))
+                    Spacer(modifier = Modifier.height(height = spaceLarge))
                     Text(
-                        text = stringResource(R.string.action_create_flashcards),
+                        text = stringResource(id = R.string.action_create_flashcards),
                         color = MaterialTheme.colorScheme.background,
                         fontSize = headline,
                         fontFamily = vagRoundedBold,

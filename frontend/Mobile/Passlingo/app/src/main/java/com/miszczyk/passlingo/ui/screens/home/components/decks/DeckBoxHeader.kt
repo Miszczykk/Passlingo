@@ -36,7 +36,7 @@ import com.miszczyk.passlingo.ui.screens.home.components.app.AppLockBottomSheet
 import com.miszczyk.passlingo.ui.screens.home.components.app.AppStatusDialogs
 import com.miszczyk.passlingo.ui.screens.home.model.HasPackageName
 import com.miszczyk.passlingo.ui.screens.home.util.requestUsageStatsPermission
-import com.miszczyk.passlingo.ui.screens.home.viewmodel.DeckViewModel
+import com.miszczyk.passlingo.ui.screens.home.viewmodel.AppViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
@@ -44,13 +44,15 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 @RequiresApi(Build.VERSION_CODES.Q)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeckBox(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewModel()) {
+fun DeckBoxHeader(
+    modifier: Modifier = Modifier, viewModel: AppViewModel = viewModel()
+) {
     val uiState by viewModel.uiState.collectAsState()
     val sheetState = rememberModalBottomSheetState()
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current
 
-    DisposableEffect(lifeCycleOwner) {
+    DisposableEffect(key1 = lifeCycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 viewModel.onReturnedFromSettings()
@@ -75,8 +77,7 @@ fun DeckBox(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewModel(
     )
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -88,18 +89,16 @@ fun DeckBox(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewModel(
         )
 
         IconButton(
-            onClick = { viewModel.onLockIconClicked() },
-            modifier = Modifier
-                .background(
-                    MaterialTheme.colorScheme.onBackground,
-                    shape = RoundedCornerShape(cornerRadiusDefault)
-                )
+            onClick = { viewModel.onLockIconClicked() }, modifier = Modifier.background(
+                color = MaterialTheme.colorScheme.onBackground,
+                shape = RoundedCornerShape(size = cornerRadiusDefault)
+            )
         ) {
             Icon(
                 imageVector = Icons.Default.Lock,
                 contentDescription = stringResource(R.string.content_desc_lock),
                 tint = animatedColorLock,
-                modifier = Modifier.scale(animatedScaleMultiplier)
+                modifier = Modifier.scale(scale = animatedScaleMultiplier)
             )
         }
     }
@@ -112,7 +111,7 @@ fun DeckBox(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewModel(
             userApps = uiState.userApps,
             selectedApps = uiState.selectedApps,
             lockedApps = uiState.lockedApps,
-            onAppToggled = { viewModel.onAppToggled(it) },
+            onAppToggled = { viewModel.onAppToggled(packageName = it) },
             onLockClicked = { viewModel.onLockSelectedClicked() },
             onRequestPermission = {
                 requestUsageStatsPermission(
@@ -131,8 +130,6 @@ fun DeckBox(modifier: Modifier = Modifier, viewModel: DeckViewModel = viewModel(
     }
 
     AppStatusDialogs(
-        dialogState = uiState.dialogState,
-        deckViewModel = viewModel,
-        appName = appName
+        dialogState = uiState.dialogState, appViewModel = viewModel, appName = appName
     )
 }

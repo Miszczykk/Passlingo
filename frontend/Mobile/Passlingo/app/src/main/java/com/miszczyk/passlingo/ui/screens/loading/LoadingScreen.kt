@@ -30,37 +30,33 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier, onAnimationFinished: () -> Unit = {}) {
-    val offsetY = remember { Animatable(0f) }
+    val offsetY = remember { Animatable(initialValue = 0f) }
 
-    LaunchedEffect(Unit) {
-        delay(500)
+    LaunchedEffect(key1 = Unit) {
+        delay(timeMillis = 500)
 
         offsetY.animateTo(
-            targetValue = 400f,
-            animationSpec = tween(durationMillis = 400, easing = EaseOut)
+            targetValue = 400f, animationSpec = tween(durationMillis = 400, easing = EaseOut)
         )
 
         offsetY.animateTo(
-            targetValue = -3000f,
-            animationSpec = tween(durationMillis = 300, easing = EaseIn)
+            targetValue = -3000f, animationSpec = tween(durationMillis = 300, easing = EaseIn)
         )
-        delay(500)
+        delay(timeMillis = 500)
         onAnimationFinished()
     }
 
     val annotatedText = buildAnnotatedString {
         withStyle(
             style = SpanStyle(
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = displayMedium
+                color = MaterialTheme.colorScheme.primary, fontSize = displayMedium
             )
         ) {
             append(stringResource(R.string.app_name))
         }
         withStyle(
             style = SpanStyle(
-                color = MaterialTheme.colorScheme.secondary,
-                fontSize = displayHuge
+                color = MaterialTheme.colorScheme.secondary, fontSize = displayHuge
             )
         ) {
             append('.')
@@ -76,7 +72,6 @@ fun LoadingScreen(modifier: Modifier = Modifier, onAnimationFinished: () -> Unit
             fontFamily = vagRoundedBold,
         )
     }
-
 }
 
 @Preview(showBackground = true)

@@ -1,6 +1,6 @@
 package com.miszczyk.passlingo.ui.screens.home.model
 
-data class DeckUiState(
+data class AppUiState(
     val showBottomSheet: Boolean = false,
     val dialogState: DialogState = DialogState.None,
     val userApps: List<AppItem> = emptyList(),

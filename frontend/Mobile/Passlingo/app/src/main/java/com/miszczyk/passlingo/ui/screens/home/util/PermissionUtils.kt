@@ -12,14 +12,12 @@ import com.miszczyk.passlingo.R
 fun hasUsageStatsPermission(context: Context): Boolean {
     val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
     val mode = appOps.checkOpNoThrow(
-        AppOpsManager.OPSTR_GET_USAGE_STATS,
-        Process.myUid(),
-        context.packageName
+        AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), context.packageName
     )
     return mode == AppOpsManager.MODE_ALLOWED
 }
 
-fun requestUsageStatsPermission(context: Context,  onError: (String) -> Unit) {
+fun requestUsageStatsPermission(context: Context, onError: (String) -> Unit) {
     val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).apply {
         data = "package:${context.packageName}".toUri()
     }

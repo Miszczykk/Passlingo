@@ -38,35 +38,38 @@ fun IconSelectBottomSheet(
     deckIconsList: List<Int>,
 ) {
     ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        sheetState = sheetState
+        onDismissRequest = onDismissRequest, sheetState = sheetState
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
             val coroutineScope = rememberCoroutineScope()
-            BottomSheetHeader(stringResource(R.string.label_select_cover_icon)) {
+            BottomSheetHeader(
+                label = stringResource(id = R.string.label_select_cover_icon)
+            ) {
                 coroutineScope.launch {
                     sheetState.hide()
                     onDismissRequest()
                 }
             }
 
-            Spacer(modifier = Modifier.height(spaceMediumLarge))
+            Spacer(modifier = Modifier.height(height = spaceMediumLarge))
 
             Text(
-                text = stringResource(R.string.prompt_select_icon_description),
+                text = stringResource(id = R.string.prompt_select_icon_description),
                 fontSize = body,
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontFamily = vagRoundedLight,
                 modifier = Modifier.padding(horizontal = spaceExtraLarge)
             )
 
-            Spacer(modifier = Modifier.height(spaceExtraLarge))
+            Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
-            HorizontalDivider(MaterialTheme.colorScheme.onSecondary)
+            HorizontalDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
 
-            IconListContent(deckIconsList, currentIcon = currentIcon, onIconClicked = onIconClicked)
+            IconListContent(
+                icons = deckIconsList, currentIcon = currentIcon, onIconClicked = onIconClicked
+            )
         }
     }
 }
@@ -74,16 +77,14 @@ fun IconSelectBottomSheet(
 @Composable
 private fun IconListContent(icons: List<Int>, currentIcon: Int, onIconClicked: (Int) -> Unit) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(4),
-        contentPadding = PaddingValues(spaceExtraLarge),
+        columns = GridCells.Fixed(count = 4),
+        contentPadding = PaddingValues(all = spaceExtraLarge),
         horizontalArrangement = Arrangement.spacedBy(spaceExtraLarge),
         verticalArrangement = Arrangement.spacedBy(spaceExtraLarge)
     ) {
-        items(icons) { iconRes ->
+        items(items = icons) { iconRes ->
             IconItem(
-                iconResId = iconRes,
-                isSelected = iconRes == currentIcon,
-                onClick = {
+                iconResId = iconRes, isSelected = iconRes == currentIcon, onClick = {
                     onIconClicked(iconRes)
                 }
             )

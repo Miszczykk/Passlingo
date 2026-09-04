@@ -37,14 +37,18 @@ import com.miszczyk.passlingo.ui.theme.TextSize.titleMediumLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun AddCardSection(modifier: Modifier = Modifier, addedCards: Int, stateFront: TextFieldState, stateBack: TextFieldState , onAddToDeckClicked: () -> Unit) {
+fun AddCardSection(
+    modifier: Modifier = Modifier,
+    addedCards: Int,
+    stateFront: TextFieldState,
+    stateBack: TextFieldState,
+    onAddToDeckClicked: () -> Unit
+) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -55,11 +59,9 @@ fun AddCardSection(modifier: Modifier = Modifier, addedCards: Int, stateFront: T
                 fontFamily = vagRoundedBold,
             )
             Box(
-                modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.secondary,
-                        shape = CircleShape
-                    ), contentAlignment = Alignment.Center
+                modifier = Modifier.background(
+                    color = MaterialTheme.colorScheme.secondary, shape = CircleShape
+                ), contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = stringResource(R.string.label_cards_added, addedCards),
@@ -67,36 +69,51 @@ fun AddCardSection(modifier: Modifier = Modifier, addedCards: Int, stateFront: T
                     fontSize = body,
                     fontFamily = vagRoundedBold,
                     modifier = Modifier.padding(
-                        vertical = spaceExtraSmall,
-                        horizontal = spaceMediumLarge
+                        vertical = spaceExtraSmall, horizontal = spaceMediumLarge
                     )
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(spaceLarge))
-
+        Spacer(modifier = Modifier.height(height = spaceLarge))
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .shadow(elevation = elevationExtraSmall, shape = RoundedCornerShape(cornerRadiusDefault))
+                .shadow(
+                    elevation = elevationExtraSmall,
+                    shape = RoundedCornerShape(size = cornerRadiusDefault)
+                )
                 .background(
                     color = MaterialTheme.colorScheme.background,
-                    shape = RoundedCornerShape(cornerRadiusDefault)
+                    shape = RoundedCornerShape(size = cornerRadiusDefault)
                 )
-                .border(borderThin, color = MaterialTheme.colorScheme.onBackground, RoundedCornerShape(cornerRadiusDefault)),
+                .border(
+                    width = borderThin,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    shape = RoundedCornerShape(size = cornerRadiusDefault)
+                ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            CardSideInput(Modifier.padding(spaceExtraLarge),stringResource(R.string.label_front_word),stringResource(R.string.prompt_front_hint), stateFront)
-            CardSideInput(Modifier.padding(horizontal = spaceExtraLarge),stringResource(R.string.label_back_meaning), stringResource(R.string.prompt_back_hint), stateBack)
+            CardSideInput(
+                Modifier.padding(all = spaceExtraLarge),
+                label = stringResource(R.string.label_front_word),
+                hintText = stringResource(R.string.prompt_front_hint),
+                stateFront
+            )
+            CardSideInput(
+                Modifier.padding(horizontal = spaceExtraLarge),
+                label = stringResource(R.string.label_back_meaning),
+                hintText = stringResource(R.string.prompt_back_hint),
+                stateBack
+            )
             //TODO ADD IMAGE
 
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(spaceExtraLarge),
-                shape = RoundedCornerShape(cornerRadiusDefault),
+                    .padding(all = spaceExtraLarge),
+                shape = RoundedCornerShape(size = cornerRadiusDefault),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondary
                 ),
