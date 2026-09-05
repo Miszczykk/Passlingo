@@ -39,7 +39,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.miszczyk.passlingo.R
-import com.miszczyk.passlingo.ui.components.HorizontalDivider
+import com.miszczyk.passlingo.ui.components.ThemedDivider
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.iconExtraHuge
@@ -90,13 +90,13 @@ fun DeckBottomSheet(
             )
 
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
-            HorizontalDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
+            ThemedDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
             OptionButton(
                 icon = Icons.Outlined.School,
                 iconColor = MaterialTheme.colorScheme.secondary,
-                textDescription = "Study Now",
+                textDescription = stringResource(id = R.string.action_study_now),
                 textColor = MaterialTheme.colorScheme.background,
                 backgroundColor = MaterialTheme.colorScheme.primary,
                 onClick = { onStudyClicked() }
@@ -107,7 +107,7 @@ fun DeckBottomSheet(
             OptionButton(
                 icon = Icons.Outlined.Edit,
                 iconColor = MaterialTheme.colorScheme.primary,
-                textDescription = "Edit Deck",
+                textDescription = stringResource(id = R.string.action_edit_deck),
                 textColor = MaterialTheme.colorScheme.primary,
                 backgroundColor = MaterialTheme.colorScheme.background,
                 borderColor = MaterialTheme.colorScheme.onBackground,
@@ -119,7 +119,7 @@ fun DeckBottomSheet(
             OptionButton(
                 icon = Icons.Outlined.DeleteOutline,
                 iconColor = MaterialTheme.colorScheme.background,
-                textDescription = "Delete Deck",
+                textDescription = stringResource(id = R.string.action_delete_deck),
                 textColor = MaterialTheme.colorScheme.background,
                 backgroundColor = MaterialTheme.colorScheme.error,
                 onClick = { onDeleteClicked() }
@@ -179,7 +179,7 @@ private fun Header(
                 )
             }
         }
-        Spacer(modifier = Modifier.width(spaceLarge))
+        Spacer(modifier = Modifier.width(width = spaceLarge))
 
         IconButton(
             onClick = {
@@ -190,7 +190,7 @@ private fun Header(
         ) {
             Icon(
                 imageVector = Icons.Default.Close,
-                contentDescription = stringResource(R.string.content_desc_close),
+                contentDescription = stringResource(id = R.string.content_desc_close),
                 tint = MaterialTheme.colorScheme.onSecondary,
             )
         }

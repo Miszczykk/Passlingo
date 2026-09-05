@@ -16,7 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.miszczyk.passlingo.ui.screens.createDeck.CreateDeckScreen
 import com.miszczyk.passlingo.ui.screens.home.HomeScreen
-import com.miszczyk.passlingo.ui.screens.home.model.Screen
+import com.miszczyk.passlingo.ui.model.Screen
 import com.miszczyk.passlingo.ui.screens.loading.LoadingScreen
 import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 

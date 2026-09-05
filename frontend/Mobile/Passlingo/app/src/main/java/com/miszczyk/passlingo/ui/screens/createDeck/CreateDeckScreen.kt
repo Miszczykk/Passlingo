@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.miszczyk.passlingo.R
-import com.miszczyk.passlingo.ui.components.HorizontalDivider
+import com.miszczyk.passlingo.ui.components.ThemedDivider
 import com.miszczyk.passlingo.ui.screens.createDeck.components.AddCardSection
 import com.miszczyk.passlingo.ui.screens.createDeck.components.CreateDeckBottomBar
 import com.miszczyk.passlingo.ui.screens.createDeck.components.DeckDetailsSection
@@ -69,7 +69,7 @@ fun CreateDeckScreen(
                     icon = uiState.deckIcon
                 )
                 Spacer(modifier = Modifier.height(height = spaceExtraHuge))
-                HorizontalDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
+                ThemedDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
                 Spacer(modifier = Modifier.height(height = spaceHuge))
                 AddCardSection(
                     addedCards = uiState.cards.size,
@@ -105,7 +105,7 @@ fun CreateDeckScreen(
             }
         }
 
-        HorizontalDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
+        ThemedDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
         Spacer(modifier = Modifier.height(height = spaceExtraLarge))
         CreateDeckBottomBar(
             deckName = viewModel.deckName.text.toString(),

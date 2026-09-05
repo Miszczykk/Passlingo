@@ -33,8 +33,9 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
-import com.miszczyk.passlingo.ui.screens.home.model.AppItem
-import com.miszczyk.passlingo.ui.screens.home.model.AppRowState
+import com.miszczyk.passlingo.ui.screens.home.model.app.AppItem
+import com.miszczyk.passlingo.ui.screens.home.model.app.AppItemStyle
+import com.miszczyk.passlingo.ui.screens.home.model.app.AppRowState
 import com.miszczyk.passlingo.ui.util.convertTimeToString
 import com.miszczyk.passlingo.ui.util.formatTime
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
@@ -53,29 +54,24 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 fun AppListItem(
     modifier: Modifier = Modifier, app: AppItem, appRowState: AppRowState, onClick: () -> Unit
 ) {
-    val checkboxScale by animateFloatAsState(
-        targetValue = if (appRowState == AppRowState.Selected) 1.2f else 1.0f,
-        animationSpec = tween(durationMillis = 300),
-        label = "CheckboxScale"
-    )
+    val targetStyle = getAppItemStyle(appRowState)
 
     val rowBackgroundColor by animateColorAsState(
-        targetValue = if (appRowState == AppRowState.Locked) {
-            MaterialTheme.colorScheme.onBackground
-        } else {
-            if (appRowState == AppRowState.Selected) MaterialTheme.colorScheme.secondary.copy(
-                alpha = 0.15f
-            ) else Color.Transparent
-        }, animationSpec = tween(durationMillis = 300), label = "RowBackground"
+        targetValue = targetStyle.rowBackgroundColor,
+        animationSpec = tween(durationMillis = 300)
     )
-
     val circleColor by animateColorAsState(
-        targetValue = if (appRowState == AppRowState.Selected) MaterialTheme.colorScheme.secondary else Color.Transparent,
+        targetValue = targetStyle.circleColor,
         label = "CircleColor"
     )
     val borderColor by animateColorAsState(
-        targetValue = if (appRowState == AppRowState.Selected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground,
+        targetValue = targetStyle.borderColor,
         label = "BorderColor"
+    )
+    val checkboxScale by animateFloatAsState(
+        targetValue = targetStyle.checkboxScale,
+        animationSpec = tween(durationMillis = 300),
+        label = "CheckboxScale"
     )
 
     Row(
@@ -151,5 +147,31 @@ fun AppListItem(
                 else -> {}
             }
         }
+    }
+}
+
+@Composable
+private fun getAppItemStyle(state: AppRowState): AppItemStyle{
+    val colors = MaterialTheme.colorScheme
+
+    return when(state){
+        AppRowState.Locked -> AppItemStyle(
+            checkboxScale = 1.0f,
+            rowBackgroundColor = colors.onBackground,
+            circleColor = Color.Transparent,
+            borderColor = colors.onBackground
+        )
+        AppRowState.Selected -> AppItemStyle(
+            checkboxScale = 1.2f,
+            rowBackgroundColor = colors.secondary.copy(alpha = 0.15f),
+            circleColor = colors.secondary,
+            borderColor = colors.secondary
+        )
+        else -> AppItemStyle(
+            checkboxScale = 1.0f,
+            rowBackgroundColor = Color.Transparent,
+            circleColor = Color.Transparent,
+            borderColor = colors.onBackground
+        )
     }
 }

@@ -86,9 +86,7 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
     fun onAddToDeckClicked() {
         val frontText = frontCreateCardState.text.toString()
         val backText = backCreateCardState.text.toString()
-        if (frontCreateCardState.text.toString().isNotBlank() && backCreateCardState.text.toString()
-                .isNotBlank()
-        ) {
+        if (frontText.isNotBlank() && backText.isNotBlank()) {
             val newCard = Flashcard(front = frontText, back = backText)
             _uiState.update { currentState ->
                 currentState.copy(

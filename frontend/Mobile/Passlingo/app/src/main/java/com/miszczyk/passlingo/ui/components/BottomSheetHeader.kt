@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +21,6 @@ import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetHeader(
     label: String, onCloseClicked: () -> Unit

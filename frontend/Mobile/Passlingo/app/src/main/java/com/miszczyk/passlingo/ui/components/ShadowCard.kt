@@ -43,7 +43,7 @@ fun ShadowCard(
 }
 
 @Composable
-fun TitleToCard(
+fun CardTitle(
     titleText: String, titleFontSize: TextUnit
 ) {
     Text(
@@ -58,7 +58,7 @@ fun TitleToCard(
 }
 
 @Composable
-fun TimeToCard(
+fun CardTime(
     timeText: String,
     numberFontSize: TextUnit,
     textFontSize: TextUnit,

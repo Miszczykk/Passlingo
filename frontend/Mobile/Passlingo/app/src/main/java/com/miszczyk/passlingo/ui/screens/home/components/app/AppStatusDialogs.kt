@@ -11,13 +11,13 @@ import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.DialogComponent
 import com.miszczyk.passlingo.ui.components.ShadowCard
-import com.miszczyk.passlingo.ui.components.TimeToCard
-import com.miszczyk.passlingo.ui.components.TitleToCard
+import com.miszczyk.passlingo.ui.components.CardTime
+import com.miszczyk.passlingo.ui.components.CardTitle
 import com.miszczyk.passlingo.ui.model.DialogItem
-import com.miszczyk.passlingo.ui.screens.home.model.DialogState
+import com.miszczyk.passlingo.ui.screens.home.model.app.AppDialogState
 import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME
 import com.miszczyk.passlingo.ui.util.formatTime
-import com.miszczyk.passlingo.ui.screens.home.viewmodel.AppViewModel
+import com.miszczyk.passlingo.ui.screens.home.viewmodel.app.AppViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
 import com.miszczyk.passlingo.ui.theme.TextSize.small
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
@@ -25,18 +25,18 @@ import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 
 @Composable
 fun AppStatusDialogs(
-    dialogState: DialogState, appViewModel: AppViewModel, appName: String
+    appDialogState: AppDialogState, appViewModel: AppViewModel, appName: String
 ) {
-    val dialogItem = when (dialogState) {
-        is DialogState.None -> return
-        is DialogState.ConfirmLock -> lockAppDialog()
-        is DialogState.ConfirmUnlock -> unlockAppDialog(appName)
-        is DialogState.InsufficientTime -> insufficientTimeDialog(appName)
-        is DialogState.Error -> errorDialog(errorMessage = dialogState.message)
+    val dialogItem = when (appDialogState) {
+        is AppDialogState.None -> return
+        is AppDialogState.ConfirmLock -> lockAppDialog()
+        is AppDialogState.ConfirmUnlock -> unlockAppDialog(appName = appName)
+        is AppDialogState.InsufficientTime -> insufficientTimeDialog(appName = appName)
+        is AppDialogState.Error -> errorDialog(errorMessage = appDialogState.message)
     }
 
     DialogComponent(dialog = dialogItem, onConfirm = {
-        if (dialogState is DialogState.Error) {
+        if (appDialogState is AppDialogState.Error) {
             appViewModel.onRetryErrorClicked()
         } else {
             appViewModel.onDialogConfirmed()
@@ -101,11 +101,11 @@ private fun errorDialog(errorMessage: String): DialogItem {
 private fun TimerLock(title: String, time: String) {
     ShadowCard {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            TitleToCard(titleText = title, titleFontSize = small)
+            CardTitle(titleText = title, titleFontSize = small)
 
             Spacer(modifier = Modifier.height(height = spaceExtraSmall))
 
-            TimeToCard(timeText = time, numberFontSize = titleLarge, textFontSize = titleMedium)
+            CardTime(timeText = time, numberFontSize = titleLarge, textFontSize = titleMedium)
         }
     }
 }

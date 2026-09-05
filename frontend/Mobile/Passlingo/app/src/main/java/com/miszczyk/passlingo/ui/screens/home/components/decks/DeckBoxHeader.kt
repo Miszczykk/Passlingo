@@ -30,13 +30,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.screens.home.components.app.AppLockBottomSheet
 import com.miszczyk.passlingo.ui.screens.home.components.app.AppStatusDialogs
-import com.miszczyk.passlingo.ui.screens.home.model.HasPackageName
+import com.miszczyk.passlingo.ui.screens.home.model.app.HasPackageName
 import com.miszczyk.passlingo.ui.screens.home.util.requestUsageStatsPermission
-import com.miszczyk.passlingo.ui.screens.home.viewmodel.AppViewModel
+import com.miszczyk.passlingo.ui.screens.home.viewmodel.app.AppViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
@@ -45,9 +44,9 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeckBoxHeader(
-    modifier: Modifier = Modifier, viewModel: AppViewModel = viewModel()
+    modifier: Modifier = Modifier, appViewModel: AppViewModel
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by appViewModel.appUiState.collectAsState()
     val sheetState = rememberModalBottomSheetState()
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current
@@ -55,7 +54,7 @@ fun DeckBoxHeader(
     DisposableEffect(key1 = lifeCycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.onReturnedFromSettings()
+                appViewModel.onReturnedFromSettings()
             }
         }
         lifeCycleOwner.lifecycle.addObserver(observer)
@@ -89,7 +88,7 @@ fun DeckBoxHeader(
         )
 
         IconButton(
-            onClick = { viewModel.onLockIconClicked() }, modifier = Modifier.background(
+            onClick = { appViewModel.onLockIconClicked() }, modifier = Modifier.background(
                 color = MaterialTheme.colorScheme.onBackground,
                 shape = RoundedCornerShape(size = cornerRadiusDefault)
             )
@@ -111,18 +110,18 @@ fun DeckBoxHeader(
             userApps = uiState.userApps,
             selectedApps = uiState.selectedApps,
             lockedApps = uiState.lockedApps,
-            onAppToggled = { viewModel.onAppToggled(packageName = it) },
-            onLockClicked = { viewModel.onLockSelectedClicked() },
+            onAppToggled = { appViewModel.onAppToggled(packageName = it) },
+            onLockClicked = { appViewModel.onLockSelectedClicked() },
             onRequestPermission = {
                 requestUsageStatsPermission(
                     context,
-                    onError = { errorMessage -> viewModel.showPermissionError(errorMessage) })
+                    onError = { errorMessage -> appViewModel.showPermissionError(errorMessage) })
             },
-            onDismissRequest = { viewModel.onSheetDismissed() }
+            onDismissRequest = { appViewModel.onSheetDismissed() }
         )
     }
 
-    val appName = when (val state = uiState.dialogState) {
+    val appName = when (val state = uiState.appDialogState) {
         is HasPackageName -> uiState.userApps.find { it.packageName == state.packageName }?.name
             ?: ""
 
@@ -130,6 +129,6 @@ fun DeckBoxHeader(
     }
 
     AppStatusDialogs(
-        dialogState = uiState.dialogState, appViewModel = viewModel, appName = appName
+        appDialogState = uiState.appDialogState, appViewModel = appViewModel, appName = appName
     )
 }

@@ -21,7 +21,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import com.miszczyk.passlingo.ui.components.HorizontalDivider
+import com.miszczyk.passlingo.ui.components.ThemedDivider
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumPlus
 import com.miszczyk.passlingo.ui.theme.TextSize.body
@@ -73,7 +73,7 @@ fun CardSideInput(
                     }
 
                     Spacer(modifier = Modifier.height(height = spaceExtraSmall))
-                    HorizontalDivider(
+                    ThemedDivider(
                         (if (!isFocused) colorLine else MaterialTheme.colorScheme.secondary),
                         strokeWidth = 3f
                     )

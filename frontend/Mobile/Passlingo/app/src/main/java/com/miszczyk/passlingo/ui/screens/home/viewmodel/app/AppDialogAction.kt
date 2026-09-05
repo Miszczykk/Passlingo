@@ -1,8 +1,8 @@
-package com.miszczyk.passlingo.ui.screens.home.viewmodel
+package com.miszczyk.passlingo.ui.screens.home.viewmodel.app
 
 import com.miszczyk.passlingo.ui.screens.home.data.RepositoryTimeAndApps
-import com.miszczyk.passlingo.ui.screens.home.model.AppUiState
-import com.miszczyk.passlingo.ui.screens.home.model.DialogState
+import com.miszczyk.passlingo.ui.screens.home.model.app.AppUiState
+import com.miszczyk.passlingo.ui.screens.home.model.app.AppDialogState
 import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME
 import com.miszczyk.passlingo.ui.util.earnedTimeFor
 import kotlinx.coroutines.CancellationException
@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class DialogAction(
+class AppDialogAction(
     private val uiStateFlow: MutableStateFlow<AppUiState>,
     private val externalScope: CoroutineScope,
     private val lockedAppsAndEarnedTimeRepositoryTimeAndApps: RepositoryTimeAndApps,
 ) {
     fun onDialogCancelled() {
-        uiStateFlow.update { state -> state.copy(dialogState = DialogState.None) }
+        uiStateFlow.update { state -> state.copy(appDialogState = AppDialogState.None) }
     }
 
     private fun onLockAppDialogConfirmed() {
@@ -28,7 +28,7 @@ class DialogAction(
                 secondsEarned = earnedTimeFor(numberOfApplication = selection.size)
             )
         }, onSuccessStateUpdate = { state ->
-            state.copy(dialogState = DialogState.None, selectedApps = emptySet())
+            state.copy(appDialogState = AppDialogState.None, selectedApps = emptySet())
         })
     }
 
@@ -38,25 +38,25 @@ class DialogAction(
                 packageName, secondsLost = COST_TIME
             )
         }, onSuccessStateUpdate = { state ->
-            state.copy(dialogState = DialogState.None)
+            state.copy(appDialogState = AppDialogState.None)
         })
     }
 
     private fun onInsufficientTimeDialogConfirmed() {
         uiStateFlow.update { state ->
             state.copy(
-                dialogState = DialogState.None, showBottomSheet = false
+                appDialogState = AppDialogState.None, showBottomSheet = false
             )
         }
     }
 
     fun onDialogConfirmed() {
-        when (val currentState = uiStateFlow.value.dialogState) {
-            is DialogState.None -> error("onDialogConfirmed called with no dialog visible")
-            is DialogState.ConfirmLock -> onLockAppDialogConfirmed()
-            is DialogState.ConfirmUnlock -> onUnlockAppDialogConfirmed(currentState.packageName)
-            is DialogState.InsufficientTime -> onInsufficientTimeDialogConfirmed()
-            is DialogState.Error -> onDialogCancelled()
+        when (val currentState = uiStateFlow.value.appDialogState) {
+            is AppDialogState.None -> error("onDialogConfirmed called with no dialog visible")
+            is AppDialogState.ConfirmLock -> onLockAppDialogConfirmed()
+            is AppDialogState.ConfirmUnlock -> onUnlockAppDialogConfirmed(currentState.packageName)
+            is AppDialogState.InsufficientTime -> onInsufficientTimeDialogConfirmed()
+            is AppDialogState.Error -> onDialogCancelled()
         }
     }
 
@@ -72,7 +72,7 @@ class DialogAction(
                 if (exception is CancellationException) throw exception
                 uiStateFlow.update { state ->
                     state.copy(
-                        dialogState = DialogState.Error(
+                        appDialogState = AppDialogState.Error(
                             exception.localizedMessage ?: "Unknown error occurred"
                         )
                     )

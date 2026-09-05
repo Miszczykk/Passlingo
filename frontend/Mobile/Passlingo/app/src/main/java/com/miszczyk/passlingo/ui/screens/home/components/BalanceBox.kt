@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.ShadowCard
-import com.miszczyk.passlingo.ui.components.TimeToCard
-import com.miszczyk.passlingo.ui.components.TitleToCard
+import com.miszczyk.passlingo.ui.components.CardTime
+import com.miszczyk.passlingo.ui.components.CardTitle
 import com.miszczyk.passlingo.ui.util.formatTime
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceMedium
 import com.miszczyk.passlingo.ui.theme.TextSize.displayMedium
@@ -23,7 +23,7 @@ fun BalanceBox(
     modifier: Modifier = Modifier, balanceTime: Long
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        TitleToCard(
+        CardTitle(
             titleText = stringResource(R.string.label_available_balance),
             titleFontSize = titleMedium
         )
@@ -31,7 +31,7 @@ fun BalanceBox(
         Spacer(modifier = Modifier.height(height = spaceMedium))
 
         ShadowCard {
-            TimeToCard(
+            CardTime(
                 timeText = formatTime(totalSeconds = balanceTime),
                 numberFontSize = displayMedium,
                 textFontSize = titleLarge,

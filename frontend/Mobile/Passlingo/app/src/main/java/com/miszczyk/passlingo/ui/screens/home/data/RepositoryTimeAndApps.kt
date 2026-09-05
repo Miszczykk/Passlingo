@@ -31,7 +31,7 @@ class RepositoryTimeAndApps(
             val newTime = (prefs[BALANCE_TIME_KEY] ?: 0L) - secondsLost
 
             prefs[LOCKED_APPS_KEY] = (prefs[LOCKED_APPS_KEY] ?: emptySet()) - packageName
-            prefs[BALANCE_TIME_KEY] = if (newTime < 0) 0L else newTime
+            prefs[BALANCE_TIME_KEY] = newTime.coerceAtLeast(minimumValue = 0L)
         }
     }
 }

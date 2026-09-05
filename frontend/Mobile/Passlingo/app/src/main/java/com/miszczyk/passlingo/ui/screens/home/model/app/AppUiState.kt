@@ -1,8 +1,8 @@
-package com.miszczyk.passlingo.ui.screens.home.model
+package com.miszczyk.passlingo.ui.screens.home.model.app
 
 data class AppUiState(
     val showBottomSheet: Boolean = false,
-    val dialogState: DialogState = DialogState.None,
+    val appDialogState: AppDialogState = AppDialogState.None,
     val userApps: List<AppItem> = emptyList(),
     val selectedApps: Set<String> = emptySet(),
     val lockedApps: Set<String> = emptySet(),

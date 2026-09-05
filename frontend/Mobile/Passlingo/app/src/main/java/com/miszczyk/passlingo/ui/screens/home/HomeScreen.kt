@@ -22,9 +22,10 @@ import com.miszczyk.passlingo.ui.screens.home.components.Header
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckBottomSheet
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckBoxHeader
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckItem
+import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckStatusDialogs
 import com.miszczyk.passlingo.ui.screens.home.components.decks.WithoutDecks
-import com.miszczyk.passlingo.ui.screens.home.viewmodel.AppViewModel
-import com.miszczyk.passlingo.ui.screens.home.viewmodel.HomeViewModel
+import com.miszczyk.passlingo.ui.screens.home.viewmodel.app.AppViewModel
+import com.miszczyk.passlingo.ui.screens.home.viewmodel.deck.DeckViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceHuge
 import com.miszczyk.passlingo.ui.theme.PasslingoTheme
@@ -36,13 +37,10 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     onCreateDeckClicked: () -> Unit,
     appViewModel: AppViewModel = viewModel(),
-    homeViewModel: HomeViewModel = viewModel()
+    deckViewModel: DeckViewModel = viewModel()
 ) {
-    val uiState by appViewModel.uiState.collectAsState()
-
-    val decksState by homeViewModel.decksState.collectAsState()
-    val selectedDeckId by homeViewModel.selectedDeckId.collectAsState()
-    val isBottomSheetVisible by homeViewModel.isBottomSheetVisible.collectAsState()
+    val appUiState by appViewModel.appUiState.collectAsState()
+    val deckUiState by deckViewModel.deckUiState.collectAsState()
     val sheetState = rememberModalBottomSheetState()
 
     LazyColumn(
@@ -52,33 +50,33 @@ fun HomeScreen(
         item {
             Header()
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
-            BalanceBox(balanceTime = uiState.balanceTime)
+            BalanceBox(balanceTime = appUiState.balanceTime)
             Spacer(modifier = Modifier.height(height = spaceHuge))
             CreateBox(onClick = onCreateDeckClicked)
             Spacer(modifier = Modifier.height(height = spaceHuge))
-            DeckBoxHeader()
+            DeckBoxHeader(appViewModel = appViewModel)
             Spacer(modifier = Modifier.height(height = spaceHuge))
         }
-        if (decksState.isEmpty()) {
+        if (deckUiState.decks.isEmpty()) {
             item {
                 WithoutDecks()
             }
         } else {
-            items(items = decksState, key = { it.deck.id }) { deckWithCards ->
+            items(items = deckUiState.decks, key = { it.deck.id }) { deckWithCards ->
                 DeckItem(
                     icon = deckWithCards.deck.iconResId,
                     nameDeck = deckWithCards.deck.name,
                     flashcardCount = deckWithCards.flashcards.size,
-                    isSelected = selectedDeckId == deckWithCards.deck.id,
-                    onClick = { homeViewModel.selectDeck(deckWithCards.deck.id) })
+                    isSelected = deckUiState.selectedDeckId == deckWithCards.deck.id,
+                    onClick = { deckViewModel.selectDeck(deckWithCards.deck.id) })
 
                 Spacer(modifier = Modifier.height(height = spaceExtraLarge))
             }
         }
     }
 
-    if (isBottomSheetVisible && selectedDeckId != null) {
-        val selectedDeck = decksState.find { it.deck.id == selectedDeckId }
+    if (deckUiState.showBottomSheet && deckUiState.selectedDeckId != null) {
+        val selectedDeck = deckUiState.decks.find { it.deck.id == deckUiState.selectedDeckId }
 
         if (selectedDeck != null) {
             DeckBottomSheet(
@@ -87,14 +85,20 @@ fun HomeScreen(
                 deckName = selectedDeck.deck.name,
                 flashcardCount = selectedDeck.flashcards.size,
                 onDismissRequest = {
-                    homeViewModel.hideBottomSheet()
+                    deckViewModel.hideBottomSheet()
                 },
                 onStudyClicked = {},
                 onEditClicked = {},
-                onDeleteClicked = { homeViewModel.deleteDeck() }
+                onDeleteClicked = { deckViewModel.deleteDeck() }
             )
         }
     }
+
+    DeckStatusDialogs(
+        deckDialogState = deckUiState.deckDialogState,
+        deckViewModel = deckViewModel,
+        deckName = deckUiState.decks.find { it.deck.id == deckUiState.selectedDeckId }?.deck?.name ?: ""
+    )
 }
 
 @RequiresApi(value = Build.VERSION_CODES.Q)

@@ -8,7 +8,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun HorizontalDivider(
+fun ThemedDivider(
     colorLine: Color, strokeWidth: Float = 1f
 ) {
     Canvas(modifier = Modifier.fillMaxWidth()) {

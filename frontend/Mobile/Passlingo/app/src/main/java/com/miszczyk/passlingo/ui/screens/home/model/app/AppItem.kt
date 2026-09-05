@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.home.model
+package com.miszczyk.passlingo.ui.screens.home.model.app
 
 import androidx.compose.ui.graphics.ImageBitmap
 

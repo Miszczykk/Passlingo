@@ -32,7 +32,7 @@ fun CreateDeckBottomBar(
 
     val textColor by animateColorAsState(
         targetValue = if (check) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onSecondary,
-        label = "buttonColor"
+        label = "textColor"
     )
 
     val textDescription = when {

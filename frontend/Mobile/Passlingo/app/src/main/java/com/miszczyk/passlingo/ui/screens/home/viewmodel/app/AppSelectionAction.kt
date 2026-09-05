@@ -1,7 +1,7 @@
-package com.miszczyk.passlingo.ui.screens.home.viewmodel
+package com.miszczyk.passlingo.ui.screens.home.viewmodel.app
 
-import com.miszczyk.passlingo.ui.screens.home.model.AppUiState
-import com.miszczyk.passlingo.ui.screens.home.model.DialogState
+import com.miszczyk.passlingo.ui.screens.home.model.app.AppUiState
+import com.miszczyk.passlingo.ui.screens.home.model.app.AppDialogState
 import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -17,11 +17,11 @@ class AppSelectionAction(
         }
     }
 
-    private fun resolveUnlockDialogState(state: AppUiState, packageName: String): DialogState {
+    private fun resolveUnlockDialogState(state: AppUiState, packageName: String): AppDialogState {
         return if (state.balanceTime < COST_TIME) {
-            DialogState.InsufficientTime(packageName)
+            AppDialogState.InsufficientTime(packageName)
         } else {
-            DialogState.ConfirmUnlock(packageName)
+            AppDialogState.ConfirmUnlock(packageName)
         }
     }
 
@@ -30,7 +30,7 @@ class AppSelectionAction(
             if (!state.lockedApps.contains(packageName)) {
                 state.copy(selectedApps = toggleAppSelection(state, packageName))
             } else {
-                state.copy(dialogState = resolveUnlockDialogState(state, packageName))
+                state.copy(appDialogState = resolveUnlockDialogState(state, packageName))
             }
         }
     }
@@ -38,7 +38,7 @@ class AppSelectionAction(
     fun onLockSelectedClicked() {
         uiStateFlow.update { state ->
             if (state.selectedApps.isNotEmpty()) {
-                state.copy(dialogState = DialogState.ConfirmLock)
+                state.copy(appDialogState = AppDialogState.ConfirmLock)
             } else {
                 state
             }

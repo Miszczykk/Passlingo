@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.BottomSheetHeader
-import com.miszczyk.passlingo.ui.components.HorizontalDivider
+import com.miszczyk.passlingo.ui.components.ThemedDivider
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.body
@@ -65,7 +65,7 @@ fun IconSelectBottomSheet(
 
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
-            HorizontalDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
+            ThemedDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
 
             IconListContent(
                 icons = deckIconsList, currentIcon = currentIcon, onIconClicked = onIconClicked

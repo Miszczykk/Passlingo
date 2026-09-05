@@ -6,7 +6,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.graphics.drawable.toBitmap
-import com.miszczyk.passlingo.ui.screens.home.model.AppItem
+import com.miszczyk.passlingo.ui.screens.home.model.app.AppItem
 import com.miszczyk.passlingo.ui.screens.home.util.Constants.ONE_MONTH_MILLIS
 
 class AppUsageProvider(

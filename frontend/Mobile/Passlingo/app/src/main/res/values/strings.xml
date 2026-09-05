@@ -29,6 +29,9 @@
     <string name="action_add_to_deck">Add to deck</string>
     <string name="action_delete">Delete</string>
     <string name="action_save">Save</string>
+    <string name="action_study_now">Study Now</string>
+    <string name="action_edit_deck">Edit Deck</string>
+    <string name="action_delete_deck">Delete Deck</string>
 
     <!-- Labels / Titles -->
     <string name="label_app_lock">App Lock</string>
@@ -89,4 +92,6 @@
     <string name="dialog_title_edit_flashcard">Edit Flashcard</string>
     <string name="dialog_message_edit_flashcard">Update the word, meaning, or cover image of your flashcard.</string>
 
+    <string name="dialog_title_delete_deck">Delete this deck?</string>
+    <string name="dialog_message_delete_deck">Are you sure you want to delete \"%1$s\"? All its flashcards will be permanently removed.</string>
 </resources>

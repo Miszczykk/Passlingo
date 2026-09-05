@@ -36,9 +36,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.BottomSheetHeader
-import com.miszczyk.passlingo.ui.components.HorizontalDivider
-import com.miszczyk.passlingo.ui.screens.home.model.AppItem
-import com.miszczyk.passlingo.ui.screens.home.model.AppRowState
+import com.miszczyk.passlingo.ui.components.ThemedDivider
+import com.miszczyk.passlingo.ui.screens.home.model.app.AppItem
+import com.miszczyk.passlingo.ui.screens.home.model.app.AppRowState
 import com.miszczyk.passlingo.ui.util.earnedTimeFor
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
@@ -97,7 +97,7 @@ fun AppLockBottomSheet(
 
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
-            HorizontalDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
+            ThemedDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
 
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
@@ -214,7 +214,7 @@ private fun ColumnScope.AppListContent(
 
     val textColor by animateColorAsState(
         targetValue = if (selectedApps.isNotEmpty()) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onSecondary,
-        label = "buttonColor"
+        label = "textColor"
     )
 
     val textDescription = if (selectedApps.isNotEmpty()) stringResource(

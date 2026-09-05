@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.home.model
+package com.miszczyk.passlingo.ui.model
 
 sealed interface Screen {
     data object Loading : Screen
