@@ -1,5 +1,6 @@
 package com.miszczyk.passlingo.ui.screens.createDeck
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,7 +27,7 @@ import com.miszczyk.passlingo.ui.screens.createDeck.components.CreateDeckBottomB
 import com.miszczyk.passlingo.ui.screens.createDeck.components.DeckDetailsSection
 import com.miszczyk.passlingo.ui.screens.createDeck.components.DeckStatusDialogs
 import com.miszczyk.passlingo.ui.screens.createDeck.components.FlashcardItem
-import com.miszczyk.passlingo.ui.screens.createDeck.components.Header
+import com.miszczyk.passlingo.ui.screens.createDeck.components.CreateDeckTopBar
 import com.miszczyk.passlingo.ui.screens.createDeck.components.IconSelectBottomSheet
 import com.miszczyk.passlingo.ui.screens.createDeck.viewmodel.CreateDeckViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraHuge
@@ -42,6 +43,10 @@ import com.miszczyk.passlingo.ui.util.DeckIcons
 fun CreateDeckScreen(
     modifier: Modifier = Modifier, onBack: () -> Unit, viewModel: CreateDeckViewModel = viewModel()
 ) {
+    BackHandler {
+        viewModel.onBackClicked()
+    }
+
     val uiState by viewModel.uiState.collectAsState()
     val sheetState = rememberModalBottomSheetState()
 
@@ -53,7 +58,7 @@ fun CreateDeckScreen(
 
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(height = spaceLarge))
-        Header(onClick = { viewModel.onBackClicked() })
+        CreateDeckTopBar(onClick = { viewModel.onBackClicked() })
         Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
         LazyColumn(

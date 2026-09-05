@@ -1,51 +1,7 @@
 package com.miszczyk.passlingo.ui.util
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.TextUnit
-import com.miszczyk.passlingo.ui.screens.home.util.Constants.EARN_TIME
+import com.miszczyk.passlingo.ui.screens.home.util.Constants.EARN_TIME_SECONDS
 import java.util.Locale
-
-@Composable
-fun convertTimeToString(
-    rawTime: String, numberFont: TextUnit, textFont: TextUnit
-): AnnotatedString {
-    val annotatedTime = buildAnnotatedString {
-        rawTime.forEach { char ->
-            when {
-                char.isDigit() -> {
-                    withStyle(
-                        style = SpanStyle(
-                            color = MaterialTheme.colorScheme.primary, fontSize = numberFont
-                        )
-                    ) { append(char.toString()) }
-                }
-
-                char.isLetter() -> {
-                    withStyle(
-                        style = SpanStyle(
-                            color = MaterialTheme.colorScheme.secondary, fontSize = textFont
-                        )
-                    ) { append(char.toString()) }
-                }
-
-                else -> {
-                    withStyle(
-                        style = SpanStyle(
-                            color = Color.Transparent, fontSize = numberFont
-                        )
-                    ) { append(char.toString()) }
-                }
-            }
-        }
-    }
-    return annotatedTime
-}
 
 fun formatTime(totalSeconds: Long, forceFullFormat: Boolean = true): String {
     val hours = totalSeconds / 3600
@@ -63,5 +19,5 @@ fun formatTime(totalSeconds: Long, forceFullFormat: Boolean = true): String {
 }
 
 fun earnedTimeFor(numberOfApplication: Int): Long {
-    return EARN_TIME * numberOfApplication
+    return EARN_TIME_SECONDS * numberOfApplication
 }

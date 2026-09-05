@@ -15,7 +15,7 @@ import com.miszczyk.passlingo.ui.components.CardTime
 import com.miszczyk.passlingo.ui.components.CardTitle
 import com.miszczyk.passlingo.ui.model.DialogItem
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppDialogState
-import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME
+import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME_SECONDS
 import com.miszczyk.passlingo.ui.util.formatTime
 import com.miszczyk.passlingo.ui.screens.home.viewmodel.app.AppViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
@@ -65,7 +65,7 @@ private fun unlockAppDialog(appName: String): DialogItem {
         extraContent = {
             TimerLock(
                 title = stringResource(R.string.label_cost_to_unlock),
-                time = formatTime(totalSeconds = COST_TIME, forceFullFormat = false)
+                time = formatTime(totalSeconds = COST_TIME_SECONDS, forceFullFormat = false)
             )
         }
     )
@@ -81,7 +81,7 @@ private fun insufficientTimeDialog(appName: String): DialogItem {
         extraContent = {
             TimerLock(
                 title = stringResource(R.string.label_requires),
-                time = formatTime(totalSeconds = COST_TIME, forceFullFormat = false)
+                time = formatTime(totalSeconds = COST_TIME_SECONDS, forceFullFormat = false)
             )
         }
     )

@@ -22,7 +22,7 @@ import com.miszczyk.passlingo.ui.theme.TextSize.headline
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun Header(
+fun CreateDeckTopBar(
     onClick: () -> Unit
 ) {
     Box(

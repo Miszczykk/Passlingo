@@ -36,7 +36,7 @@ import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppItem
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppItemStyle
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppRowState
-import com.miszczyk.passlingo.ui.util.convertTimeToString
+import com.miszczyk.passlingo.ui.util.styledTimeText
 import com.miszczyk.passlingo.ui.util.formatTime
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
@@ -109,7 +109,7 @@ fun AppListItem(
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = convertTimeToString(
+                text = styledTimeText(
                     rawTime = formatTime(
                         totalSeconds = app.timeInForeground / 1000, forceFullFormat = false
                     ), numberFont = body, textFont = caption

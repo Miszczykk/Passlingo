@@ -19,11 +19,13 @@ import com.miszczyk.passlingo.ui.screens.home.HomeScreen
 import com.miszczyk.passlingo.ui.model.Screen
 import com.miszczyk.passlingo.ui.screens.loading.LoadingScreen
 import com.miszczyk.passlingo.ui.theme.PasslingoTheme
+import androidx.activity.enableEdgeToEdge
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             PasslingoTheme {
                 var currentScreen by remember { mutableStateOf<Screen>(Screen.Loading) }

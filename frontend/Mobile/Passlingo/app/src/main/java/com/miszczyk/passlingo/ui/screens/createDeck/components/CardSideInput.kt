@@ -17,10 +17,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import com.miszczyk.passlingo.ui.components.HintedTextField
 import com.miszczyk.passlingo.ui.components.ThemedDivider
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumPlus
@@ -62,12 +62,8 @@ fun CardSideInput(
                     Box(
                         modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart
                     ) {
-                        Text(
-                            text = hintText,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            fontFamily = vagRoundedBold,
-                            fontSize = titleMedium,
-                            modifier = Modifier.alpha(alpha = if (state.text.isEmpty()) 1f else 0f)
+                        HintedTextField(
+                            state = state, hintText = hintText, fontFamily = vagRoundedBold
                         )
                         innerTextField()
                     }
@@ -78,7 +74,6 @@ fun CardSideInput(
                         strokeWidth = 3f
                     )
                 }
-            }
-        )
+            })
     }
 }

@@ -2,7 +2,7 @@ package com.miszczyk.passlingo.ui.screens.home.viewmodel.app
 
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppUiState
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppDialogState
-import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME
+import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME_SECONDS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
@@ -18,7 +18,7 @@ class AppSelectionAction(
     }
 
     private fun resolveUnlockDialogState(state: AppUiState, packageName: String): AppDialogState {
-        return if (state.balanceTime < COST_TIME) {
+        return if (state.balanceTime < COST_TIME_SECONDS) {
             AppDialogState.InsufficientTime(packageName)
         } else {
             AppDialogState.ConfirmUnlock(packageName)

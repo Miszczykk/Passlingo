@@ -3,7 +3,7 @@ package com.miszczyk.passlingo.ui.screens.home.viewmodel.app
 import com.miszczyk.passlingo.ui.screens.home.data.RepositoryTimeAndApps
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppUiState
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppDialogState
-import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME
+import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME_SECONDS
 import com.miszczyk.passlingo.ui.util.earnedTimeFor
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +35,7 @@ class AppDialogAction(
     private fun onUnlockAppDialogConfirmed(packageName: String) {
         executeDialogTask(task = {
             lockedAppsAndEarnedTimeRepositoryTimeAndApps.unlockAppAndSubtractCreditTime(
-                packageName, secondsLost = COST_TIME
+                packageName, secondsLost = COST_TIME_SECONDS
             )
         }, onSuccessStateUpdate = { state ->
             state.copy(appDialogState = AppDialogState.None)

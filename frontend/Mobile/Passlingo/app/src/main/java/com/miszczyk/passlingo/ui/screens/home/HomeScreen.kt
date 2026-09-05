@@ -8,17 +8,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.miszczyk.passlingo.ui.components.AppNameLogo
 import com.miszczyk.passlingo.ui.screens.home.components.BalanceBox
 import com.miszczyk.passlingo.ui.screens.home.components.CreateBox
-import com.miszczyk.passlingo.ui.screens.home.components.Header
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckBottomSheet
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckBoxHeader
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckItem
@@ -29,6 +31,9 @@ import com.miszczyk.passlingo.ui.screens.home.viewmodel.deck.DeckViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceHuge
 import com.miszczyk.passlingo.ui.theme.PasslingoTheme
+import com.miszczyk.passlingo.ui.theme.TextSize.displayLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.displaySmall
+import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(value = Build.VERSION_CODES.Q)
@@ -48,7 +53,7 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Header()
+            Text(text = AppNameLogo(displaySmall, displayLarge), textAlign = TextAlign.Center, fontFamily = vagRoundedBold)
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
             BalanceBox(balanceTime = appUiState.balanceTime)
             Spacer(modifier = Modifier.height(height = spaceHuge))
