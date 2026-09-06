@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.createDeck.components
+package com.miszczyk.passlingo.ui.screens.decks.manageDeck.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,8 +20,7 @@ import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.DialogComponent
 import com.miszczyk.passlingo.ui.model.DialogItem
-import com.miszczyk.passlingo.ui.screens.createDeck.model.CreateDeckDialogState
-import com.miszczyk.passlingo.ui.screens.createDeck.viewmodel.CreateDeckViewModel
+import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.DeckFormDialogState
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
@@ -32,28 +31,32 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
 fun DeckStatusDialogs(
-    dialogState: CreateDeckDialogState, createDeckViewModel: CreateDeckViewModel
+    dialogState: DeckFormDialogState,
+    editFrontState: TextFieldState,
+    editBackState: TextFieldState,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
 ) {
     val dialogItem = when (dialogState) {
-        is CreateDeckDialogState.None -> return
-        is CreateDeckDialogState.SaveDeck -> saveDeckDialog()
-        is CreateDeckDialogState.DiscardChanges -> discardChangesDialog()
-        is CreateDeckDialogState.Error -> errorDialog(errorMessage = dialogState.message)
-        is CreateDeckDialogState.DeleteFlashcard -> deleteFlashcard(
+        is DeckFormDialogState.None -> return
+        is DeckFormDialogState.SaveDeckForm -> saveDeckDialog()
+        is DeckFormDialogState.DiscardChanges -> discardChangesDialog()
+        is DeckFormDialogState.Error -> errorDialog(errorMessage = dialogState.message)
+        is DeckFormDialogState.DeleteFlashcard -> deleteFlashcard(
             frontText = dialogState.frontText, backText = dialogState.backText
         )
 
-        is CreateDeckDialogState.EditFlashcard -> editFlashcard(
-            stateFront = createDeckViewModel.editFrontState,
-            stateBack = createDeckViewModel.editBackState
+        is DeckFormDialogState.EditFlashcard -> editFlashcard(
+            stateFront = editFrontState,
+            stateBack = editBackState
         )
     }
 
 
     DialogComponent(
         dialog = dialogItem,
-        onConfirm = { createDeckViewModel.onDialogConfirmed() },
-        onCancel = { createDeckViewModel.onDialogCancelled() }
+        onConfirm = { onConfirm() },
+        onCancel = { onDismiss() }
     )
 }
 

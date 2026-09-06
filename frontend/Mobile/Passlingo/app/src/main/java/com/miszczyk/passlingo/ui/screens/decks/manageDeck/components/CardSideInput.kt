@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.createDeck.components
+package com.miszczyk.passlingo.ui.screens.decks.manageDeck.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

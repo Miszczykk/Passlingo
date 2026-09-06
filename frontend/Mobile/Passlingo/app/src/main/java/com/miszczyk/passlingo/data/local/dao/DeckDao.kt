@@ -33,4 +33,21 @@ interface DeckDao {
 
     @Delete
     suspend fun deleteDeck(deck: DeckEntity)
+
+    @Transaction
+    @Query("SELECT * FROM decks WHERE id = :deckId")
+    suspend fun getDeckWithFlashcardsById(deckId: String): DeckWithFlashcards?
+
+    @androidx.room.Update
+    suspend fun updateDeck(deck: DeckEntity)
+
+    @Query("DELETE FROM flashcards WHERE deckId = :deckId")
+    suspend fun deleteFlashcardsByDeckId(deckId: String)
+
+    @Transaction
+    suspend fun updateDeckWithFlashcards(deck: DeckEntity, cards: List<FlashcardEntity>){
+        updateDeck(deck)
+        deleteFlashcardsByDeckId(deck.id)
+        insertFlashcards(cards)
+    }
 }

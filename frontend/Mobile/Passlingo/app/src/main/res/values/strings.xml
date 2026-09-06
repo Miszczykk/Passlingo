@@ -46,6 +46,7 @@
     <string name="label_front_word">FRONT (WORD)</string>
     <string name="label_back_meaning">BACK (MEANING)</string>
     <string name="label_create_deck">Create Deck</string>
+    <string name="label_edit_deck">Edit Deck</string>
     <string name="label_select_cover_icon">Select Cover Icon</string>
     <string name="label_card_to_delete">CARD TO DELETE</string>
     <plurals name="label_cards_count">

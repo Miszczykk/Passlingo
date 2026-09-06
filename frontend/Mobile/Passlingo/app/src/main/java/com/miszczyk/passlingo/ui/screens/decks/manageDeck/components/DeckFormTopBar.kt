@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.createDeck.components
+package com.miszczyk.passlingo.ui.screens.decks.manageDeck.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,16 +22,18 @@ import com.miszczyk.passlingo.ui.theme.TextSize.headline
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun CreateDeckTopBar(
+fun DeckFormTopBar(
+    title: String,
     onClick: () -> Unit
-) {
+){
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = spaceExtraLarge)
-    ) {
+    ){
         IconButton(
-            onClick = { onClick() }, modifier = Modifier
+            onClick = { onClick() },
+            modifier = Modifier
                 .align(Alignment.CenterStart)
                 .background(
                     color = MaterialTheme.colorScheme.onBackground,
@@ -46,7 +48,7 @@ fun CreateDeckTopBar(
         }
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = stringResource(id = R.string.label_create_deck),
+            text = title,
             color = MaterialTheme.colorScheme.primary,
             fontSize = headline,
             fontFamily = vagRoundedBold,

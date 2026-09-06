@@ -41,6 +41,7 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onCreateDeckClicked: () -> Unit,
+    onEditDeckClicked: (String) -> Unit,
     appViewModel: AppViewModel = viewModel(),
     deckViewModel: DeckViewModel = viewModel()
 ) {
@@ -93,7 +94,7 @@ fun HomeScreen(
                     deckViewModel.hideBottomSheet()
                 },
                 onStudyClicked = {},
-                onEditClicked = {},
+                onEditClicked = {onEditDeckClicked(selectedDeck.deck.id)},
                 onDeleteClicked = { deckViewModel.deleteDeck() }
             )
         }
@@ -111,6 +112,6 @@ fun HomeScreen(
 @Composable
 fun HomePreview() {
     PasslingoTheme {
-        HomeScreen(onCreateDeckClicked = {})
+        HomeScreen(onCreateDeckClicked = {}, onEditDeckClicked = {})
     }
 }

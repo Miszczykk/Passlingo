@@ -1,15 +1,15 @@
-package com.miszczyk.passlingo.ui.screens.createDeck.viewmodel
+package com.miszczyk.passlingo.ui.screens.decks.createDeck.viewmodel
 
-import com.miszczyk.passlingo.ui.screens.createDeck.model.CreateDeckDialogState
-import com.miszczyk.passlingo.ui.screens.createDeck.model.CreateDeckUiState
+import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.DeckFormDialogState
+import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.DeckFormUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class CreateDeckDialogAction(
-    private val uiStateFlow: MutableStateFlow<CreateDeckUiState>,
+class DeckFormDialogAction(
+    private val uiStateFlow: MutableStateFlow<DeckFormUiState>,
     private val externalScope: CoroutineScope,
     private val navigateBack: Channel<Unit>,
     private val saveDeck: suspend () -> Unit,
@@ -18,13 +18,13 @@ class CreateDeckDialogAction(
     private val onDeleteConfirmed: (String) -> Unit,
 ) {
     fun onDialogCancelled() {
-        uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
+        uiStateFlow.update { state -> state.copy(dialogState = DeckFormDialogState.None) }
 
     }
 
     fun onDiscardDialogConfirmed() {
         clearScreen()
-        uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
+        uiStateFlow.update { state -> state.copy(dialogState = DeckFormDialogState.None) }
         externalScope.launch {
             navigateBack.send(element = Unit)
         }
@@ -36,12 +36,12 @@ class CreateDeckDialogAction(
                 saveDeck()
             }.onSuccess {
                 clearScreen()
-                uiStateFlow.update { it.copy(dialogState = CreateDeckDialogState.None) }
+                uiStateFlow.update { it.copy(dialogState = DeckFormDialogState.None) }
                 navigateBack.send(element = Unit)
             }.onFailure { exception ->
                 uiStateFlow.update {
                     it.copy(
-                        dialogState = CreateDeckDialogState.Error(
+                        dialogState = DeckFormDialogState.Error(
                             message = exception.localizedMessage ?: "Failed to save deck"
                         )
                     )
@@ -52,22 +52,22 @@ class CreateDeckDialogAction(
 
     private fun onDeleteCardDialogConfirmed(id: String) {
         onDeleteConfirmed(id)
-        uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
+        uiStateFlow.update { state -> state.copy(dialogState = DeckFormDialogState.None) }
     }
 
     private fun onEditCardDialogConfirmed(id: String) {
         onEditCardConfirmed(id)
-        uiStateFlow.update { state -> state.copy(dialogState = CreateDeckDialogState.None) }
+        uiStateFlow.update { state -> state.copy(dialogState = DeckFormDialogState.None) }
     }
 
     fun onDialogConfirmed() {
         when (val currentState = uiStateFlow.value.dialogState) {
-            is CreateDeckDialogState.None -> error("onDialogConfirmed called with no dialog visible")
-            is CreateDeckDialogState.SaveDeck -> onSaveDeckDialogConfirmed()
-            is CreateDeckDialogState.DiscardChanges -> onDiscardDialogConfirmed()
-            is CreateDeckDialogState.Error -> onDialogCancelled()
-            is CreateDeckDialogState.DeleteFlashcard -> onDeleteCardDialogConfirmed(currentState.id)
-            is CreateDeckDialogState.EditFlashcard -> onEditCardDialogConfirmed(currentState.id)
+            is DeckFormDialogState.None -> error("onDialogConfirmed called with no dialog visible")
+            is DeckFormDialogState.SaveDeckForm -> onSaveDeckDialogConfirmed()
+            is DeckFormDialogState.DiscardChanges -> onDiscardDialogConfirmed()
+            is DeckFormDialogState.Error -> onDialogCancelled()
+            is DeckFormDialogState.DeleteFlashcard -> onDeleteCardDialogConfirmed(currentState.id)
+            is DeckFormDialogState.EditFlashcard -> onEditCardDialogConfirmed(currentState.id)
         }
     }
 }

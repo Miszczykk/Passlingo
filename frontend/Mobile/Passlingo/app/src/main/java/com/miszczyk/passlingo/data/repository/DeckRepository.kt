@@ -5,7 +5,7 @@ import com.miszczyk.passlingo.data.local.PasslingoDatabase
 import com.miszczyk.passlingo.data.local.entity.DeckEntity
 import com.miszczyk.passlingo.data.local.entity.DeckWithFlashcards
 import com.miszczyk.passlingo.data.local.entity.FlashcardEntity
-import com.miszczyk.passlingo.ui.screens.createDeck.model.Flashcard
+import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.Flashcard
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
@@ -27,5 +27,16 @@ class DeckRepository(context: Context) {
     suspend fun deleteDeck(deckId: String?){
         val deck  = deckDao.getDeckById(deckId ?: "") ?: return
         deckDao.deleteDeck(deck)
+    }
+
+    suspend fun getDeckWithFlashcardsById(deckId: String): DeckWithFlashcards? {
+        return deckDao.getDeckWithFlashcardsById(deckId)
+    }
+    suspend fun updateDeck(id: String, name: String, iconResId: Int, cards: List<Flashcard>){
+        val deckEntity = DeckEntity(id = id, name = name, iconResId = iconResId)
+        val cardEntities = cards.map {card ->
+            FlashcardEntity(id = card.id, deckId = id, front = card.front, back = card.back)
+        }
+        deckDao.updateDeckWithFlashcards(deckEntity, cardEntities)
     }
 }

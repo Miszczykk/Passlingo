@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.createDeck.components
+package com.miszczyk.passlingo.ui.screens.decks.manageDeck.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,9 +20,11 @@ import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun CreateDeckBottomBar(
-    deckName: String, addedCards: Int, onSaveDeckClicked: () -> Unit
-) {
+fun DeckFormBottomBar(
+    deckName: String,
+    addedCards: Int,
+    onSaveDeckClicked: () -> Unit
+){
     val check = deckName.isNotBlank() && addedCards > 0
 
     val buttonColor by animateColorAsState(
@@ -41,6 +43,7 @@ fun CreateDeckBottomBar(
         !check -> stringResource(id = R.string.action_enter_name_add_cards)
         else -> stringResource(id = R.string.action_save_deck)
     }
+
     Button(
         modifier = Modifier
             .fillMaxWidth()
