@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.decks.createDeck.viewmodel
+package com.miszczyk.passlingo.ui.screens.decks.manageDeck.viewmodel
 
 import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.DeckFormDialogState
 import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.DeckFormUiState
