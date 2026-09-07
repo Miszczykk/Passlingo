@@ -16,10 +16,10 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 fun LabeledContent(
     modifier: Modifier = Modifier,
     label: String,
-    horizontal: Alignment.Horizontal? = Alignment.Start,
+    horizontal: Alignment.Horizontal = Alignment.Start,
     content: @Composable () -> Unit,
 ) {
-    Column(modifier = modifier, horizontalAlignment = horizontal ?: Alignment.Start) {
+    Column(modifier = modifier, horizontalAlignment = horizontal) {
         Text(
             text = label.uppercase(),
             fontSize = titleSmall,

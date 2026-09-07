@@ -58,7 +58,8 @@ fun AppListItem(
 
     val rowBackgroundColor by animateColorAsState(
         targetValue = targetStyle.rowBackgroundColor,
-        animationSpec = tween(durationMillis = 300)
+        animationSpec = tween(durationMillis = 300),
+        label = "RowBackgroundColor"
     )
     val circleColor by animateColorAsState(
         targetValue = targetStyle.circleColor,
