@@ -26,6 +26,7 @@ import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckBoxHeader
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckItem
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckStatusDialogs
 import com.miszczyk.passlingo.ui.screens.home.components.decks.WithoutDecks
+import com.miszczyk.passlingo.ui.screens.home.model.deck.HasDeckName
 import com.miszczyk.passlingo.ui.screens.home.viewmodel.app.AppViewModel
 import com.miszczyk.passlingo.ui.screens.home.viewmodel.deck.DeckViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
@@ -103,7 +104,7 @@ fun HomeScreen(
     DeckStatusDialogs(
         deckDialogState = deckUiState.deckDialogState,
         deckViewModel = deckViewModel,
-        deckName = deckUiState.decks.find { it.deck.id == deckUiState.selectedDeckId }?.deck?.name ?: ""
+        deckName = (deckUiState.deckDialogState as? HasDeckName)?.deckName ?: ""
     )
 }
 
