@@ -6,7 +6,7 @@ data class DeckFormUiState(
     val dialogState: DeckFormDialogState = DeckFormDialogState.None,
     val showBottomSheet: Boolean = false,
 
-    val deckIcon: DeckIcons = DeckIcons.BEAR,
+    val deckIcon: DeckIcons = DeckIcons.all.first(),
 
     val cards: List<Flashcard> = emptyList()
 )
