@@ -35,6 +35,7 @@ import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 import com.miszczyk.passlingo.ui.theme.TextSize.displayLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.displaySmall
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
+import com.miszczyk.passlingo.ui.util.DeckIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(value = Build.VERSION_CODES.Q)
@@ -71,7 +72,7 @@ fun HomeScreen(
         } else {
             items(items = deckUiState.decks, key = { it.deck.id }) { deckWithCards ->
                 DeckItem(
-                    icon = deckWithCards.deck.iconResId,
+                    icon = DeckIcons.findIconFromId(deckWithCards.deck.iconResId).resId,
                     nameDeck = deckWithCards.deck.name,
                     flashcardCount = deckWithCards.flashcards.size,
                     isSelected = deckUiState.selectedDeckId == deckWithCards.deck.id,
@@ -88,7 +89,7 @@ fun HomeScreen(
         if (selectedDeck != null) {
             DeckBottomSheet(
                 sheetState = sheetState,
-                deckIcon = selectedDeck.deck.iconResId,
+                deckIcon = DeckIcons.findIconFromId(selectedDeck.deck.iconResId).resId,
                 deckName = selectedDeck.deck.name,
                 flashcardCount = selectedDeck.flashcards.size,
                 onDismissRequest = {

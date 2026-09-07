@@ -99,7 +99,7 @@ fun DeckBottomSheet(
                 textDescription = stringResource(id = R.string.action_study_now),
                 textColor = MaterialTheme.colorScheme.background,
                 backgroundColor = MaterialTheme.colorScheme.primary,
-                onClick = { onStudyClicked(); onDismissRequest() }
+                onClick = { onStudyClicked()}
             )
 
             Spacer(modifier = Modifier.height(height = spaceMediumLarge))
@@ -111,7 +111,7 @@ fun DeckBottomSheet(
                 textColor = MaterialTheme.colorScheme.primary,
                 backgroundColor = MaterialTheme.colorScheme.background,
                 borderColor = MaterialTheme.colorScheme.onBackground,
-                onClick = { onEditClicked(); onDismissRequest() }
+                onClick = { onEditClicked()}
             )
 
             Spacer(modifier = Modifier.height(height = spaceMediumLarge))
@@ -122,7 +122,7 @@ fun DeckBottomSheet(
                 textDescription = stringResource(id = R.string.action_delete_deck),
                 textColor = MaterialTheme.colorScheme.background,
                 backgroundColor = MaterialTheme.colorScheme.error,
-                onClick = { onDeleteClicked();  onDismissRequest()}
+                onClick = { onDeleteClicked()}
             )
 
             Spacer(modifier = Modifier.height(height = spaceDefault))

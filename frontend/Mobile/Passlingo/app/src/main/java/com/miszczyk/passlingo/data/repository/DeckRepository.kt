@@ -24,8 +24,8 @@ class DeckRepository(context: Context) {
         deckDao.insertDeckWithFlashcards(deckEntity, cardEntities)
     }
 
-    suspend fun deleteDeck(deckId: String?){
-        val deck  = deckDao.getDeckById(deckId ?: "") ?: return
+    suspend fun deleteDeck(deckId: String){
+        val deck  = deckDao.getDeckById(deckId) ?: return
         deckDao.deleteDeck(deck)
     }
 
