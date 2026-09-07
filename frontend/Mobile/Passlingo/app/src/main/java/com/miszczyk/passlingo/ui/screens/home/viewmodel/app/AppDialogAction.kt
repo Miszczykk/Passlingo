@@ -1,7 +1,7 @@
 package com.miszczyk.passlingo.ui.screens.home.viewmodel.app
 
 import com.miszczyk.passlingo.ui.screens.home.components.BaseDialogAction
-import com.miszczyk.passlingo.ui.screens.home.data.RepositoryTimeAndApps
+import com.miszczyk.passlingo.ui.screens.home.data.TimeAndAppsRepository
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppDialogState
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppUiState
 import com.miszczyk.passlingo.ui.screens.home.util.Constants.COST_TIME_SECONDS
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.update
 class AppDialogAction(
     uiStateFlow: MutableStateFlow<AppUiState>,
     externalScope: CoroutineScope,
-    private val lockedAppsAndEarnedTimeRepositoryTimeAndApps: RepositoryTimeAndApps,
+    private val repository: TimeAndAppsRepository,
 ) : BaseDialogAction<AppUiState, AppDialogState>(uiStateFlow, externalScope) {
 
     override val noneDialogState: AppDialogState = AppDialogState.None
@@ -36,9 +36,9 @@ class AppDialogAction(
     private fun onLockAppDialogConfirmed() {
         val selection = uiStateFlow.value.selectedApps
         executeDialogTask(task = {
-            lockedAppsAndEarnedTimeRepositoryTimeAndApps.lockAppsAndAddCreditTime(
+            repository.lockAppsAndAddCreditTime(
                 packageNames = selection,
-                secondsEarned = earnedTimeFor(numberOfApplication = selection.size)
+                secondsEarned = earnedTimeFor(numberOfApplications = selection.size)
             )
         }, onSuccessStateUpdate = { state ->
             state.copy(appDialogState = AppDialogState.None, selectedApps = emptySet())
@@ -47,7 +47,7 @@ class AppDialogAction(
 
     private fun onUnlockAppDialogConfirmed(packageName: String) {
         executeDialogTask(task = {
-            lockedAppsAndEarnedTimeRepositoryTimeAndApps.unlockAppAndSubtractCreditTime(
+            repository.unlockAppAndSubtractCreditTime(
                 packageName, secondsLost = COST_TIME_SECONDS
             )
         }, onSuccessStateUpdate = { state ->

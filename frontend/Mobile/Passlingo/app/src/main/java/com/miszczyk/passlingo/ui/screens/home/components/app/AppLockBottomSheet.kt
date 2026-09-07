@@ -213,7 +213,7 @@ private fun ColumnScope.AppListContent(
 
     val textDescription = if (selectedApps.isNotEmpty()) stringResource(
         R.string.action_lock_selected,
-        (earnedTimeFor(numberOfApplication = selectedApps.size) / 60).toInt()
+        (earnedTimeFor(numberOfApplications = selectedApps.size) / 60).toInt()
     ) else stringResource(R.string.prompt_select_apps_to_lock)
 
     Button(

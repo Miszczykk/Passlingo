@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.TextUnit
 import com.miszczyk.passlingo.R
 
 @Composable
-fun AppNameLogo(smallSize: TextUnit, bigSize: TextUnit): AnnotatedString {
+fun buildAppNameLogo(smallSize: TextUnit, bigSize: TextUnit): AnnotatedString {
     return buildAnnotatedString {
         withStyle(
             style = SpanStyle(

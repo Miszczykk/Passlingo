@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.miszczyk.passlingo.ui.components.AppNameLogo
+import com.miszczyk.passlingo.ui.components.buildAppNameLogo
 import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 import com.miszczyk.passlingo.ui.theme.TextSize.displayHuge
 import com.miszczyk.passlingo.ui.theme.TextSize.displayMedium
@@ -42,7 +42,7 @@ fun LoadingScreen(modifier: Modifier = Modifier, onAnimationFinished: () -> Unit
     }
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
-            text = AppNameLogo(displayMedium, displayHuge),
+            text = buildAppNameLogo(displayMedium, displayHuge),
             modifier = modifier
                 .fillMaxWidth()
                 .graphicsLayer { translationY = offsetY.value },

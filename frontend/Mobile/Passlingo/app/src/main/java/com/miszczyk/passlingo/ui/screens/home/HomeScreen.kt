@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.miszczyk.passlingo.ui.components.AppNameLogo
+import com.miszczyk.passlingo.ui.components.buildAppNameLogo
 import com.miszczyk.passlingo.ui.screens.home.components.BalanceBox
 import com.miszczyk.passlingo.ui.screens.home.components.CreateBox
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckBottomSheet
@@ -56,7 +56,7 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Text(text = AppNameLogo(displaySmall, displayLarge), textAlign = TextAlign.Center, fontFamily = vagRoundedBold)
+            Text(text = buildAppNameLogo(displaySmall, displayLarge), textAlign = TextAlign.Center, fontFamily = vagRoundedBold)
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
             BalanceBox(balanceTime = appUiState.balanceTime)
             Spacer(modifier = Modifier.height(height = spaceHuge))

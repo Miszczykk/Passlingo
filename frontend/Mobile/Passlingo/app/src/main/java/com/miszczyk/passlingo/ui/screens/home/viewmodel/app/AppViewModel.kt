@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.miszczyk.passlingo.ui.screens.home.data.AppUsageProvider
-import com.miszczyk.passlingo.ui.screens.home.data.RepositoryTimeAndApps
+import com.miszczyk.passlingo.ui.screens.home.data.TimeAndAppsRepository
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppDialogState
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppUiState
 import com.miszczyk.passlingo.ui.screens.home.util.hasUsageStatsPermission
@@ -23,10 +23,10 @@ import kotlinx.coroutines.withContext
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
     private val appUsageProvider = AppUsageProvider(context = application)
-    private val repositoryTimeAndApps = RepositoryTimeAndApps(context = application)
+    private val timeAndAppsRepository = TimeAndAppsRepository(context = application)
     private val _appUiState = MutableStateFlow(value = AppUiState())
     val appUiState: StateFlow<AppUiState> = _appUiState.asStateFlow()
-    private val appDialogAction = AppDialogAction(uiStateFlow = _appUiState, externalScope = viewModelScope, lockedAppsAndEarnedTimeRepositoryTimeAndApps = repositoryTimeAndApps)
+    private val appDialogAction = AppDialogAction(uiStateFlow = _appUiState, externalScope = viewModelScope, repository = timeAndAppsRepository)
     private val appSelectionAction = AppSelectionAction(uiStateFlow = _appUiState)
 
     private var observationJob: Job? = null
@@ -38,7 +38,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     private fun startObservingData() {
         observationJob?.cancel()
         observationJob = combine(
-            flow = repositoryTimeAndApps.lockedApps, flow2 =  repositoryTimeAndApps.balanceTime
+            flow = timeAndAppsRepository.lockedApps, flow2 =  timeAndAppsRepository.balanceTime
         ) { locked, time ->
             locked to time
         }.observeWithRetry(

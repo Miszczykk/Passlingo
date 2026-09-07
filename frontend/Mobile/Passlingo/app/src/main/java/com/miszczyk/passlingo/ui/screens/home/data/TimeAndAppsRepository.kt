@@ -8,7 +8,7 @@ import com.miszczyk.passlingo.ui.screens.home.datastore.SettingsDataStore.dataSt
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class RepositoryTimeAndApps(
+class TimeAndAppsRepository(
     private val context: Context
 ) {
     val lockedApps: Flow<Set<String>> = context.dataStore.data.map { prefs ->

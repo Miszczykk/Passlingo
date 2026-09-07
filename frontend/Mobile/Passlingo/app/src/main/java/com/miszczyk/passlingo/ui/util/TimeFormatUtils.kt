@@ -18,6 +18,6 @@ fun formatTime(totalSeconds: Long, forceFullFormat: Boolean = true): String {
     }
 }
 
-fun earnedTimeFor(numberOfApplication: Int): Long {
-    return EARN_TIME_SECONDS * numberOfApplication
+fun earnedTimeFor(numberOfApplications: Int): Long {
+    return EARN_TIME_SECONDS * numberOfApplications
 }
