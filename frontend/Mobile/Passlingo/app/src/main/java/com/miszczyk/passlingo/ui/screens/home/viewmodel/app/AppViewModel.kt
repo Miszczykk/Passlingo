@@ -6,20 +6,16 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.miszczyk.passlingo.ui.screens.home.data.AppUsageProvider
 import com.miszczyk.passlingo.ui.screens.home.data.RepositoryTimeAndApps
-import com.miszczyk.passlingo.ui.screens.home.model.app.AppUiState
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppDialogState
+import com.miszczyk.passlingo.ui.screens.home.model.app.AppUiState
 import com.miszczyk.passlingo.ui.screens.home.util.hasUsageStatsPermission
+import com.miszczyk.passlingo.ui.util.observeWithRetry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -41,21 +37,19 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun startObservingData() {
         observationJob?.cancel()
-
         observationJob = combine(
             flow = repositoryTimeAndApps.lockedApps, flow2 =  repositoryTimeAndApps.balanceTime
         ) { locked, time ->
             locked to time
-        }.onEach { (locked, time) ->
-            _appUiState.update { it.copy(lockedApps = locked, balanceTime = time) }
-        }.retry(retries = 3) { _ ->
-            delay(timeMillis = 1000)
-            true
-        }.catch { e ->
-            val errorMessage = e.localizedMessage ?: "Failed to load data"
-            Log.e("error", errorMessage)
-            _appUiState.update { it.copy(appDialogState = AppDialogState.Error(errorMessage)) }
-        }.launchIn(viewModelScope)
+        }.observeWithRetry(
+            scope = viewModelScope,
+            onError = { e ->
+                _appUiState.update { it.copy(appDialogState = AppDialogState.Error(e.localizedMessage ?: "Failed to load data")) }
+            },
+            onEachAction = { (locked, time) ->
+                _appUiState.update { it.copy(lockedApps = locked, balanceTime = time) }
+            }
+        )
     }
 
     private fun loadInstalledApps() {
