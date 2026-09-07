@@ -9,6 +9,7 @@ import com.miszczyk.passlingo.data.repository.DeckRepository
 import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.DeckFormDialogState
 import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.DeckFormUiState
 import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.Flashcard
+import com.miszczyk.passlingo.ui.util.DeckIcons
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,7 +51,7 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
     private suspend fun saveDeckToDatabase() {
         deckRepository.saveDeck(
             name = deckName.text.toString(),
-            iconResId = _uiState.value.deckIcon,
+            iconResId = _uiState.value.deckIcon.id,
             cards = _uiState.value.cards
         )
     }
@@ -78,7 +79,7 @@ class CreateDeckViewModel(application: Application) : AndroidViewModel(applicati
         _uiState.update { it.copy(showBottomSheet = true) }
     }
 
-    fun onIconClicked(selectedIcon: Int) {
+    fun onIconClicked(selectedIcon: DeckIcons) {
         _uiState.update { it.copy(deckIcon = selectedIcon) }
         onSheetDismissed()
     }

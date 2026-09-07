@@ -26,16 +26,17 @@ import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.body
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
+import com.miszczyk.passlingo.ui.util.DeckIcons
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IconSelectBottomSheet(
     sheetState: SheetState,
-    currentIcon: Int,
-    onIconClicked: (Int) -> Unit,
+    currentIcon: DeckIcons,
+    onIconClicked: (DeckIcons) -> Unit,
     onDismissRequest: () -> Unit,
-    deckIconsList: List<Int>,
+    deckIconsList: List<DeckIcons>,
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismissRequest, sheetState = sheetState
@@ -75,17 +76,17 @@ fun IconSelectBottomSheet(
 }
 
 @Composable
-private fun IconListContent(icons: List<Int>, currentIcon: Int, onIconClicked: (Int) -> Unit) {
+private fun IconListContent(icons: List<DeckIcons>, currentIcon: DeckIcons, onIconClicked: (DeckIcons) -> Unit) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(count = 4),
         contentPadding = PaddingValues(all = spaceExtraLarge),
         horizontalArrangement = Arrangement.spacedBy(spaceExtraLarge),
         verticalArrangement = Arrangement.spacedBy(spaceExtraLarge)
     ) {
-        items(items = icons) { iconRes ->
+        items(items = icons) { deckIcon ->
             IconItem(
-                iconResId = iconRes, isSelected = iconRes == currentIcon, onClick = {
-                    onIconClicked(iconRes)
+                iconResId = deckIcon.resId, isSelected = deckIcon == currentIcon, onClick = {
+                    onIconClicked(deckIcon)
                 }
             )
         }

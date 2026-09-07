@@ -24,6 +24,7 @@ import com.miszczyk.passlingo.ui.theme.Dimens.spaceHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.bodySmall
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
+import com.miszczyk.passlingo.ui.util.DeckIcons
 
 @Composable
 fun DeckFormContent(
@@ -31,7 +32,7 @@ fun DeckFormContent(
     headerTitle: String,
 
     deckNameState: TextFieldState,
-    deckIcon: Int,
+    deckIcon: DeckIcons,
 
     frontCardState: TextFieldState,
     backCardState: TextFieldState,
@@ -64,7 +65,7 @@ fun DeckFormContent(
                 DeckDetailsSection(
                     state = deckNameState,
                     onSelectIconClicked = { onSelectIconClicked() },
-                    icon = deckIcon
+                    icon = deckIcon.resId
                 )
 
                 Spacer(modifier = Modifier.height(height = spaceExtraHuge))

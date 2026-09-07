@@ -53,7 +53,7 @@ fun AddCardSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.label_deck_cards),
+                text = stringResource(id = R.string.label_deck_cards),
                 color = MaterialTheme.colorScheme.primary,
                 fontSize = titleLarge,
                 fontFamily = vagRoundedBold,
@@ -64,7 +64,7 @@ fun AddCardSection(
                 ), contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(R.string.label_cards_added, addedCards),
+                    text = stringResource(id = R.string.label_cards_added, addedCards),
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = body,
                     fontFamily = vagRoundedBold,
