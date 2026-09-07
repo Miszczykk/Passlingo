@@ -30,7 +30,6 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -39,7 +38,6 @@ import com.miszczyk.passlingo.ui.components.BottomSheetHeader
 import com.miszczyk.passlingo.ui.components.ThemedDivider
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppItem
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppRowState
-import com.miszczyk.passlingo.ui.util.earnedTimeFor
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
@@ -51,7 +49,8 @@ import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
-import kotlinx.coroutines.launch
+import com.miszczyk.passlingo.ui.util.earnedTimeFor
+import com.miszczyk.passlingo.ui.util.rememberSheetCloseHandler
 
 
 @RequiresApi(Build.VERSION_CODES.Q)
@@ -69,20 +68,15 @@ fun AppLockBottomSheet(
     onRequestPermission: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
-
+    val closeSheet = rememberSheetCloseHandler(sheetState, onDismissRequest)
     ModalBottomSheet(
-        onDismissRequest = onDismissRequest, sheetState = sheetState
+        onDismissRequest = closeSheet, sheetState = sheetState
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            val coroutineScope = rememberCoroutineScope()
-
             BottomSheetHeader(label = stringResource(R.string.label_app_lock)) {
-                coroutineScope.launch {
-                    sheetState.hide()
-                    onDismissRequest()
-                }
+                closeSheet()
             }
 
             Spacer(modifier = Modifier.height(height = spaceMediumLarge))

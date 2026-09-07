@@ -29,7 +29,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,7 +53,7 @@ import com.miszczyk.passlingo.ui.theme.TextSize.body
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
-import kotlinx.coroutines.launch
+import com.miszczyk.passlingo.ui.util.rememberSheetCloseHandler
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,24 +68,19 @@ fun DeckBottomSheet(
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit
 ) {
+    val closeSheet = rememberSheetCloseHandler(sheetState, onDismissRequest)
+
     ModalBottomSheet(
-        onDismissRequest = onDismissRequest, sheetState = sheetState
+        onDismissRequest = closeSheet, sheetState = sheetState
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            val coroutineScope = rememberCoroutineScope()
-
             Header(
                 iconResId = deckIcon,
                 deckName = deckName,
                 flashcardCount = flashcardCount,
-                onCloseClicked = {
-                    coroutineScope.launch {
-                        sheetState.hide()
-                        onDismissRequest()
-                    }
-                }
+                onCloseClicked = closeSheet
             )
 
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
@@ -182,9 +176,8 @@ private fun Header(
         Spacer(modifier = Modifier.width(width = spaceLarge))
 
         IconButton(
-            onClick = {
-                onCloseClicked()
-            }, modifier = Modifier.background(
+            onClick = onCloseClicked
+            , modifier = Modifier.background(
                 color = MaterialTheme.colorScheme.onBackground, shape = CircleShape
             )
         ) {

@@ -16,7 +16,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
@@ -27,7 +26,7 @@ import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.body
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 import com.miszczyk.passlingo.ui.util.DeckIcons
-import kotlinx.coroutines.launch
+import com.miszczyk.passlingo.ui.util.rememberSheetCloseHandler
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,20 +37,17 @@ fun IconSelectBottomSheet(
     onDismissRequest: () -> Unit,
     deckIconsList: List<DeckIcons>,
 ) {
+    val closeSheet = rememberSheetCloseHandler(sheetState, onDismissRequest)
     ModalBottomSheet(
-        onDismissRequest = onDismissRequest, sheetState = sheetState
+        onDismissRequest = closeSheet, sheetState = sheetState
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            val coroutineScope = rememberCoroutineScope()
             BottomSheetHeader(
                 label = stringResource(id = R.string.label_select_cover_icon)
             ) {
-                coroutineScope.launch {
-                    sheetState.hide()
-                    onDismissRequest()
-                }
+                closeSheet()
             }
 
             Spacer(modifier = Modifier.height(height = spaceMediumLarge))
