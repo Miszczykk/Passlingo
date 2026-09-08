@@ -25,6 +25,7 @@ import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckBottomSheet
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckBoxHeader
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckItem
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckStatusDialogs
+import com.miszczyk.passlingo.ui.screens.home.components.decks.StudyModeBottomSheet
 import com.miszczyk.passlingo.ui.screens.home.components.decks.WithoutDecks
 import com.miszczyk.passlingo.ui.screens.home.model.deck.HasDeckName
 import com.miszczyk.passlingo.ui.screens.home.viewmodel.app.AppViewModel
@@ -50,13 +51,18 @@ fun HomeScreen(
     val appUiState by appViewModel.appUiState.collectAsState()
     val deckUiState by deckViewModel.deckUiState.collectAsState()
     val sheetState = rememberModalBottomSheetState()
+    val sheetStateToStudyMode = rememberModalBottomSheetState()
 
     LazyColumn(
         modifier = modifier.padding(horizontal = spaceExtraLarge),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Text(text = buildAppNameLogo(displaySmall, displayLarge), textAlign = TextAlign.Center, fontFamily = vagRoundedBold)
+            Text(
+                text = buildAppNameLogo(displaySmall, displayLarge),
+                textAlign = TextAlign.Center,
+                fontFamily = vagRoundedBold
+            )
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
             BalanceBox(balanceTime = appUiState.balanceTime)
             Spacer(modifier = Modifier.height(height = spaceHuge))
@@ -83,10 +89,10 @@ fun HomeScreen(
         }
     }
 
-    if (deckUiState.showBottomSheet && deckUiState.selectedDeckId != null) {
-        val selectedDeck = deckUiState.decks.find { it.deck.id == deckUiState.selectedDeckId }
+    val selectedDeck = deckUiState.decks.find { it.deck.id == deckUiState.selectedDeckId }
 
-        if (selectedDeck != null) {
+    if (selectedDeck != null) {
+        if (deckUiState.showBottomSheet) {
             DeckBottomSheet(
                 sheetState = sheetState,
                 deckIcon = DeckIcons.findIconFromId(selectedDeck.deck.iconResId).resId,
@@ -95,9 +101,19 @@ fun HomeScreen(
                 onDismissRequest = {
                     deckViewModel.hideBottomSheet()
                 },
-                onStudyClicked = {},
-                onEditClicked = {onEditDeckClicked(selectedDeck.deck.id)},
+                onStudyClicked = { deckViewModel.onStudyModeClicked() },
+                onEditClicked = { onEditDeckClicked(selectedDeck.deck.id) },
                 onDeleteClicked = { deckViewModel.deleteDeck() }
+            )
+        }
+        if (deckUiState.showStudyModeBottomSheet) {
+            StudyModeBottomSheet(
+                sheetState = sheetStateToStudyMode,
+                deckName = selectedDeck.deck.name,
+                onDismissRequest = { deckViewModel.hideStudyModeBottomSheet() },
+                onFlashcardClicked = {},
+                onQuizClicked = {},
+                onTypingClicked = {}
             )
         }
     }
@@ -107,6 +123,7 @@ fun HomeScreen(
         deckViewModel = deckViewModel,
         deckName = (deckUiState.deckDialogState as? HasDeckName)?.deckName ?: ""
     )
+
 }
 
 @RequiresApi(value = Build.VERSION_CODES.Q)

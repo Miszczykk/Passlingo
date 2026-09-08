@@ -62,6 +62,23 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun onStudyModeClicked(){
+        _deckUiState.update { currentState ->
+            currentState.copy(
+                showBottomSheet = false,
+                showStudyModeBottomSheet = true
+            )
+        }
+    }
+    fun hideStudyModeBottomSheet(){
+        _deckUiState.update { currentState ->
+            currentState.copy(
+                showStudyModeBottomSheet = false,
+                selectedDeckId = null
+            )
+        }
+    }
+
     fun onRetryErrorClicked() {
         _deckUiState.update { it.copy(deckDialogState = DeckDialogState.None) }
         startObservingData()

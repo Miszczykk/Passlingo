@@ -53,6 +53,10 @@
         <item quantity="one">%1$d card</item>
         <item quantity="other">%1$d cards</item>
     </plurals>
+    <string name="label_select_study_mode">Select Study Mode</string>
+    <string name="label_mode_flashcards">Flashcards</string>
+    <string name="label_mode_quiz">Quiz</string>
+    <string name="label_mode_typing">Typing</string>
 
     <!-- Prompts & Messages -->
     <string name="prompt_app_lock_description">Select apps you want to restrict access to.\nUnlocking them will require studying!</string>
@@ -66,6 +70,10 @@
     <string name="prompt_select_icon_description">Choose an icon that best represents the subject of your flashcards.</string>
     <string name="prompt_no_decks_yet">No decks yet</string>
     <string name="prompt_create_first_deck">Create your first deck to start earning time.</string>
+    <string name="prompt_choose_study_mode">Choose how you want to practice \"%1$s\" today.</string>
+    <string name="desc_mode_flashcards">Flip cards to reveal answers</string>
+    <string name="desc_mode_quiz">Choose the correct translation</string>
+    <string name="desc_mode_typing">Type the exact translation</string>
 
     <!-- Dialogs -->
     <string name="dialog_title_confirm_lock">Are you sure?</string>
