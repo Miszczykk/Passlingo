@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
 class DeckSelectionAction(private val uiStateFlow: MutableStateFlow<DeckUiState>) {
-
     fun onDeleteDeckClicked() {
         uiStateFlow.update { state ->
             val deckId = state.selectedDeckId

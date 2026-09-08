@@ -28,12 +28,11 @@ fun DeckStatusDialogs(
     }, onCancel = { deckViewModel.onDialogCancelled() }
     )
 }
-
 @Composable
 private fun deleteDeckDialog(deckName: String): DialogItem {
     return DialogItem(
         title = stringResource(id = R.string.dialog_title_delete_deck),
-        message = stringResource(id = R.string.dialog_message_delete_deck),
+        message = stringResource(id = R.string.dialog_message_delete_deck, deckName),
         onConfirmText = stringResource(id = R.string.action_delete),
         onConfirmTextColor = MaterialTheme.colorScheme.background,
         onConfirmBackgroundColor = MaterialTheme.colorScheme.error,
