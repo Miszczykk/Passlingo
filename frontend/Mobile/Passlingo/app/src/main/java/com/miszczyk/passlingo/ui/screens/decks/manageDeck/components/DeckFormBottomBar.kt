@@ -25,7 +25,7 @@ fun DeckFormBottomBar(
     addedCards: Int,
     onSaveDeckClicked: () -> Unit
 ){
-    val check = deckName.isNotBlank() && addedCards > 0
+    val check = deckName.isNotBlank() && addedCards >= 4
 
     val buttonColor by animateColorAsState(
         targetValue = if (check) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
@@ -38,8 +38,8 @@ fun DeckFormBottomBar(
     )
 
     val textDescription = when {
-        (deckName.isBlank() && addedCards > 0) -> stringResource(id = R.string.action_enter_deck_name)
-        (deckName.isNotBlank() && addedCards == 0) -> stringResource(id = R.string.action_add_cards_first)
+        (deckName.isBlank() && addedCards >= 4) -> stringResource(id = R.string.action_enter_deck_name)
+        (deckName.isNotBlank() && addedCards < 4) -> stringResource(id = R.string.action_add_cards_first)
         !check -> stringResource(id = R.string.action_enter_name_add_cards)
         else -> stringResource(id = R.string.action_save_deck)
     }

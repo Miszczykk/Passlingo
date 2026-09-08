@@ -66,7 +66,7 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
 
 
     fun onSaveDeckClicked(){
-        if (deckName.text.toString().isNotBlank() && _uiState.value.cards.isNotEmpty()) {
+        if (deckName.text.toString().isNotBlank() && _uiState.value.cards.size >= 4) {
             _uiState.update { it.copy(dialogState = DeckFormDialogState.SaveDeckForm) }
         }
     }

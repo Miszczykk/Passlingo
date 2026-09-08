@@ -85,7 +85,7 @@ fun DeckFormContent(
             if(cards.isEmpty()) {
                 item{
                     Text(
-                        text = stringResource(R.string.prompt_no_cards_added),
+                        text = stringResource(id = R.string.prompt_no_cards_added),
                         color = MaterialTheme.colorScheme.onSurface,
                         fontFamily = vagRoundedLight,
                         fontSize = bodySmall,
