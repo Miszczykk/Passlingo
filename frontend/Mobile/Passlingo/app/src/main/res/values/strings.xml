@@ -32,6 +32,7 @@
     <string name="action_study_now">Study Now</string>
     <string name="action_edit_deck">Edit Deck</string>
     <string name="action_delete_deck">Delete Deck</string>
+    <string name="action_start_session">Start Session</string>
 
     <!-- Labels / Titles -->
     <string name="label_app_lock">App Lock</string>
@@ -57,6 +58,8 @@
     <string name="label_mode_flashcards">Flashcards</string>
     <string name="label_mode_quiz">Quiz</string>
     <string name="label_mode_typing">Typing</string>
+    <string name="label_study_settings">Study Settings</string>
+    <string name="label_target_rounds">TARGET ROUNDS</string>
 
     <!-- Prompts & Messages -->
     <string name="prompt_app_lock_description">Select apps you want to restrict access to.\nUnlocking them will require studying!</string>
@@ -74,6 +77,7 @@
     <string name="desc_mode_flashcards">Flip cards to reveal answers</string>
     <string name="desc_mode_quiz">Choose the correct translation</string>
     <string name="desc_mode_typing">Type the exact translation</string>
+    <string name="desc_target_rounds">How many times must a card be answered correctly to be cleared?</string>
 
     <!-- Dialogs -->
     <string name="dialog_title_confirm_lock">Are you sure?</string>

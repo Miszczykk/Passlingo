@@ -21,12 +21,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.miszczyk.passlingo.ui.components.buildAppNameLogo
 import com.miszczyk.passlingo.ui.screens.home.components.BalanceBox
 import com.miszczyk.passlingo.ui.screens.home.components.CreateBox
-import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckBottomSheet
+import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckOptionsBottomSheet
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckBoxHeader
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckItem
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckStatusDialogs
 import com.miszczyk.passlingo.ui.screens.home.components.decks.StudyModeBottomSheet
+import com.miszczyk.passlingo.ui.screens.home.components.decks.StudySettingsBottomSheet
 import com.miszczyk.passlingo.ui.screens.home.components.decks.WithoutDecks
+import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckBottomSheetState
 import com.miszczyk.passlingo.ui.screens.home.model.deck.HasDeckName
 import com.miszczyk.passlingo.ui.screens.home.viewmodel.app.AppViewModel
 import com.miszczyk.passlingo.ui.screens.home.viewmodel.deck.DeckViewModel
@@ -50,8 +52,10 @@ fun HomeScreen(
 ) {
     val appUiState by appViewModel.appUiState.collectAsState()
     val deckUiState by deckViewModel.deckUiState.collectAsState()
-    val sheetState = rememberModalBottomSheetState()
+
+    val sheetStateToOptions = rememberModalBottomSheetState()
     val sheetStateToStudyMode = rememberModalBottomSheetState()
+    val sheetStateToStudySettings = rememberModalBottomSheetState()
 
     LazyColumn(
         modifier = modifier.padding(horizontal = spaceExtraLarge),
@@ -89,34 +93,41 @@ fun HomeScreen(
         }
     }
 
-    val selectedDeck = deckUiState.decks.find { it.deck.id == deckUiState.selectedDeckId }
+        when(val state = deckUiState.deckBottomSheetState){
+            is DeckBottomSheetState.None -> {}
 
-    if (selectedDeck != null) {
-        if (deckUiState.showBottomSheet) {
-            DeckBottomSheet(
-                sheetState = sheetState,
-                deckIcon = DeckIcons.findIconFromId(selectedDeck.deck.iconResId).resId,
-                deckName = selectedDeck.deck.name,
-                flashcardCount = selectedDeck.flashcards.size,
-                onDismissRequest = {
-                    deckViewModel.hideBottomSheet()
-                },
-                onStudyClicked = { deckViewModel.onStudyModeClicked() },
-                onEditClicked = { onEditDeckClicked(selectedDeck.deck.id) },
-                onDeleteClicked = { deckViewModel.deleteDeck() }
-            )
+            is DeckBottomSheetState.DeckOptions -> {
+                DeckOptionsBottomSheet(
+                    sheetState = sheetStateToOptions,
+                    deckIcon = DeckIcons.findIconFromId(state.iconResId).resId,
+                    deckName = state.deckName,
+                    flashcardCount = state.flashcardCount,
+                    onDismissRequest = { deckViewModel.hideBottomSheet() },
+                    onStudyClicked = { deckViewModel.onStudyModeClicked() },
+                    onEditClicked = { deckUiState.selectedDeckId?.let { onEditDeckClicked(it) } },
+                    onDeleteClicked = { deckViewModel.deleteDeck() }
+                )
+            }
+
+            is DeckBottomSheetState.StudyMode -> {
+                StudyModeBottomSheet(
+                    sheetState = sheetStateToStudyMode,
+                    deckName = state.deckName,
+                    onDismissRequest = { deckViewModel.hideBottomSheet() },
+                    onFlashcardClicked = {deckViewModel.onStudySettingsClicked()},
+                    onQuizClicked = {deckViewModel.onStudySettingsClicked()},
+                    onTypingClicked = {deckViewModel.onStudySettingsClicked()}
+                )
+            }
+
+            is DeckBottomSheetState.StudySettings -> {
+                StudySettingsBottomSheet(
+                    sheetState = sheetStateToStudySettings,
+                    onDismissRequest = {deckViewModel.hideBottomSheet()},
+                    onStartSessionClicked = {}
+                )
+            }
         }
-        if (deckUiState.showStudyModeBottomSheet) {
-            StudyModeBottomSheet(
-                sheetState = sheetStateToStudyMode,
-                deckName = selectedDeck.deck.name,
-                onDismissRequest = { deckViewModel.hideStudyModeBottomSheet() },
-                onFlashcardClicked = {},
-                onQuizClicked = {},
-                onTypingClicked = {}
-            )
-        }
-    }
 
     DeckStatusDialogs(
         deckDialogState = deckUiState.deckDialogState,

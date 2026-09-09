@@ -11,6 +11,7 @@ object Dimens {
     val elevationMedium = 6.dp
 
     val cornerRadiusSmall = 10.dp
+    val cornerRadiusMedium = 12.dp
     val cornerRadiusDefault = 16.dp
 
     val iconSmall = 16.dp
@@ -22,6 +23,8 @@ object Dimens {
     val iconGiant = 75.dp
     val animatedRadiusSmall = 80.dp
     val animatedRadiusLarge = 100.dp
+
+    val sizeIndicator = 38.dp
 
     val spaceNone = 0.dp
     val spaceExtraSmall = 5.dp

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.miszczyk.passlingo.data.repository.DeckRepository
+import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckBottomSheetState
 import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckDialogState
 import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckUiState
 import com.miszczyk.passlingo.ui.util.observeWithRetry
@@ -47,34 +48,45 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
     fun hideBottomSheet() {
         _deckUiState.update { currentState ->
             currentState.copy(
-                showBottomSheet = false,
+                deckBottomSheetState = DeckBottomSheetState.None,
                 selectedDeckId = null
             )
         }
     }
 
     fun selectDeck(id: String) {
-        _deckUiState.update { currentState ->
-            currentState.copy(
-                selectedDeckId = id,
-                showBottomSheet = true
-            )
+        val deckWithCards = _deckUiState.value.decks.find { it.deck.id == id }
+        if (deckWithCards != null) {
+            _deckUiState.update { currentState ->
+                currentState.copy(
+                    selectedDeckId = id,
+                    deckBottomSheetState = DeckBottomSheetState.DeckOptions(
+                        deckName = deckWithCards.deck.name,
+                        iconResId = deckWithCards.deck.iconResId,
+                        flashcardCount = deckWithCards.flashcards.size
+                    )
+                )
+            }
         }
     }
 
-    fun onStudyModeClicked(){
-        _deckUiState.update { currentState ->
-            currentState.copy(
-                showBottomSheet = false,
-                showStudyModeBottomSheet = true
-            )
+    fun onStudyModeClicked() {
+        val id = _deckUiState.value.selectedDeckId
+        val deckWithCards = _deckUiState.value.decks.find { it.deck.id == id }
+        if (deckWithCards != null) {
+            _deckUiState.update { currentState ->
+                currentState.copy(
+                    deckBottomSheetState = DeckBottomSheetState.StudyMode(
+                        deckName = deckWithCards.deck.name
+                    )
+                )
+            }
         }
     }
-    fun hideStudyModeBottomSheet(){
+    fun onStudySettingsClicked() {
         _deckUiState.update { currentState ->
             currentState.copy(
-                showStudyModeBottomSheet = false,
-                selectedDeckId = null
+                deckBottomSheetState = DeckBottomSheetState.StudySettings
             )
         }
     }

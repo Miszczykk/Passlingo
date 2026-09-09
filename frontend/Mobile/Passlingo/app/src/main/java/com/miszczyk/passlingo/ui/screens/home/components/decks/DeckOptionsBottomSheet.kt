@@ -58,7 +58,7 @@ import com.miszczyk.passlingo.ui.util.rememberSheetCloseHandler
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeckBottomSheet(
+fun DeckOptionsBottomSheet(
     sheetState: SheetState,
     deckIcon: Int,
     deckName: String,

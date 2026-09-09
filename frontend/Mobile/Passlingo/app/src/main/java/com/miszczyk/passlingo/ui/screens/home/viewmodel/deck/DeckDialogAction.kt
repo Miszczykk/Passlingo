@@ -2,6 +2,7 @@ package com.miszczyk.passlingo.ui.screens.home.viewmodel.deck
 
 import com.miszczyk.passlingo.data.repository.DeckRepository
 import com.miszczyk.passlingo.ui.screens.home.components.BaseDialogAction
+import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckBottomSheetState
 import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckDialogState
 import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckUiState
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +36,7 @@ class DeckDialogAction(
             onSuccessStateUpdate = { state ->
                 state.copy(
                     deckDialogState = DeckDialogState.None,
-                    showBottomSheet = false,
+                    deckBottomSheetState = DeckBottomSheetState.None,
                     selectedDeckId = null
                 )
             }

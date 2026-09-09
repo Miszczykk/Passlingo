@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.BottomSheetHeader
 import com.miszczyk.passlingo.ui.components.ThemedDivider
@@ -37,6 +36,10 @@ import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceMedium
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceMediumLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceNone
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceSmall
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceVeryLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.body
 import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
@@ -73,11 +76,11 @@ fun StudyModeBottomSheet(
                 modifier = Modifier.padding(horizontal = spaceExtraLarge)
             )
 
-            Spacer(modifier = Modifier.height(height = 15.dp))
+            Spacer(modifier = Modifier.height(height = spaceMediumLarge))
 
             ThemedDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
 
-            Spacer(modifier = Modifier.height(height = 15.dp))
+            Spacer(modifier = Modifier.height(height = spaceMediumLarge))
 
             ModeButton(
                 iconResId = R.drawable.flashcard,
@@ -115,7 +118,7 @@ private fun ModeButton(
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = spaceSmall)
             .padding(horizontal = spaceExtraLarge)
             .border(
                 width = borderDefault,
@@ -126,7 +129,7 @@ private fun ModeButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.background
         ),
-        contentPadding = PaddingValues(0.dp),
+        contentPadding = PaddingValues(all = spaceNone),
         onClick = {
             onClick()
         }
@@ -134,7 +137,7 @@ private fun ModeButton(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(all = 24.dp),
+                .padding(all = spaceVeryLarge),
             horizontalArrangement = Arrangement.Start
         ) {
                 Icon(
