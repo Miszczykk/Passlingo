@@ -8,6 +8,7 @@ import com.miszczyk.passlingo.data.local.entity.StudyMode
 import com.miszczyk.passlingo.data.local.entity.StudySessionEntity
 import com.miszczyk.passlingo.data.repository.DeckRepository
 import com.miszczyk.passlingo.data.repository.StudySessionRepositoryImpl
+import com.miszczyk.passlingo.ui.screens.home.data.TimeAndAppsRepository
 import com.miszczyk.passlingo.ui.screens.studyMode.flashcards.model.FlashcardsUiState
 import com.miszczyk.passlingo.ui.screens.studyMode.flashcards.model.PracticeCardUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +20,7 @@ import java.util.UUID
 
 class FlashcardsViewModel(application: Application) : AndroidViewModel(application){
     private val sessionRepository = StudySessionRepositoryImpl(application)
+    private val repository = TimeAndAppsRepository(context = application)
     private val deckRepository = DeckRepository(application)
 
     private val _uiState = MutableStateFlow(FlashcardsUiState())
@@ -30,7 +32,7 @@ class FlashcardsViewModel(application: Application) : AndroidViewModel(applicati
 
     private var currentBatch: List<StudyCardProgressEntity> = emptyList()
     private var flashcardsDict: Map<String, Pair<String, String>> = emptyMap()
-    var timeToBreath = 0;
+    var timeToBreath = 0
 
     fun startSession(deckId: String, rounds: Int){
         currentDeckId = deckId
@@ -152,6 +154,9 @@ class FlashcardsViewModel(application: Application) : AndroidViewModel(applicati
         viewModelScope.launch {
             if(isCorrect){
                 sessionRepository.incrementCurrentRound(currentSessionId, currentProgress.flashcardId)
+                if(currentProgress.currentRound + 1 == targetRounds){
+                    repository.addCreditTime(secondsEarned = ((10 * targetRounds).toLong()))
+                }
             }else{
                 sessionRepository.resetCurrentRound(currentSessionId, currentProgress.flashcardId)
                 sessionRepository.incrementAttempts(currentSessionId, currentProgress.flashcardId)

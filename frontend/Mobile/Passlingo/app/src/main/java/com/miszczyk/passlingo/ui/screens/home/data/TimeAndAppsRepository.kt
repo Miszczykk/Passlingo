@@ -34,4 +34,10 @@ class TimeAndAppsRepository(
             prefs[BALANCE_TIME_KEY] = newTime.coerceAtLeast(minimumValue = 0L)
         }
     }
+
+    suspend fun addCreditTime(secondsEarned: Long){
+        context.dataStore.edit { prefs ->
+            prefs[BALANCE_TIME_KEY] = (prefs[BALANCE_TIME_KEY] ?: 0L) + secondsEarned
+        }
+    }
 }
