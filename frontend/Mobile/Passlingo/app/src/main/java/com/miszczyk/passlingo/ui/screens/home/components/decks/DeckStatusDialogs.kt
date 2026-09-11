@@ -51,9 +51,9 @@ private fun deleteDeckDialog(deckName: String): DialogItem {
 @Composable
 private fun errorDialog(errorMessage: String): DialogItem {
     return DialogItem(
-        title = stringResource(R.string.dialog_title_error),
+        title = stringResource(id = R.string.dialog_title_error),
         message = errorMessage,
-        onConfirmText = stringResource(R.string.action_close),
+        onConfirmText = stringResource(id = R.string.action_close),
         onConfirmTextColor = MaterialTheme.colorScheme.background
     )
 }
@@ -61,9 +61,9 @@ private fun errorDialog(errorMessage: String): DialogItem {
 @Composable
 private fun resumeSessionDialog(): DialogItem {
     return DialogItem(
-        title = "Resume Session?",
-        message = "You have an unfinished study session for this deck. Would you like to pick up exactly where you left off?",
-        onConfirmText = "Continue",
-        onCancelText = "Start Over",
+        title = stringResource(id = R.string.dialog_title_resume_session),
+        message = stringResource(id = R.string.dialog_message_resume_session),
+        onConfirmText = stringResource(id = R.string.action_continue),
+        onCancelText = stringResource(id = R.string.action_start_over),
     )
 }

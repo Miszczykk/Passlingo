@@ -33,6 +33,13 @@
     <string name="action_edit_deck">Edit Deck</string>
     <string name="action_delete_deck">Delete Deck</string>
     <string name="action_start_session">Start Session</string>
+    <string name="action_continue">Continue</string>
+    <string name="action_start_over">Start Over</string>
+    <string name="action_finish_and_return">Finish &amp; Return</string>
+    <string name="action_continue_studying">Continue studying</string>
+    <string name="action_quit_for_now">Quit for now</string>
+    <string name="action_again">Again</string>
+    <string name="action_got_it">Got it</string>
 
     <!-- Labels / Titles -->
     <string name="label_app_lock">App Lock</string>
@@ -60,6 +67,15 @@
     <string name="label_mode_typing">Typing</string>
     <string name="label_study_settings">Study Settings</string>
     <string name="label_target_rounds">TARGET ROUNDS</string>
+    <string name="label_tries">TRIES</string>
+    <string name="label_loading">Loading...</string>
+    <string name="title_perfect_session">Perfect Session!</string>
+    <string name="title_needs_practice">Needs Practice</string>
+    <string name="title_take_a_breather">Take a breather</string>
+    <string name="label_front">FRONT</string>
+    <string name="label_back">BACK</string>
+    <string name="label_tap_to_flip">Tap to flip</string>
+    <string name="label_tap_card_to_reveal">TAP CARD TO REVEAL ANSWER</string>
 
     <!-- Prompts & Messages -->
     <string name="prompt_app_lock_description">Select apps you want to restrict access to.\nUnlocking them will require studying!</string>
@@ -78,6 +94,9 @@
     <string name="desc_mode_quiz">Choose the correct translation</string>
     <string name="desc_mode_typing">Type the exact translation</string>
     <string name="desc_target_rounds">How many times must a card be answered correctly to be cleared?</string>
+    <string name="message_perfect_session">You nailed every single card without mistakes.</string>
+    <string name="message_extra_tries">These cards took extra tries:</string>
+    <string name="message_take_a_breather">You\'ve done 10 reviews! Take a short mental break before continuing your learning.</string>
 
     <!-- Dialogs -->
     <string name="dialog_title_confirm_lock">Are you sure?</string>
@@ -107,4 +126,7 @@
 
     <string name="dialog_title_delete_deck">Delete this deck?</string>
     <string name="dialog_message_delete_deck">Are you sure you want to delete \"%1$s\"? All its flashcards will be permanently removed.</string>
+
+    <string name="dialog_title_resume_session">Resume Session?</string>
+    <string name="dialog_message_resume_session">You have an unfinished study session for this deck. Would you like to pick up exactly where you left off?</string>
 </resources>

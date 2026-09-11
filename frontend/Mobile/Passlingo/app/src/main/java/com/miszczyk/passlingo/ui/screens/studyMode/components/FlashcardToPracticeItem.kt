@@ -17,7 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.borderExtraThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
@@ -89,7 +91,7 @@ fun FlashcardToPracticeItem(frontText: String, backText: String, attempts: Int){
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = "TRIES",
+                text = stringResource(id = R.string.label_tries),
                 fontFamily = vagRoundedLight,
                 fontSize = caption,
                 color = MaterialTheme.colorScheme.error,

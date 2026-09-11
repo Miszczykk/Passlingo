@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.miszczyk.passlingo.R
@@ -84,7 +85,7 @@ fun FlashcardScreen(
     if (uiState.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
-                "Loading...",
+                text = stringResource(id = R.string.label_loading),
                 color = MaterialTheme.colorScheme.primary,
                 fontFamily = vagRoundedBold
             )
@@ -116,7 +117,7 @@ fun FlashcardScreen(
             Spacer(modifier = Modifier.height(height = spaceLarge))
 
             Text(
-                text = "Perfect Session!",
+                text = stringResource(id = R.string.title_perfect_session),
                 fontSize = headlineLarge,
                 fontFamily = vagRoundedBold,
                 color = MaterialTheme.colorScheme.primary
@@ -125,7 +126,7 @@ fun FlashcardScreen(
             Spacer(modifier = Modifier.height(height = spaceMedium))
 
             Text(
-                text = "You nailed every single card without mistakes.",
+                text = stringResource(id = R.string.message_perfect_session),
                 fontSize = titleMedium,
                 textAlign = TextAlign.Center,
                 fontFamily = vagRoundedLight,
@@ -145,7 +146,7 @@ fun FlashcardScreen(
                     onBack()
                 }) {
                 Text(
-                    text = "Finish & Return",
+                    text = stringResource(id = R.string.action_finish_and_return),
                     fontSize = titleLarge,
                     color = MaterialTheme.colorScheme.background,
                     fontFamily = vagRoundedBold,
@@ -181,7 +182,7 @@ fun FlashcardScreen(
                 Spacer(modifier = Modifier.height(height = spaceLarge))
 
                 Text(
-                    text = "Needs Practice",
+                    text = stringResource(id = R.string.title_needs_practice),
                     fontSize = headlineLarge,
                     fontFamily = vagRoundedBold,
                     color = MaterialTheme.colorScheme.primary
@@ -190,7 +191,7 @@ fun FlashcardScreen(
                 Spacer(modifier = Modifier.height(height = spaceMedium))
 
                 Text(
-                    text = "These cards took extra tries:",
+                    text = stringResource(id = R.string.message_extra_tries),
                     fontSize = titleMedium,
                     textAlign = TextAlign.Center,
                     fontFamily = vagRoundedLight,
@@ -223,7 +224,7 @@ fun FlashcardScreen(
                         onBack()
                     }) {
                     Text(
-                        text = "Finish & Return",
+                        text = stringResource(id = R.string.action_finish_and_return),
                         fontSize = titleLarge,
                         color = MaterialTheme.colorScheme.background,
                         fontFamily = vagRoundedBold,
@@ -260,7 +261,7 @@ fun FlashcardScreen(
             Spacer(modifier = Modifier.height(height = spaceHuge))
 
             Text(
-                text = "Take a breather",
+                text = stringResource(id = R.string.title_take_a_breather),
                 fontSize = headlineLarge,
                 fontFamily = vagRoundedBold,
                 color = MaterialTheme.colorScheme.primary
@@ -269,7 +270,7 @@ fun FlashcardScreen(
             Spacer(modifier = Modifier.height(height = spaceMedium))
 
             Text(
-                text = "You've done 10 reviews! Take a short mental break before continuing your learning.",
+                text = stringResource(id = R.string.message_take_a_breather),
                 fontSize = titleMedium,
                 textAlign = TextAlign.Center,
                 fontFamily = vagRoundedLight,
@@ -290,7 +291,7 @@ fun FlashcardScreen(
                     viewModel.continueLearningClicked()
                 }) {
                 Text(
-                    text = "Continue studying",
+                    text = stringResource(id = R.string.action_continue_studying),
                     fontSize = titleLarge,
                     color = MaterialTheme.colorScheme.background,
                     fontFamily = vagRoundedBold,
@@ -306,7 +307,7 @@ fun FlashcardScreen(
                 onClick = { onBack() }
             ) {
                 Text(
-                    text = "Quit for now",
+                    text = stringResource(id = R.string.action_quit_for_now),
                     fontSize = titleMediumLarge,
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontFamily = vagRoundedBold,
@@ -378,7 +379,7 @@ private fun FrontCard(definition: String) {
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "FRONT",
+            text = stringResource(id = R.string.label_front),
             fontSize = bodyExtraLarge,
             color = MaterialTheme.colorScheme.secondary,
             fontFamily = vagRoundedBold
@@ -392,7 +393,7 @@ private fun FrontCard(definition: String) {
         )
 
         Text(
-            text = "Tap to flip",
+            text = stringResource(id = R.string.label_tap_to_flip),
             fontSize = bodyLarge,
             color = MaterialTheme.colorScheme.onSecondary,
             fontFamily = vagRoundedBold
@@ -423,7 +424,7 @@ private fun BackCard(definition: String) {
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "BACK",
+            text = stringResource(id = R.string.label_back),
             fontSize = bodyExtraLarge,
             color = MaterialTheme.colorScheme.secondary,
             fontFamily = vagRoundedBold
@@ -437,7 +438,7 @@ private fun BackCard(definition: String) {
         )
 
         Text(
-            text = "Tap to flip",
+            text = stringResource(id = R.string.label_tap_to_flip),
             fontSize = bodyLarge,
             color = MaterialTheme.colorScheme.onSecondary,
             fontFamily = vagRoundedBold
@@ -479,7 +480,7 @@ private fun FrontButton(onClick: () -> Unit) {
         onClick = { onClick() }
     ) {
         Text(
-            text = "TAP CARD TO REVEAL ANSWER",
+            text = stringResource(id = R.string.label_tap_card_to_reveal),
             fontSize = titleLarge,
             color = MaterialTheme.colorScheme.onSecondary,
             fontFamily = vagRoundedBold,
@@ -511,7 +512,7 @@ private fun BackButtons(
             }
         ) {
             Text(
-                text = "Again",
+                text = stringResource(id = R.string.action_again),
                 fontSize = titleLarge,
                 color = MaterialTheme.colorScheme.background,
                 fontFamily = vagRoundedBold,
@@ -521,7 +522,7 @@ private fun BackButtons(
 
         Button(
             modifier = Modifier
-                .weight(1f),
+                .weight(weight = 1f),
             shape = RoundedCornerShape(size = cornerRadiusDefault),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF10B981)
@@ -531,7 +532,7 @@ private fun BackButtons(
             }
         ) {
             Text(
-                text = "Got it",
+                text = stringResource(id = R.string.action_got_it),
                 fontSize = titleLarge,
                 color = MaterialTheme.colorScheme.background,
                 fontFamily = vagRoundedBold,
