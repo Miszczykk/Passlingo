@@ -18,13 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
+import com.miszczyk.passlingo.ui.theme.Dimens.borderExtraThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.body
+import com.miszczyk.passlingo.ui.theme.TextSize.caption
 import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
@@ -73,17 +73,17 @@ fun FlashcardToPracticeItem(frontText: String, backText: String, attempts: Int){
                 .clip(shape = RoundedCornerShape(size = cornerRadiusDefault))
                 .background(color = MaterialTheme.colorScheme.error.copy(alpha = 0.2f))
                 .border(
-                    width = 0.5.dp,
+                    width = borderExtraThin,
                     color = MaterialTheme.colorScheme.error,
                     shape = RoundedCornerShape(size = cornerRadiusDefault)
                 )
-                .padding(all = 5.dp),
+                .padding(all = spaceExtraSmall),
             horizontalAlignment = Alignment.CenterHorizontally,
         ){
             Text(
                 text = attempts.toString(),
                 fontFamily = vagRoundedBold,
-                fontSize = 12.sp,
+                fontSize = caption,
                 color = MaterialTheme.colorScheme.error,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -91,7 +91,7 @@ fun FlashcardToPracticeItem(frontText: String, backText: String, attempts: Int){
             Text(
                 text = "TRIES",
                 fontFamily = vagRoundedLight,
-                fontSize = 12.sp,
+                fontSize = caption,
                 color = MaterialTheme.colorScheme.error,
             )
         }

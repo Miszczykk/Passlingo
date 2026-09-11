@@ -15,10 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.sp
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
@@ -43,7 +43,7 @@ fun Header(title: String, onClick: () -> Unit){
             modifier = Modifier.align(Alignment.Center),
             text = title,
             color = MaterialTheme.colorScheme.primary,
-            fontSize = 25.sp,
+            fontSize = titleLarge,
             fontFamily = vagRoundedBold,
         )
     }

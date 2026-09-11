@@ -5,14 +5,21 @@ import androidx.compose.ui.unit.dp
 object Dimens {
     val elevationNone = 0.dp
     val elevationExtraSmall = 0.5.dp
+
+    val borderExtraThin = 0.5.dp
     val borderThin = 1.dp
     val borderDefault = 2.dp
+    val borderGap = 6.dp
+    val borderDash = 8.dp
+
     val elevationSmall = 3.dp
     val elevationMedium = 6.dp
+
 
     val cornerRadiusSmall = 10.dp
     val cornerRadiusMedium = 12.dp
     val cornerRadiusDefault = 16.dp
+    val cornerRadiusLarge = 32.dp
 
     val iconSmall = 16.dp
     val iconMedium = 24.dp
@@ -21,6 +28,8 @@ object Dimens {
     val iconHuge = 60.dp
     val iconExtraHuge = 65.dp
     val iconGiant = 75.dp
+    val iconMassive = 100.dp
+
     val animatedRadiusSmall = 80.dp
     val animatedRadiusLarge = 100.dp
 

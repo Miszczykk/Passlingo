@@ -38,20 +38,32 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.ThemedDivider
 import com.miszczyk.passlingo.ui.screens.studyMode.components.FlashcardToPracticeItem
 import com.miszczyk.passlingo.ui.screens.studyMode.components.Header
 import com.miszczyk.passlingo.ui.screens.studyMode.flashcards.components.FlashcardsViewModel
+import com.miszczyk.passlingo.ui.theme.Dimens.borderDash
+import com.miszczyk.passlingo.ui.theme.Dimens.borderGap
+import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
+import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.iconGiant
+import com.miszczyk.passlingo.ui.theme.Dimens.iconMassive
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceMedium
+import com.miszczyk.passlingo.ui.theme.TextSize.bodyExtraLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.bodyLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.headlineLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
+import com.miszczyk.passlingo.ui.theme.TextSize.titleMediumLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
@@ -93,34 +105,34 @@ fun FlashcardScreen(
                 contentDescription = "cup",
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
-                    .size(100.dp)
+                    .size(size = iconMassive)
                     .background(
                         color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f),
                         shape = CircleShape
                     )
-                    .padding(all = 5.dp)
+                    .padding(all = spaceExtraSmall)
             )
 
-            Spacer(modifier = Modifier.height(height = 20.dp))
+            Spacer(modifier = Modifier.height(height = spaceLarge))
 
             Text(
                 text = "Perfect Session!",
-                fontSize = 40.sp,
+                fontSize = headlineLarge,
                 fontFamily = vagRoundedBold,
                 color = MaterialTheme.colorScheme.primary
             )
 
-            Spacer(modifier = Modifier.height(height = 10.dp))
+            Spacer(modifier = Modifier.height(height = spaceMedium))
 
             Text(
                 text = "You nailed every single card without mistakes.",
-                fontSize = 20.sp,
+                fontSize = titleMedium,
                 textAlign = TextAlign.Center,
                 fontFamily = vagRoundedLight,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(modifier = Modifier.height(height = 40.dp))
+            Spacer(modifier = Modifier.height(height = spaceHuge))
 
             Button(
                 modifier = Modifier
@@ -158,34 +170,34 @@ fun FlashcardScreen(
                     contentDescription = "cup",
                     tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier
-                        .size(100.dp)
+                        .size(size = iconMassive)
                         .background(
                             color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f),
                             shape = CircleShape
                         )
-                        .padding(all = 5.dp)
+                        .padding(all = spaceExtraSmall)
                 )
 
-                Spacer(modifier = Modifier.height(height = 20.dp))
+                Spacer(modifier = Modifier.height(height = spaceLarge))
 
                 Text(
                     text = "Needs Practice",
-                    fontSize = 40.sp,
+                    fontSize = headlineLarge,
                     fontFamily = vagRoundedBold,
                     color = MaterialTheme.colorScheme.primary
                 )
 
-                Spacer(modifier = Modifier.height(height = 10.dp))
+                Spacer(modifier = Modifier.height(height = spaceMedium))
 
                 Text(
                     text = "These cards took extra tries:",
-                    fontSize = 20.sp,
+                    fontSize = titleMedium,
                     textAlign = TextAlign.Center,
                     fontFamily = vagRoundedLight,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
-                Spacer(modifier = Modifier.height(height = 30.dp))
+                Spacer(modifier = Modifier.height(height = spaceExtraLarge))
             }
 
             items(items = uiState.cardsToPractice, key = {it.id}) {card ->
@@ -198,7 +210,7 @@ fun FlashcardScreen(
             }
 
             item{
-                Spacer(modifier = Modifier.height(height = 10.dp))
+                Spacer(modifier = Modifier.height(height = spaceMedium))
 
                 Button(
                     modifier = Modifier
@@ -219,7 +231,6 @@ fun FlashcardScreen(
                     )
                 }
             }
-
         }
         return
     }
@@ -238,34 +249,34 @@ fun FlashcardScreen(
                 contentDescription = "coffee",
                 tint = Color(0xFF3b82f6),
                 modifier = Modifier
-                    .size(100.dp)
+                    .size(size = iconMassive)
                     .background(
                         color = Color(0xFF3b82f6).copy(alpha = 0.2f),
                         shape = CircleShape
                     )
-                    .padding(all = 10.dp)
+                    .padding(all = spaceMedium)
             )
 
-            Spacer(modifier = Modifier.height(height = 40.dp))
+            Spacer(modifier = Modifier.height(height = spaceHuge))
 
             Text(
                 text = "Take a breather",
-                fontSize = 40.sp,
+                fontSize = headlineLarge,
                 fontFamily = vagRoundedBold,
                 color = MaterialTheme.colorScheme.primary
             )
 
-            Spacer(modifier = Modifier.height(height = 10.dp))
+            Spacer(modifier = Modifier.height(height = spaceMedium))
 
             Text(
                 text = "You've done 10 reviews! Take a short mental break before continuing your learning.",
-                fontSize = 20.sp,
+                fontSize = titleMedium,
                 textAlign = TextAlign.Center,
                 fontFamily = vagRoundedLight,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(modifier = Modifier.height(height = 40.dp))
+            Spacer(modifier = Modifier.height(height = spaceHuge))
 
             Button(
                 modifier = Modifier
@@ -287,7 +298,7 @@ fun FlashcardScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(height = 10.dp))
+            Spacer(modifier = Modifier.height(height = spaceMedium))
 
             TextButton(
                 modifier = Modifier
@@ -296,7 +307,7 @@ fun FlashcardScreen(
             ) {
                 Text(
                     text = "Quit for now",
-                    fontSize = 23.sp,
+                    fontSize = titleMediumLarge,
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontFamily = vagRoundedBold,
                     modifier = Modifier.padding(vertical = spaceDefault)
@@ -350,39 +361,39 @@ private fun FrontCard(definition: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(size = 32.dp))
+            .clip(RoundedCornerShape(size = cornerRadiusLarge))
             .background(
                 color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(size = 32.dp)
+                shape = RoundedCornerShape(size = cornerRadiusLarge)
             )
             .drawBehind {
                 drawCircle(
                     color = circleColor,
-                    radius = 75.dp.toPx(),
+                    radius = iconGiant.toPx(),
                     center = Offset(x = size.width - 80f, y = 50f)
                 )
             }
-            .padding(all = 30.dp),
+            .padding(all = spaceExtraLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = "FRONT",
-            fontSize = 17.sp,
+            fontSize = bodyExtraLarge,
             color = MaterialTheme.colorScheme.secondary,
             fontFamily = vagRoundedBold
         )
 
         Text(
             text = definition,
-            fontSize = 25.sp,
+            fontSize = titleLarge,
             color = MaterialTheme.colorScheme.background,
             fontFamily = vagRoundedLight
         )
 
         Text(
             text = "Tap to flip",
-            fontSize = 16.sp,
+            fontSize = bodyLarge,
             color = MaterialTheme.colorScheme.onSecondary,
             fontFamily = vagRoundedBold
         )
@@ -395,39 +406,39 @@ private fun BackCard(definition: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(size = 32.dp))
+            .clip(RoundedCornerShape(size = cornerRadiusLarge))
             .background(
                 color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(size = 32.dp)
+                shape = RoundedCornerShape(size = cornerRadiusLarge)
             )
             .drawBehind {
                 drawCircle(
                     color = circleColor,
-                    radius = 75.dp.toPx(),
+                    radius = iconGiant.toPx(),
                     center = Offset(x = 80f, y = size.height - 50f)
                 )
             }
-            .padding(all = 30.dp),
+            .padding(all = spaceExtraLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = "BACK",
-            fontSize = 17.sp,
+            fontSize = bodyExtraLarge,
             color = MaterialTheme.colorScheme.secondary,
             fontFamily = vagRoundedBold
         )
 
         Text(
             text = definition,
-            fontSize = 25.sp,
+            fontSize = titleLarge,
             color = MaterialTheme.colorScheme.background,
             fontFamily = vagRoundedLight
         )
 
         Text(
             text = "Tap to flip",
-            fontSize = 16.sp,
+            fontSize = bodyLarge,
             color = MaterialTheme.colorScheme.onSecondary,
             fontFamily = vagRoundedBold
         )
@@ -442,9 +453,9 @@ private fun FrontButton(onClick: () -> Unit) {
             .fillMaxWidth()
             .padding(horizontal = spaceExtraLarge)
             .drawWithCache {
-                val strokeWidthPx = 1.dp.toPx()
-                val dashLengthPx = 8.dp.toPx()
-                val gapLengthPx = 6.dp.toPx()
+                val strokeWidthPx = borderThin.toPx()
+                val dashLengthPx = borderDash.toPx()
+                val gapLengthPx = borderGap.toPx()
                 onDrawWithContent {
                     drawContent()
 
@@ -490,7 +501,7 @@ private fun BackButtons(
     ) {
         Button(
             modifier = Modifier
-                .weight(1f),
+                .weight(weight = 1f),
             shape = RoundedCornerShape(size = cornerRadiusDefault),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.error
