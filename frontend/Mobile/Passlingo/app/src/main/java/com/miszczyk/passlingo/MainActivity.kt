@@ -21,6 +21,7 @@ import com.miszczyk.passlingo.ui.screens.loading.LoadingScreen
 import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 import androidx.activity.enableEdgeToEdge
 import com.miszczyk.passlingo.ui.screens.decks.editDeck.EditDeckScreen
+import com.miszczyk.passlingo.ui.screens.studyMode.flashcards.FlashcardScreen
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -35,15 +36,41 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     containerColor = MaterialTheme.colorScheme.background
                 ) { innerPadding ->
-                    when(currentScreen){
-                        is Screen.Loading -> LoadingScreen(modifier = Modifier.padding(innerPadding), onAnimationFinished = { currentScreen = Screen.Home })
-                        is Screen.Home ->  HomeScreen(modifier = Modifier.padding(innerPadding), onCreateDeckClicked = { currentScreen = Screen.CreateDeck }, onEditDeckClicked = {id -> currentScreen = Screen.EditDeck(deckId = id)})
-                        is Screen.CreateDeck -> CreateDeckScreen(modifier = Modifier.padding(innerPadding), onBack = { currentScreen = Screen.Home })
+                    when (currentScreen) {
+                        is Screen.Loading -> LoadingScreen(
+                            modifier = Modifier.padding(innerPadding),
+                            onAnimationFinished = { currentScreen = Screen.Home })
+
+                        is Screen.Home -> HomeScreen(
+                            modifier = Modifier.padding(innerPadding),
+                            onCreateDeckClicked = { currentScreen = Screen.CreateDeck },
+                            onEditDeckClicked = { id ->
+                                currentScreen = Screen.EditDeck(deckId = id)
+                            },
+                            onFlashcardsClicked = { deckId, rounds ->
+                                currentScreen = Screen.Flashcard(deckId = deckId, rounds = rounds)
+                            })
+
+                        is Screen.CreateDeck -> CreateDeckScreen(
+                            modifier = Modifier.padding(
+                                innerPadding
+                            ), onBack = { currentScreen = Screen.Home })
+
                         is Screen.EditDeck -> EditDeckScreen(
                             modifier = Modifier.padding(innerPadding),
                             deckId = (currentScreen as Screen.EditDeck).deckId,
                             onBack = { currentScreen = Screen.Home }
                         )
+
+                        is Screen.Flashcard -> {
+                            val flashcardScreen = currentScreen as Screen.Flashcard
+                            FlashcardScreen(
+                                modifier = Modifier.padding(innerPadding),
+                                deckId = flashcardScreen.deckId,
+                                rounds = flashcardScreen.rounds,
+                                onBack = { currentScreen = Screen.Home }
+                            )
+                        }
                     }
                 }
             }

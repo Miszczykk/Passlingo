@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Upsert
 import com.miszczyk.passlingo.data.local.entity.DeckEntity
 import com.miszczyk.passlingo.data.local.entity.DeckWithFlashcards
 import com.miszczyk.passlingo.data.local.entity.FlashcardEntity
@@ -44,10 +45,21 @@ interface DeckDao {
     @Query("DELETE FROM flashcards WHERE deckId = :deckId")
     suspend fun deleteFlashcardsByDeckId(deckId: String)
 
+    @Upsert
+    suspend fun upsertFlashcards(cards: List<FlashcardEntity>)
+
+    @Query("DELETE FROM flashcards WHERE deckId = :deckId AND id NOT IN (:currentCardIds)")
+    suspend fun deleteRemovedFlashcards(deckId: String, currentCardIds: List<String>)
+
     @Transaction
     suspend fun updateDeckWithFlashcards(deck: DeckEntity, cards: List<FlashcardEntity>){
         updateDeck(deck)
-        deleteFlashcardsByDeckId(deck.id)
-        insertFlashcards(cards)
+        if(cards.isEmpty()){
+            deleteFlashcardsByDeckId(deck.id)
+        }else{
+            upsertFlashcards(cards)
+            val currentCardIds = cards.map { it.id }
+            deleteRemovedFlashcards(deck.id, currentCardIds)
+        }
     }
 }

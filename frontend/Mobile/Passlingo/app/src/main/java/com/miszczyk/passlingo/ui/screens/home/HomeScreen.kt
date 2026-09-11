@@ -47,6 +47,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     onCreateDeckClicked: () -> Unit,
     onEditDeckClicked: (String) -> Unit,
+    onFlashcardsClicked: (String, Int) -> Unit,
     appViewModel: AppViewModel = viewModel(),
     deckViewModel: DeckViewModel = viewModel()
 ) {
@@ -114,7 +115,7 @@ fun HomeScreen(
                     sheetState = sheetStateToStudyMode,
                     deckName = state.deckName,
                     onDismissRequest = { deckViewModel.hideBottomSheet() },
-                    onFlashcardClicked = {deckViewModel.onStudySettingsClicked()},
+                    onFlashcardClicked = {deckViewModel.onFlashcardModeSelected()},
                     onQuizClicked = {deckViewModel.onStudySettingsClicked()},
                     onTypingClicked = {deckViewModel.onStudySettingsClicked()}
                 )
@@ -124,7 +125,12 @@ fun HomeScreen(
                 StudySettingsBottomSheet(
                     sheetState = sheetStateToStudySettings,
                     onDismissRequest = {deckViewModel.hideBottomSheet()},
-                    onStartSessionClicked = {}
+                    onStartSessionClicked = { selectedRounds ->
+                        deckUiState.selectedDeckId?.let { deckId ->
+                            deckViewModel.hideBottomSheet()
+                            onFlashcardsClicked(deckId, selectedRounds)
+                        }
+                    }
                 )
             }
         }
@@ -132,7 +138,13 @@ fun HomeScreen(
     DeckStatusDialogs(
         deckDialogState = deckUiState.deckDialogState,
         deckViewModel = deckViewModel,
-        deckName = (deckUiState.deckDialogState as? HasDeckName)?.deckName ?: ""
+        deckName = (deckUiState.deckDialogState as? HasDeckName)?.deckName ?: "",
+        onContinueSession = {
+            deckUiState.selectedDeckId?.let { deckId ->
+                deckViewModel.onDialogConfirmed()
+                onFlashcardsClicked(deckId, 0)
+            }
+        }
     )
 
 }
@@ -142,6 +154,6 @@ fun HomeScreen(
 @Composable
 fun HomePreview() {
     PasslingoTheme {
-        HomeScreen(onCreateDeckClicked = {}, onEditDeckClicked = {})
+        HomeScreen(onCreateDeckClicked = {}, onEditDeckClicked = {}, onFlashcardsClicked = {_, _ -> })
     }
 }

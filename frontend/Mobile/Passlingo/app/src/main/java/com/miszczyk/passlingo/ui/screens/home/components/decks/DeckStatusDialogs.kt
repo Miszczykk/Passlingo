@@ -11,23 +11,31 @@ import com.miszczyk.passlingo.ui.screens.home.viewmodel.deck.DeckViewModel
 
 @Composable
 fun DeckStatusDialogs(
-    deckDialogState: DeckDialogState, deckViewModel: DeckViewModel, deckName: String
+    deckDialogState: DeckDialogState, deckViewModel: DeckViewModel, deckName: String, onContinueSession: () -> Unit = {}
 ) {
     val dialogItem = when (deckDialogState) {
         is DeckDialogState.None -> return
         is DeckDialogState.ConfirmDelete -> deleteDeckDialog(deckName = deckName)
         is DeckDialogState.Error -> errorDialog(errorMessage = deckDialogState.message)
+        is DeckDialogState.ResumeSession -> resumeSessionDialog()
     }
 
     DialogComponent(dialog = dialogItem, onConfirm = {
-        if (deckDialogState is DeckDialogState.Error) {
-            deckViewModel.onRetryErrorClicked()
-        } else {
-            deckViewModel.onDialogConfirmed()
+        when(deckDialogState){
+            is DeckDialogState.Error -> deckViewModel.onRetryErrorClicked()
+            is DeckDialogState.ResumeSession -> onContinueSession()
+            else -> deckViewModel.onDialogConfirmed()
         }
-    }, onCancel = { deckViewModel.onDialogCancelled() }
+    }, onCancel = {
+        if (deckDialogState is DeckDialogState.ResumeSession) {
+            deckViewModel.onContinueSessionCancelled()
+        } else {
+            deckViewModel.onDialogCancelled()
+        }
+    }
     )
 }
+
 @Composable
 private fun deleteDeckDialog(deckName: String): DialogItem {
     return DialogItem(
@@ -47,5 +55,15 @@ private fun errorDialog(errorMessage: String): DialogItem {
         message = errorMessage,
         onConfirmText = stringResource(R.string.action_close),
         onConfirmTextColor = MaterialTheme.colorScheme.background
+    )
+}
+
+@Composable
+private fun resumeSessionDialog(): DialogItem {
+    return DialogItem(
+        title = "Resume Session?",
+        message = "You have an unfinished study session for this deck. Would you like to pick up exactly where you left off?",
+        onConfirmText = "Continue",
+        onCancelText = "Start Over",
     )
 }

@@ -61,7 +61,7 @@ import com.miszczyk.passlingo.ui.util.rememberSheetCloseHandler
 fun StudySettingsBottomSheet(
     sheetState: SheetState,
     onDismissRequest: () -> Unit,
-    onStartSessionClicked: () -> Unit,
+    onStartSessionClicked: (Int) -> Unit,
 ){
     val closeSheet = rememberSheetCloseHandler(sheetState, onDismissRequest)
     var selectedRound by remember { mutableIntStateOf(value = 1) }
@@ -120,7 +120,7 @@ fun StudySettingsBottomSheet(
 
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
-            BottomButton(onClick = onStartSessionClicked)
+            BottomButton(onClick = { onStartSessionClicked(selectedRound) })
 
             Spacer(modifier = Modifier.height(height = spaceDefault))
         }

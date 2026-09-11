@@ -1,17 +1,20 @@
 package com.miszczyk.passlingo.ui.screens.home.viewmodel.deck
 
 import com.miszczyk.passlingo.data.repository.DeckRepository
+import com.miszczyk.passlingo.data.repository.StudySessionRepositoryImpl
 import com.miszczyk.passlingo.ui.screens.home.components.BaseDialogAction
 import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckBottomSheetState
 import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckDialogState
 import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 class DeckDialogAction(
     uiStateFlow: MutableStateFlow<DeckUiState>,
     externalScope: CoroutineScope,
     private val deckRepository: DeckRepository,
+    private val sessionRepository: StudySessionRepositoryImpl
 ) : BaseDialogAction<DeckUiState, DeckDialogState>(uiStateFlow, externalScope) {
 
     override val noneDialogState: DeckDialogState = DeckDialogState.None
@@ -26,6 +29,7 @@ class DeckDialogAction(
             is DeckDialogState.None -> error("onDialogConfirmed called with no dialog visible")
             is DeckDialogState.ConfirmDelete -> onDeleteDeckConfirmed()
             is DeckDialogState.Error -> onDialogCancelled()
+            is DeckDialogState.ResumeSession -> onContinueSessionConfirmed()
         }
     }
 
@@ -41,5 +45,27 @@ class DeckDialogAction(
                 )
             }
         )
+    }
+    fun onContinueSessionCancelled(){
+        val deckId = uiStateFlow.value.selectedDeckId ?: return
+        executeDialogTask(
+            task = {
+                sessionRepository.deleteSessionByDeckId(deckId)
+            }, onSuccessStateUpdate = {state ->
+                state.copy(
+                    deckDialogState = DeckDialogState.None,
+                    deckBottomSheetState = DeckBottomSheetState.StudySettings
+                )
+            }
+        )
+    }
+
+    private fun onContinueSessionConfirmed(){
+        uiStateFlow.update {
+            it.copy(
+                deckDialogState = DeckDialogState.None,
+                deckBottomSheetState = DeckBottomSheetState.None
+            )
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.miszczyk.passlingo.data.repository.DeckRepository
+import com.miszczyk.passlingo.data.repository.StudySessionRepositoryImpl
 import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckBottomSheetState
 import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckDialogState
 import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckUiState
@@ -13,13 +14,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class DeckViewModel(application: Application) : AndroidViewModel(application) {
     private val deckRepository = DeckRepository(context = application)
+    private val studySessionRepository = StudySessionRepositoryImpl(context = application)
     private val _deckUiState = MutableStateFlow(value = DeckUiState())
     val deckUiState: StateFlow<DeckUiState> = _deckUiState.asStateFlow()
 
-    private val deckDialogAction = DeckDialogAction(uiStateFlow = _deckUiState, externalScope = viewModelScope, deckRepository = deckRepository)
+    private val deckDialogAction = DeckDialogAction(uiStateFlow = _deckUiState, externalScope = viewModelScope, deckRepository = deckRepository, sessionRepository = studySessionRepository)
     private val deckSelectionAction = DeckSelectionAction(uiStateFlow = _deckUiState)
 
     private var observationJob: Job? = null
@@ -42,6 +45,8 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onDialogCancelled() = deckDialogAction.onDialogCancelled()
     fun onDialogConfirmed() = deckDialogAction.onDialogConfirmed()
+
+    fun onContinueSessionCancelled() = deckDialogAction.onContinueSessionCancelled()
 
     fun deleteDeck() = deckSelectionAction.onDeleteDeckClicked()
 
@@ -94,5 +99,29 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
     fun onRetryErrorClicked() {
         _deckUiState.update { it.copy(deckDialogState = DeckDialogState.None) }
         startObservingData()
+    }
+
+    fun onFlashcardModeSelected(){
+        val deckId = _deckUiState.value.selectedDeckId ?: return
+        val deckWithCards = _deckUiState.value.decks.find {it.deck.id == deckId} ?: return
+
+        viewModelScope.launch {
+            val hasSession = studySessionRepository.doesSessionExist(deckId)
+
+            if(hasSession){
+                _deckUiState.update { currentState ->
+                    currentState.copy(
+                        deckDialogState = DeckDialogState.ResumeSession(deckWithCards.deck.name)
+                    )
+                }
+            } else{
+                _deckUiState.update { currentState ->
+                    currentState.copy(
+                        deckBottomSheetState = DeckBottomSheetState.StudySettings
+                    )
+                }
+            }
+
+        }
     }
 }

@@ -8,4 +8,5 @@ sealed interface DeckDialogState {
     data object None : DeckDialogState
     data class ConfirmDelete(override val deckName: String) : DeckDialogState, HasDeckName
     data class Error(val message: String) : DeckDialogState
+    data class ResumeSession(override val deckName: String) : DeckDialogState, HasDeckName
 }

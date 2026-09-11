@@ -9,6 +9,7 @@ import com.miszczyk.passlingo.data.local.entity.StudySessionEntity
 interface StudySessionRepository {
     suspend fun createSession(session: StudySessionEntity, progress: List<StudyCardProgressEntity>)
     suspend fun deleteSessionByDeckId(deckId: String)
+    suspend fun deleteSessionById(sessionId: String)
     suspend fun getActiveSession(deckId: String): StudySessionWithProgress?
     suspend fun doesSessionExist(deckId: String): Boolean
     suspend fun getFinishedCard(sessionId: String, targetRounds: Int): Int
@@ -17,6 +18,7 @@ interface StudySessionRepository {
     suspend fun incrementCurrentRound(sessionId: String, flashcardId: String)
     suspend fun incrementAttempts(sessionId: String, flashcardId: String)
     suspend fun getNextBatch(sessionId: String, targetRound: Int): List<StudyCardProgressEntity>
+    suspend fun getCardToPractice(sessionId: String): List<StudyCardProgressEntity>
 }
 
 class StudySessionRepositoryImpl(context: Context): StudySessionRepository {
@@ -28,6 +30,10 @@ class StudySessionRepositoryImpl(context: Context): StudySessionRepository {
 
     override suspend fun deleteSessionByDeckId(deckId: String) {
         dao.deleteSessionByDeckId(deckId)
+    }
+
+    override suspend fun deleteSessionById(sessionId: String) {
+        dao.deleteSessionById(sessionId)
     }
 
     override suspend fun getActiveSession(deckId: String): StudySessionWithProgress? {
@@ -60,5 +66,9 @@ class StudySessionRepositoryImpl(context: Context): StudySessionRepository {
 
     override suspend fun getNextBatch(sessionId: String, targetRound: Int): List<StudyCardProgressEntity> {
         return dao.getNextBatch(sessionId, targetRound)
+    }
+
+    override suspend fun getCardToPractice(sessionId: String): List<StudyCardProgressEntity> {
+        return dao.getCardToPractice(sessionId)
     }
 }

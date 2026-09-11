@@ -33,6 +33,8 @@ interface StudySessionDao {
     @Query("DELETE FROM study_sessions WHERE deckId = :deckId")
     suspend fun deleteSessionByDeckId(deckId: String)
 
+    @Query("DELETE FROM study_sessions WHERE id = :sessionId")
+    suspend fun deleteSessionById(sessionId: String)
 
     @Transaction
     @Query("SELECT * FROM study_sessions WHERE deckId = :deckId LIMIT 1")
@@ -62,4 +64,7 @@ interface StudySessionDao {
 
     @Query("SELECT * FROM study_card_progress WHERE sessionId = :sessionId AND currentRound < :targetRound ORDER BY currentRound ASC LIMIT 10")
     suspend fun getNextBatch(sessionId: String, targetRound: Int): List<StudyCardProgressEntity>
+
+    @Query("SELECT * FROM study_card_progress WHERE sessionId = :sessionId AND attempts > 0 ORDER BY attempts DESC")
+    suspend fun getCardToPractice(sessionId: String): List<StudyCardProgressEntity>
 }
