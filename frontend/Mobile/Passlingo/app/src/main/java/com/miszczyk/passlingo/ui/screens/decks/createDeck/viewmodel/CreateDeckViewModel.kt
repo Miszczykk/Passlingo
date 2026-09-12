@@ -2,6 +2,7 @@ package com.miszczyk.passlingo.ui.screens.decks.createDeck.viewmodel
 
 import android.app.Application
 import com.miszczyk.passlingo.ui.screens.decks.manageDeck.viewmodel.DeckFormViewModel
+import com.miszczyk.passlingo.ui.util.clear
 import kotlinx.coroutines.flow.update
 
 class CreateDeckViewModel(application: Application) : DeckFormViewModel(application) {
@@ -16,6 +17,6 @@ class CreateDeckViewModel(application: Application) : DeckFormViewModel(applicat
     override fun clearScreen() {
         super.clearScreen()
         _uiState.update { it.copy(cards = emptyList()) }
-        deckName.edit { replace(start = 0, end = length, text = "") }
+        deckName.clear()
     }
 }

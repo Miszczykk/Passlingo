@@ -7,5 +7,7 @@ data class FlashcardsUiState(
     val currentFront: String? = null,
     val currentBack: String? = null,
     val progressText: String = "0 / 0",
-    val cardsToPractice: List<PracticeCardUiModel> = emptyList()
+    val cardsToPractice: List<PracticeCardUiModel> = emptyList(),
+
+    val errorMessage: String? = null
 )

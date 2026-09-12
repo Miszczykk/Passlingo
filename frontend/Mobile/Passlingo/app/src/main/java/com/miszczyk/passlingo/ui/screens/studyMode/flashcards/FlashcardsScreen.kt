@@ -41,9 +41,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.ui.components.ScreenHeader
 import com.miszczyk.passlingo.ui.components.ThemedDivider
 import com.miszczyk.passlingo.ui.screens.studyMode.components.FlashcardToPracticeItem
-import com.miszczyk.passlingo.ui.screens.studyMode.components.Header
 import com.miszczyk.passlingo.ui.screens.studyMode.flashcards.components.FlashcardsViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDash
 import com.miszczyk.passlingo.ui.theme.Dimens.borderGap
@@ -322,7 +322,7 @@ fun FlashcardScreen(
         modifier = modifier.fillMaxSize()
     ) {
         Spacer(modifier = Modifier.height(height = spaceLarge))
-        Header(title = uiState.progressText, onBack)
+        ScreenHeader(title = uiState.progressText, titleFontSize = titleLarge, onClick = onBack)
         Spacer(modifier = Modifier.height(height = spaceExtraHuge))
 
         Box(

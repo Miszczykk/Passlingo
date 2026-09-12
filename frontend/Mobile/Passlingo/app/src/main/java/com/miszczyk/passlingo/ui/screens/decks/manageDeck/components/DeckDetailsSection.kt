@@ -1,7 +1,5 @@
 package com.miszczyk.passlingo.ui.screens.decks.manageDeck.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -21,15 +19,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.HintedTextField
 import com.miszczyk.passlingo.ui.components.LabeledContent
+import com.miszczyk.passlingo.ui.components.cardSurface
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
-import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.elevationSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.iconGiant
@@ -63,19 +60,7 @@ fun DeckDetailsSection(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .shadow(
-                                elevation = elevationSmall,
-                                shape = RoundedCornerShape(size = cornerRadiusDefault)
-                            )
-                            .background(
-                                color = MaterialTheme.colorScheme.background,
-                                shape = RoundedCornerShape(size = cornerRadiusDefault)
-                            )
-                            .border(
-                                width = borderThin,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                shape = RoundedCornerShape(size = cornerRadiusDefault)
-                            )
+                            .cardSurface()
                             .padding(horizontal = spaceExtraLarge, vertical = spaceVeryLarge),
                         contentAlignment = Alignment.CenterStart
                     ) {
@@ -99,18 +84,9 @@ fun DeckDetailsSection(
         ) {
             IconButton(
                 onClick = { onSelectIconClicked() }, modifier = Modifier
-                    .shadow(
-                        elevation = elevationSmall,
-                        shape = RoundedCornerShape(size = cornerRadiusDefault)
-                    )
+                    .cardSurface(borderColor = MaterialTheme.colorScheme.primary, borderWidth = borderDefault, elevation = elevationSmall, backgroundColor = MaterialTheme.colorScheme.primary)
                     .size(size = iconGiant)
                     .clip(shape = RoundedCornerShape(size = cornerRadiusDefault))
-                    .background(color = MaterialTheme.colorScheme.primary)
-                    .border(
-                        width = borderDefault,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(size = cornerRadiusDefault)
-                    )
             ) {
                 Icon(
                     painter = painterResource(id = icon),

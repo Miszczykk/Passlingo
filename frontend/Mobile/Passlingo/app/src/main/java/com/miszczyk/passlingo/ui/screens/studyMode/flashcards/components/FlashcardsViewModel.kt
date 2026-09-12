@@ -1,8 +1,11 @@
 package com.miszczyk.passlingo.ui.screens.studyMode.flashcards.components
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.data.local.entity.DeckWithFlashcards
 import com.miszczyk.passlingo.data.local.entity.StudyCardProgressEntity
 import com.miszczyk.passlingo.data.local.entity.StudyMode
 import com.miszczyk.passlingo.data.local.entity.StudySessionEntity
@@ -32,7 +35,7 @@ class FlashcardsViewModel(application: Application) : AndroidViewModel(applicati
 
     private var currentBatch: List<StudyCardProgressEntity> = emptyList()
     private var flashcardsDict: Map<String, Pair<String, String>> = emptyMap()
-    var timeToBreath = 0
+    private var timeToBreath = 0
 
     fun startSession(deckId: String, rounds: Int){
         currentDeckId = deckId
@@ -40,26 +43,34 @@ class FlashcardsViewModel(application: Application) : AndroidViewModel(applicati
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = false, isBreather = false, isFlipped = false) }
 
-            val deckWithCards = deckRepository.getDeckWithFlashcardsById(deckId)
-            flashcardsDict = deckWithCards?.flashcards?.associate {
-                it.id to Pair(it.front, it.back)
-            } ?: emptyMap()
+            runCatching {
+                val deckWithCards = deckRepository.getDeckWithFlashcardsById(deckId)
 
-            if (sessionRepository.doesSessionExist(deckId)) {
-                val session = sessionRepository.getActiveSession(deckId)
-                if (session != null) {
-                    currentSessionId = session.session.id
-                    targetRounds = session.session.targetRounds
+                flashcardsDict = deckWithCards?.flashcards?.associate {
+                    it.id to Pair(it.front, it.back)
+                } ?: emptyMap()
+
+                val activeSession = sessionRepository.getActiveSession(deckId)
+
+                if (activeSession != null) {
+                        currentSessionId = activeSession.session.id
+                        targetRounds = activeSession.session.targetRounds
+                } else {
+                    targetRounds = rounds
+                    createNewSession(deckId, deckWithCards)
                 }
-            } else {
-                targetRounds = rounds
-                createNewSession(deckId)
+
+                loadNextBatchAndShow()
+            }.onFailure { error ->
+                Log.e("FlashcardsViewModel", "Failed to start session", error)
+                _uiState.update {
+                    it.copy(errorMessage = getApplication<Application>().getString(R.string.error_study_session))
+                }
             }
-            loadNextBatchAndShow()
         }
     }
 
-    private suspend fun createNewSession(deckId: String){
+    private suspend fun createNewSession(deckId: String, deckWithCards: DeckWithFlashcards?){
         currentSessionId = UUID.randomUUID().toString()
         val session = StudySessionEntity(
             id = currentSessionId,
@@ -68,7 +79,6 @@ class FlashcardsViewModel(application: Application) : AndroidViewModel(applicati
             targetRounds = targetRounds
         )
 
-        val deckWithCards = deckRepository.getDeckWithFlashcardsById(deckId)
         val progressList = deckWithCards?.flashcards?.shuffled()?.mapIndexed { index, card ->
             StudyCardProgressEntity(
                 id = UUID.randomUUID().toString(),
@@ -98,7 +108,6 @@ class FlashcardsViewModel(application: Application) : AndroidViewModel(applicati
                     currentBack = null
                 )
             }
-
         }else{
             showCurrentCard()
         }
@@ -152,36 +161,49 @@ class FlashcardsViewModel(application: Application) : AndroidViewModel(applicati
         timeToBreath++
 
         viewModelScope.launch {
-            if(isCorrect){
-                sessionRepository.incrementCurrentRound(currentSessionId, currentProgress.flashcardId)
-                if(currentProgress.currentRound + 1 == targetRounds){
-                    repository.addCreditTime(secondsEarned = ((10 * targetRounds).toLong()))
-                }
-            }else{
-                sessionRepository.resetCurrentRound(currentSessionId, currentProgress.flashcardId)
-                sessionRepository.incrementAttempts(currentSessionId, currentProgress.flashcardId)
-            }
-
-            currentBatch = currentBatch.drop(1)
-
-            if(currentBatch.isNotEmpty()){
-                showCurrentCard()
-            }else{
-                if(timeToBreath >= 10){
-                    _uiState.update { it.copy(isBreather = true) }
+            runCatching {
+                if(isCorrect){
+                    sessionRepository.incrementCurrentRound(currentSessionId, currentProgress.flashcardId)
+                    if(currentProgress.currentRound + 1 == targetRounds){
+                        repository.addCreditTime(secondsEarned = ((10 * targetRounds).toLong()))
+                    }
                 }else{
-                    loadNextBatchAndShow()
+                    sessionRepository.resetCurrentRound(currentSessionId, currentProgress.flashcardId)
+                    sessionRepository.incrementAttempts(currentSessionId, currentProgress.flashcardId)
                 }
 
+                currentBatch = currentBatch.drop(1)
+
+                if(currentBatch.isNotEmpty()){
+                    showCurrentCard()
+                }else{
+                    if(timeToBreath >= 10){
+                        _uiState.update { it.copy(isBreather = true) }
+                    }else{
+                        loadNextBatchAndShow()
+                    }
+                }
+            }.onFailure { error ->
+                Log.e("FlashcardsViewModel", "Failed to process card answer", error)
+                _uiState.update {
+                    it.copy(errorMessage = getApplication<Application>().getString(R.string.error_study_session))
+                }
             }
         }
     }
 
     fun continueLearningClicked(){
         viewModelScope.launch {
-            timeToBreath = 0
-            _uiState.update { it.copy(isBreather = false) }
-            loadNextBatchAndShow()
+            runCatching {
+                timeToBreath = 0
+                _uiState.update { it.copy(isBreather = false) }
+                loadNextBatchAndShow()
+            }.onFailure { error ->
+                Log.e("FlashcardsViewModel", "Failed to continue learning", error)
+                _uiState.update {
+                    it.copy(errorMessage = getApplication<Application>().getString(R.string.error_study_session))
+                }
+            }
         }
     }
 }

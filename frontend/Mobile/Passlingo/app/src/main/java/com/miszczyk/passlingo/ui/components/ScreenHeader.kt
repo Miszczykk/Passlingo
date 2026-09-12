@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.studyMode.components
+package com.miszczyk.passlingo.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,15 +15,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.TextUnit
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
-import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.headline
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun Header(title: String, onClick: () -> Unit){
-    Box(modifier = Modifier.fillMaxWidth().padding(horizontal = spaceExtraLarge)) {
+fun ScreenHeader(
+    title: String,
+    titleFontSize: TextUnit = headline,
+    onClick: () -> Unit
+){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = spaceExtraLarge)
+    ){
         IconButton(
             onClick = { onClick() },
             modifier = Modifier
@@ -43,7 +52,7 @@ fun Header(title: String, onClick: () -> Unit){
             modifier = Modifier.align(Alignment.Center),
             text = title,
             color = MaterialTheme.colorScheme.primary,
-            fontSize = titleLarge,
+            fontSize = titleFontSize,
             fontFamily = vagRoundedBold,
         )
     }

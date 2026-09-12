@@ -18,9 +18,7 @@ class DeckRepository(context: Context) {
         val deckId = UUID.randomUUID().toString()
 
         val deckEntity = DeckEntity(id = deckId, name = name, iconResId = iconResId)
-        val cardEntities = cards.map {card ->
-            FlashcardEntity(id = card.id, deckId = deckId, front = card.front, back = card.back)
-        }
+        val cardEntities = cards.toEntities(deckId = deckId)
         deckDao.insertDeckWithFlashcards(deckEntity, cardEntities)
     }
 
@@ -34,9 +32,18 @@ class DeckRepository(context: Context) {
     }
     suspend fun updateDeck(id: String, name: String, iconResId: Int, cards: List<Flashcard>){
         val deckEntity = DeckEntity(id = id, name = name, iconResId = iconResId)
-        val cardEntities = cards.map {card ->
-            FlashcardEntity(id = card.id, deckId = id, front = card.front, back = card.back)
-        }
+        val cardEntities = cards.toEntities(deckId = id)
         deckDao.updateDeckWithFlashcards(deckEntity, cardEntities)
+    }
+
+    private fun List<Flashcard>.toEntities(deckId: String): List<FlashcardEntity> {
+        return this.map { card ->
+            FlashcardEntity(
+                id = card.id,
+                deckId = deckId,
+                front = card.front,
+                back = card.back
+            )
+        }
     }
 }

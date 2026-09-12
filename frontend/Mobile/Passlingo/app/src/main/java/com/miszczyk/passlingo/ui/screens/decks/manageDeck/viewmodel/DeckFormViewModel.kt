@@ -8,7 +8,10 @@ import com.miszczyk.passlingo.data.repository.DeckRepository
 import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.DeckFormDialogState
 import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.DeckFormUiState
 import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.Flashcard
+import com.miszczyk.passlingo.ui.screens.decks.manageDeck.util.DeckFormConstants.MIN_CARDS_REQUIRES
 import com.miszczyk.passlingo.ui.util.DeckIcons
+import com.miszczyk.passlingo.ui.util.clear
+import com.miszczyk.passlingo.ui.util.setText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -51,8 +54,8 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
     protected abstract suspend fun saveDeckToDatabase()
 
     open fun clearScreen(){
-        frontCreateCardState.edit { replace(start = 0, end = length, text = "") }
-        backCreateCardState.edit { replace(start = 0, end = length, text = "") }
+        frontCreateCardState.clear()
+        backCreateCardState.clear()
     }
 
     fun onSheetDismissed() {
@@ -66,7 +69,7 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
 
 
     fun onSaveDeckClicked(){
-        if (deckName.text.toString().isNotBlank() && _uiState.value.cards.size >= 4) {
+        if (deckName.text.toString().isNotBlank() && _uiState.value.cards.size >= MIN_CARDS_REQUIRES) {
             _uiState.update { it.copy(dialogState = DeckFormDialogState.SaveDeckForm) }
         }
     }
@@ -96,8 +99,8 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
             _uiState.update { currentState ->
                 currentState.copy(cards = currentState.cards + newCard)
             }
-            frontCreateCardState.edit { replace(start = 0, end = length, text = "") }
-            backCreateCardState.edit { replace(start = 0, end = length, text = "") }
+            frontCreateCardState.clear()
+            backCreateCardState.clear()
         } else {
             _uiState.update {
                 it.copy(
@@ -112,8 +115,8 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
     }
 
     fun onEditCardClicked(card: Flashcard) {
-        editFrontState.edit { replace(start = 0, end = length, text = card.front) }
-        editBackState.edit { replace(start = 0, end = length, text = card.back) }
+        editFrontState.setText(card.front)
+        editBackState.setText(card.back)
 
         _uiState.update {
             it.copy(

@@ -10,7 +10,6 @@ import com.miszczyk.passlingo.ui.screens.home.model.app.AppDialogState
 import com.miszczyk.passlingo.ui.screens.home.model.app.AppUiState
 import com.miszczyk.passlingo.ui.screens.home.util.hasUsageStatsPermission
 import com.miszczyk.passlingo.ui.util.observeWithRetry
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +17,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
@@ -56,9 +54,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         _appUiState.update { it.copy(isLoadingApps = true) }
         viewModelScope.launch {
             val result = runCatching {
-                withContext(context = Dispatchers.IO) {
                     appUsageProvider.getInstalledAppsWithUsage()
-                }
             }
             result.fold(onSuccess = { apps ->
                 _appUiState.update { it.copy(userApps = apps, isLoadingApps = false) }

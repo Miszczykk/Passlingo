@@ -20,24 +20,30 @@ class TimeAndAppsRepository(
     }
 
     suspend fun lockAppsAndAddCreditTime(packageNames: Set<String>, secondsEarned: Long) {
-        context.dataStore.edit { prefs ->
-            prefs[LOCKED_APPS_KEY] = (prefs[LOCKED_APPS_KEY] ?: emptySet()) + packageNames
-            prefs[BALANCE_TIME_KEY] = (prefs[BALANCE_TIME_KEY] ?: 0L) + secondsEarned
-        }
+        updateTimeAndApps(timeDelta = secondsEarned, appsToLock = packageNames)
     }
 
     suspend fun unlockAppAndSubtractCreditTime(packageName: String, secondsLost: Long) {
-        context.dataStore.edit { prefs ->
-            val newTime = (prefs[BALANCE_TIME_KEY] ?: 0L) - secondsLost
-
-            prefs[LOCKED_APPS_KEY] = (prefs[LOCKED_APPS_KEY] ?: emptySet()) - packageName
-            prefs[BALANCE_TIME_KEY] = newTime.coerceAtLeast(minimumValue = 0L)
-        }
+        updateTimeAndApps(timeDelta = -secondsLost, appsToUnlock = setOf(packageName))
     }
 
     suspend fun addCreditTime(secondsEarned: Long){
+        updateTimeAndApps(timeDelta = secondsEarned)
+    }
+
+    private suspend fun updateTimeAndApps(
+        timeDelta: Long,
+        appsToLock: Set<String> = emptySet(),
+        appsToUnlock: Set<String> = emptySet()
+    ){
         context.dataStore.edit { prefs ->
-            prefs[BALANCE_TIME_KEY] = (prefs[BALANCE_TIME_KEY] ?: 0L) + secondsEarned
+            val currentTime = prefs[BALANCE_TIME_KEY] ?: 0L
+            prefs[BALANCE_TIME_KEY] = (currentTime + timeDelta).coerceAtLeast(minimumValue = 0L)
+
+            if (appsToLock.isNotEmpty() || appsToUnlock.isNotEmpty()) {
+                val currentApps = prefs[LOCKED_APPS_KEY] ?: emptySet()
+                prefs[LOCKED_APPS_KEY] = (currentApps + appsToLock) - appsToUnlock
+            }
         }
     }
 }

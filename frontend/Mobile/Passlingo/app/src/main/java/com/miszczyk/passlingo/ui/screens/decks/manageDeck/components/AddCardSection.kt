@@ -1,7 +1,6 @@
 package com.miszczyk.passlingo.ui.screens.decks.manageDeck.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,12 +19,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
-import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
+import com.miszczyk.passlingo.ui.components.cardSurface
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
-import com.miszczyk.passlingo.ui.theme.Dimens.elevationExtraSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
@@ -80,19 +77,20 @@ fun AddCardSection(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .shadow(
-                    elevation = elevationExtraSmall,
-                    shape = RoundedCornerShape(size = cornerRadiusDefault)
-                )
-                .background(
-                    color = MaterialTheme.colorScheme.background,
-                    shape = RoundedCornerShape(size = cornerRadiusDefault)
-                )
-                .border(
-                    width = borderThin,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    shape = RoundedCornerShape(size = cornerRadiusDefault)
-                ),
+                .cardSurface(),
+//                .shadow(
+//                    elevation = elevationExtraSmall,
+//                    shape = RoundedCornerShape(size = cornerRadiusDefault)
+//                )
+//                .background(
+//                    color = MaterialTheme.colorScheme.background,
+//                    shape = RoundedCornerShape(size = cornerRadiusDefault)
+//                )
+//                .border(
+//                    width = borderThin,
+//                    color = MaterialTheme.colorScheme.onBackground,
+//                    shape = RoundedCornerShape(size = cornerRadiusDefault)
+//                ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CardSideInput(

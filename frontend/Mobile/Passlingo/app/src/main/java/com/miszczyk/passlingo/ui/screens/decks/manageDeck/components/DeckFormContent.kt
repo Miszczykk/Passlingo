@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.ui.components.ScreenHeader
 import com.miszczyk.passlingo.ui.components.ThemedDivider
 import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.Flashcard
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraHuge
@@ -52,7 +53,7 @@ fun DeckFormContent(
 
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(height = spaceLarge))
-        DeckFormTopBar(title = headerTitle, onClick = { onBackClicked() })
+        ScreenHeader(title = headerTitle, onClick = onBackClicked)
         Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
         LazyColumn(

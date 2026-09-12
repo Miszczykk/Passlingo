@@ -68,7 +68,7 @@
     <string name="label_study_settings">Study Settings</string>
     <string name="label_target_rounds">TARGET ROUNDS</string>
     <string name="label_tries">TRIES</string>
-    <string name="label_loading">Loading...</string>
+    <string name="label_loading">Loading…</string>
     <string name="title_perfect_session">Perfect Session!</string>
     <string name="title_needs_practice">Needs Practice</string>
     <string name="title_take_a_breather">Take a breather</string>
@@ -97,6 +97,9 @@
     <string name="message_perfect_session">You nailed every single card without mistakes.</string>
     <string name="message_extra_tries">These cards took extra tries:</string>
     <string name="message_take_a_breather">You\'ve done 10 reviews! Take a short mental break before continuing your learning.</string>
+    <string name="error_missing_usage_permission">Missing usage access permission. Please grant it in Settings.</string>
+    <string name="error_study_session">A critical error occurred during the study session.</string>
+    <string name="error_deck_not_found">Deck not found. It might have been deleted.</string>
 
     <!-- Dialogs -->
     <string name="dialog_title_confirm_lock">Are you sure?</string>

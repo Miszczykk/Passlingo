@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.ui.screens.decks.manageDeck.util.DeckFormConstants.MIN_CARDS_REQUIRES
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
@@ -25,7 +26,7 @@ fun DeckFormBottomBar(
     addedCards: Int,
     onSaveDeckClicked: () -> Unit
 ){
-    val check = deckName.isNotBlank() && addedCards >= 4
+    val check = deckName.isNotBlank() && addedCards >= MIN_CARDS_REQUIRES
 
     val buttonColor by animateColorAsState(
         targetValue = if (check) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
@@ -38,8 +39,8 @@ fun DeckFormBottomBar(
     )
 
     val textDescription = when {
-        (deckName.isBlank() && addedCards >= 4) -> stringResource(id = R.string.action_enter_deck_name)
-        (deckName.isNotBlank() && addedCards < 4) -> stringResource(id = R.string.action_add_cards_first)
+        (deckName.isBlank() && addedCards >= MIN_CARDS_REQUIRES) -> stringResource(id = R.string.action_enter_deck_name)
+        (deckName.isNotBlank() && addedCards < MIN_CARDS_REQUIRES) -> stringResource(id = R.string.action_add_cards_first)
         !check -> stringResource(id = R.string.action_enter_name_add_cards)
         else -> stringResource(id = R.string.action_save_deck)
     }
@@ -52,6 +53,7 @@ fun DeckFormBottomBar(
         colors = ButtonDefaults.buttonColors(
             containerColor = buttonColor
         ),
+        enabled = check,
         onClick = {
             onSaveDeckClicked()
         }) {

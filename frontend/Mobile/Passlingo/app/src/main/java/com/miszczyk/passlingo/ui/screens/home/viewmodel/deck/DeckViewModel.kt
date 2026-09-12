@@ -3,6 +3,7 @@ package com.miszczyk.passlingo.ui.screens.home.viewmodel.deck
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.miszczyk.passlingo.data.local.entity.DeckWithFlashcards
 import com.miszczyk.passlingo.data.repository.DeckRepository
 import com.miszczyk.passlingo.data.repository.StudySessionRepositoryImpl
 import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckBottomSheetState
@@ -43,6 +44,14 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
         )
     }
 
+    private fun getDeckById(id: String?): DeckWithFlashcards? {
+        return _deckUiState.value.decks.find { it.deck.id == id }
+    }
+
+    private fun getSelectedDeck(): DeckWithFlashcards? {
+        return getDeckById(_deckUiState.value.selectedDeckId)
+    }
+
     fun onDialogCancelled() = deckDialogAction.onDialogCancelled()
     fun onDialogConfirmed() = deckDialogAction.onDialogConfirmed()
 
@@ -60,7 +69,7 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun selectDeck(id: String) {
-        val deckWithCards = _deckUiState.value.decks.find { it.deck.id == id }
+        val deckWithCards = getDeckById(id)
         if (deckWithCards != null) {
             _deckUiState.update { currentState ->
                 currentState.copy(
@@ -76,8 +85,7 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onStudyModeClicked() {
-        val id = _deckUiState.value.selectedDeckId
-        val deckWithCards = _deckUiState.value.decks.find { it.deck.id == id }
+        val deckWithCards = getSelectedDeck()
         if (deckWithCards != null) {
             _deckUiState.update { currentState ->
                 currentState.copy(
@@ -103,7 +111,7 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onFlashcardModeSelected(){
         val deckId = _deckUiState.value.selectedDeckId ?: return
-        val deckWithCards = _deckUiState.value.decks.find {it.deck.id == deckId} ?: return
+        val deckWithCards = getSelectedDeck() ?: return
 
         viewModelScope.launch {
             val hasSession = studySessionRepository.doesSessionExist(deckId)

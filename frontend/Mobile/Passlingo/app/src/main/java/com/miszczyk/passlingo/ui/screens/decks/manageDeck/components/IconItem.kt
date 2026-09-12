@@ -1,8 +1,6 @@
 package com.miszczyk.passlingo.ui.screens.decks.manageDeck.components
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,10 +10,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.ui.components.cardSurface
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.elevationNone
@@ -35,17 +33,13 @@ fun IconItem(
 
     IconButton(
         onClick = { onClick() }, modifier = Modifier
-            .shadow(
-                elevation = if (isSelected) elevationSmall else elevationNone,
-                shape = RoundedCornerShape(size = cornerRadiusDefault)
-            )
             .aspectRatio(ratio = 1f)
             .clip(shape = RoundedCornerShape(size = cornerRadiusDefault))
-            .background(backgroundColor)
-            .border(
-                width = borderDefault,
-                color = borderColor,
-                shape = RoundedCornerShape(size = cornerRadiusDefault)
+            .cardSurface(
+                elevation = if (isSelected) elevationSmall else elevationNone,
+                backgroundColor = backgroundColor,
+                borderWidth = borderDefault,
+                borderColor = borderColor
             )
     ) {
         Icon(
