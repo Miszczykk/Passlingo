@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.miszczyk.passlingo.data.local.entity.DeckWithFlashcards
+import com.miszczyk.passlingo.data.local.entity.StudyMode
 import com.miszczyk.passlingo.data.repository.DeckRepository
 import com.miszczyk.passlingo.data.repository.StudySessionRepositoryImpl
 import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckBottomSheetState
@@ -27,6 +28,9 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
     private val deckSelectionAction = DeckSelectionAction(uiStateFlow = _deckUiState)
 
     private var observationJob: Job? = null
+
+    var currentStudyMode: StudyMode = StudyMode.FLASHCARDS
+        private set
 
     init {
         startObservingData()
@@ -96,40 +100,34 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-    fun onStudySettingsClicked() {
-        _deckUiState.update { currentState ->
-            currentState.copy(
-                deckBottomSheetState = DeckBottomSheetState.StudySettings
-            )
-        }
-    }
 
     fun onRetryErrorClicked() {
         _deckUiState.update { it.copy(deckDialogState = DeckDialogState.None) }
         startObservingData()
     }
 
-    fun onFlashcardModeSelected(){
+    fun onStudyModeSelected(mode: StudyMode){
+        currentStudyMode = mode
         val deckId = _deckUiState.value.selectedDeckId ?: return
         val deckWithCards = getSelectedDeck() ?: return
 
         viewModelScope.launch {
-            val hasSession = studySessionRepository.doesSessionExist(deckId)
+            val hasSession = studySessionRepository.doesSessionExist(deckId, mode)
 
             if(hasSession){
                 _deckUiState.update { currentState ->
                     currentState.copy(
-                        deckDialogState = DeckDialogState.ResumeSession(deckWithCards.deck.name)
+                        deckDialogState = DeckDialogState.ResumeSession(deckName = deckWithCards.deck.name)
                     )
                 }
-            } else{
-                _deckUiState.update { currentState ->
+            }else{
+                _deckUiState.update {  currentState ->
                     currentState.copy(
                         deckBottomSheetState = DeckBottomSheetState.StudySettings
                     )
                 }
             }
-
         }
     }
+
 }

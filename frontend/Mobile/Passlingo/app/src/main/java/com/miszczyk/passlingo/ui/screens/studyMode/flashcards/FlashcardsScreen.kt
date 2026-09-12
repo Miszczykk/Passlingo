@@ -11,17 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -36,14 +30,14 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.ScreenHeader
 import com.miszczyk.passlingo.ui.components.ThemedDivider
-import com.miszczyk.passlingo.ui.screens.studyMode.components.FlashcardToPracticeItem
+import com.miszczyk.passlingo.ui.screens.studyMode.components.BreatherScreen
+import com.miszczyk.passlingo.ui.screens.studyMode.components.LoadingScreen
+import com.miszczyk.passlingo.ui.screens.studyMode.components.SessionSummarySection
 import com.miszczyk.passlingo.ui.screens.studyMode.flashcards.components.FlashcardsViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDash
 import com.miszczyk.passlingo.ui.theme.Dimens.borderGap
@@ -51,20 +45,13 @@ import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.iconGiant
-import com.miszczyk.passlingo.ui.theme.Dimens.iconMassive
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
-import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
-import com.miszczyk.passlingo.ui.theme.Dimens.spaceHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
-import com.miszczyk.passlingo.ui.theme.Dimens.spaceMedium
 import com.miszczyk.passlingo.ui.theme.TextSize.bodyExtraLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.bodyLarge
-import com.miszczyk.passlingo.ui.theme.TextSize.headlineLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
-import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
-import com.miszczyk.passlingo.ui.theme.TextSize.titleMediumLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
@@ -83,238 +70,25 @@ fun FlashcardScreen(
     }
 
     if (uiState.isLoading) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(
-                text = stringResource(id = R.string.label_loading),
-                color = MaterialTheme.colorScheme.primary,
-                fontFamily = vagRoundedBold
-            )
-        }
+        LoadingScreen()
         return
     }
 
-    if (uiState.currentFront == null && uiState.cardsToPractice.isEmpty()) {
-        Column(
+    if(uiState.currentFront == null){
+        SessionSummarySection(
+            cardsToPractice = uiState.cardsToPractice,
+            onBack = onBack,
             modifier = modifier
-                .fillMaxSize()
-                .padding(horizontal = spaceExtraLarge),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.cup),
-                contentDescription = "cup",
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier
-                    .size(size = iconMassive)
-                    .background(
-                        color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f),
-                        shape = CircleShape
-                    )
-                    .padding(all = spaceExtraSmall)
-            )
-
-            Spacer(modifier = Modifier.height(height = spaceLarge))
-
-            Text(
-                text = stringResource(id = R.string.title_perfect_session),
-                fontSize = headlineLarge,
-                fontFamily = vagRoundedBold,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(modifier = Modifier.height(height = spaceMedium))
-
-            Text(
-                text = stringResource(id = R.string.message_perfect_session),
-                fontSize = titleMedium,
-                textAlign = TextAlign.Center,
-                fontFamily = vagRoundedLight,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Spacer(modifier = Modifier.height(height = spaceHuge))
-
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                shape = RoundedCornerShape(size = cornerRadiusDefault),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                ),
-                onClick = {
-                    onBack()
-                }) {
-                Text(
-                    text = stringResource(id = R.string.action_finish_and_return),
-                    fontSize = titleLarge,
-                    color = MaterialTheme.colorScheme.background,
-                    fontFamily = vagRoundedBold,
-                    modifier = Modifier.padding(vertical = spaceDefault)
-                )
-            }
-        }
+        )
         return
     }
-
-    if (uiState.currentFront == null && uiState.cardsToPractice.isNotEmpty()) {
-        LazyColumn(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(horizontal = spaceExtraLarge),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            item{
-                Spacer(modifier = Modifier.height(height = spaceExtraHuge))
-                Icon(
-                    painter = painterResource(R.drawable.cup),
-                    contentDescription = "cup",
-                    tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier
-                        .size(size = iconMassive)
-                        .background(
-                            color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f),
-                            shape = CircleShape
-                        )
-                        .padding(all = spaceExtraSmall)
-                )
-
-                Spacer(modifier = Modifier.height(height = spaceLarge))
-
-                Text(
-                    text = stringResource(id = R.string.title_needs_practice),
-                    fontSize = headlineLarge,
-                    fontFamily = vagRoundedBold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-
-                Spacer(modifier = Modifier.height(height = spaceMedium))
-
-                Text(
-                    text = stringResource(id = R.string.message_extra_tries),
-                    fontSize = titleMedium,
-                    textAlign = TextAlign.Center,
-                    fontFamily = vagRoundedLight,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Spacer(modifier = Modifier.height(height = spaceExtraLarge))
-            }
-
-            items(items = uiState.cardsToPractice, key = {it.id}) {card ->
-                FlashcardToPracticeItem(
-                    frontText = card.front,
-                    backText = card.back,
-                    attempts = card.attempts
-                )
-                Spacer(modifier = Modifier.height(height = spaceLarge))
-            }
-
-            item{
-                Spacer(modifier = Modifier.height(height = spaceMedium))
-
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(size = cornerRadiusDefault),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    ),
-                    onClick = {
-                        onBack()
-                    }) {
-                    Text(
-                        text = stringResource(id = R.string.action_finish_and_return),
-                        fontSize = titleLarge,
-                        color = MaterialTheme.colorScheme.background,
-                        fontFamily = vagRoundedBold,
-                        modifier = Modifier.padding(vertical = spaceDefault)
-                    )
-                }
-            }
-        }
-        return
-    }
-
 
     if (uiState.isBreather) {
-        Column(
+        BreatherScreen(
+            continueLearning ={ viewModel.continueLearningClicked()},
+            onBack = onBack,
             modifier = modifier
-                .fillMaxSize()
-                .padding(horizontal = spaceExtraLarge),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.coffee),
-                contentDescription = "coffee",
-                tint = Color(0xFF3b82f6),
-                modifier = Modifier
-                    .size(size = iconMassive)
-                    .background(
-                        color = Color(0xFF3b82f6).copy(alpha = 0.2f),
-                        shape = CircleShape
-                    )
-                    .padding(all = spaceMedium)
-            )
-
-            Spacer(modifier = Modifier.height(height = spaceHuge))
-
-            Text(
-                text = stringResource(id = R.string.title_take_a_breather),
-                fontSize = headlineLarge,
-                fontFamily = vagRoundedBold,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(modifier = Modifier.height(height = spaceMedium))
-
-            Text(
-                text = stringResource(id = R.string.message_take_a_breather),
-                fontSize = titleMedium,
-                textAlign = TextAlign.Center,
-                fontFamily = vagRoundedLight,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Spacer(modifier = Modifier.height(height = spaceHuge))
-
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = spaceExtraLarge),
-                shape = RoundedCornerShape(size = cornerRadiusDefault),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                ),
-                onClick = {
-                    viewModel.continueLearningClicked()
-                }) {
-                Text(
-                    text = stringResource(id = R.string.action_continue_studying),
-                    fontSize = titleLarge,
-                    color = MaterialTheme.colorScheme.background,
-                    fontFamily = vagRoundedBold,
-                    modifier = Modifier.padding(vertical = spaceDefault)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(height = spaceMedium))
-
-            TextButton(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = { onBack() }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.action_quit_for_now),
-                    fontSize = titleMediumLarge,
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    fontFamily = vagRoundedBold,
-                    modifier = Modifier.padding(vertical = spaceDefault)
-                )
-            }
-        }
+        )
         return
     }
 

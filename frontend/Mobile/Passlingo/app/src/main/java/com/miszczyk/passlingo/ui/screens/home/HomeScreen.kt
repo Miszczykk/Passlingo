@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.miszczyk.passlingo.data.local.entity.StudyMode
 import com.miszczyk.passlingo.ui.components.buildAppNameLogo
 import com.miszczyk.passlingo.ui.screens.home.components.BalanceBox
 import com.miszczyk.passlingo.ui.screens.home.components.CreateBox
@@ -48,6 +49,7 @@ fun HomeScreen(
     onCreateDeckClicked: () -> Unit,
     onEditDeckClicked: (String) -> Unit,
     onFlashcardsClicked: (String, Int) -> Unit,
+    onTypingClicked: (String, Int) -> Unit,
     appViewModel: AppViewModel = viewModel(),
     deckViewModel: DeckViewModel = viewModel()
 ) {
@@ -105,7 +107,7 @@ fun HomeScreen(
                     flashcardCount = state.flashcardCount,
                     onDismissRequest = { deckViewModel.hideBottomSheet() },
                     onStudyClicked = { deckViewModel.onStudyModeClicked() },
-                    onEditClicked = { deckUiState.selectedDeckId?.let { onEditDeckClicked(it) } },
+                    onEditClicked = { deckUiState.selectedDeckId?.let {deckId -> deckViewModel.hideBottomSheet(); onEditDeckClicked(deckId) } },
                     onDeleteClicked = { deckViewModel.deleteDeck() }
                 )
             }
@@ -115,9 +117,9 @@ fun HomeScreen(
                     sheetState = sheetStateToStudyMode,
                     deckName = state.deckName,
                     onDismissRequest = { deckViewModel.hideBottomSheet() },
-                    onFlashcardClicked = {deckViewModel.onFlashcardModeSelected()},
-                    onQuizClicked = {deckViewModel.onStudySettingsClicked()},
-                    onTypingClicked = {deckViewModel.onStudySettingsClicked()}
+                    onFlashcardClicked = {deckViewModel.onStudyModeSelected(mode = StudyMode.FLASHCARDS)},
+                    onQuizClicked = {},
+                    onTypingClicked = {deckViewModel.onStudyModeSelected(mode = StudyMode.TYPING)}
                 )
             }
 
@@ -128,7 +130,11 @@ fun HomeScreen(
                     onStartSessionClicked = { selectedRounds ->
                         deckUiState.selectedDeckId?.let { deckId ->
                             deckViewModel.hideBottomSheet()
-                            onFlashcardsClicked(deckId, selectedRounds)
+                            if (deckViewModel.currentStudyMode == StudyMode.FLASHCARDS) {
+                                onFlashcardsClicked(deckId, selectedRounds)
+                            } else if (deckViewModel.currentStudyMode == StudyMode.TYPING) {
+                                onTypingClicked(deckId, selectedRounds)
+                            }
                         }
                     }
                 )
@@ -142,7 +148,12 @@ fun HomeScreen(
         onContinueSession = {
             deckUiState.selectedDeckId?.let { deckId ->
                 deckViewModel.onDialogConfirmed()
-                onFlashcardsClicked(deckId, 0)
+                deckViewModel.hideBottomSheet()
+                if (deckViewModel.currentStudyMode == StudyMode.FLASHCARDS) {
+                    onFlashcardsClicked(deckId, 0)
+                } else if (deckViewModel.currentStudyMode == StudyMode.TYPING) {
+                    onTypingClicked(deckId, 0)
+                }
             }
         }
     )
@@ -154,6 +165,6 @@ fun HomeScreen(
 @Composable
 fun HomePreview() {
     PasslingoTheme {
-        HomeScreen(onCreateDeckClicked = {}, onEditDeckClicked = {}, onFlashcardsClicked = {_, _ -> })
+        HomeScreen(onCreateDeckClicked = {}, onEditDeckClicked = {}, onFlashcardsClicked = {_, _ -> }, onTypingClicked = {_, _ ->})
     }
 }

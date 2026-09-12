@@ -1,4 +1,4 @@
-package com.miszczyk.passlingo.ui.screens.studyMode.flashcards.model
+package com.miszczyk.passlingo.ui.screens.studyMode.model
 
 data class PracticeCardUiModel(
     val id: String,

@@ -4,14 +4,15 @@ import android.content.Context
 import com.miszczyk.passlingo.data.local.PasslingoDatabase
 import com.miszczyk.passlingo.data.local.dao.StudySessionWithProgress
 import com.miszczyk.passlingo.data.local.entity.StudyCardProgressEntity
+import com.miszczyk.passlingo.data.local.entity.StudyMode
 import com.miszczyk.passlingo.data.local.entity.StudySessionEntity
 
 interface StudySessionRepository {
     suspend fun createSession(session: StudySessionEntity, progress: List<StudyCardProgressEntity>)
     suspend fun deleteSessionByDeckId(deckId: String)
     suspend fun deleteSessionById(sessionId: String)
-    suspend fun getActiveSession(deckId: String): StudySessionWithProgress?
-    suspend fun doesSessionExist(deckId: String): Boolean
+    suspend fun getActiveSession(deckId: String, mode: StudyMode): StudySessionWithProgress?
+    suspend fun doesSessionExist(deckId: String, mode: StudyMode): Boolean
     suspend fun getFinishedCard(sessionId: String, targetRounds: Int): Int
     suspend fun getTotalCardCount(sessionId: String): Int
     suspend fun resetCurrentRound(sessionId: String, flashcardId: String)
@@ -36,12 +37,12 @@ class StudySessionRepositoryImpl(context: Context): StudySessionRepository {
         dao.deleteSessionById(sessionId)
     }
 
-    override suspend fun getActiveSession(deckId: String): StudySessionWithProgress? {
-        return dao.getActiveSession(deckId)
+    override suspend fun getActiveSession(deckId: String, mode: StudyMode): StudySessionWithProgress? {
+        return dao.getActiveSession(deckId, mode)
     }
 
-    override suspend fun doesSessionExist(deckId: String): Boolean {
-        return dao.doesSessionExist(deckId)
+    override suspend fun doesSessionExist(deckId: String, mode: StudyMode): Boolean {
+        return dao.doesSessionExist(deckId, mode)
     }
 
     override suspend fun getFinishedCard(sessionId: String, targetRounds: Int): Int {

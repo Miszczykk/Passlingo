@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Relation
 import androidx.room.Transaction
 import com.miszczyk.passlingo.data.local.entity.StudyCardProgressEntity
+import com.miszczyk.passlingo.data.local.entity.StudyMode
 import com.miszczyk.passlingo.data.local.entity.StudySessionEntity
 
 data class StudySessionWithProgress(
@@ -37,13 +38,13 @@ interface StudySessionDao {
     suspend fun deleteSessionById(sessionId: String)
 
     @Transaction
-    @Query("SELECT * FROM study_sessions WHERE deckId = :deckId LIMIT 1")
-    suspend fun getActiveSession(deckId: String): StudySessionWithProgress?
+    @Query("SELECT * FROM study_sessions WHERE deckId = :deckId AND mode = :mode LIMIT 1")
+    suspend fun getActiveSession(deckId: String, mode: StudyMode): StudySessionWithProgress?
 
 
     // SESSION STATUS
-    @Query("SELECT EXISTS(SELECT 1 FROM study_sessions WHERE deckId = :deckId)")
-    suspend fun doesSessionExist(deckId: String): Boolean
+    @Query("SELECT EXISTS(SELECT 1 FROM study_sessions WHERE deckId = :deckId AND mode = :mode)")
+    suspend fun doesSessionExist(deckId: String, mode: StudyMode): Boolean
 
     @Query("SELECT COUNT(*) FROM study_card_progress WHERE sessionId = :sessionId AND currentRound = :targetRounds")
     suspend fun getFinishedCard(sessionId: String, targetRounds: Int): Int
