@@ -143,10 +143,14 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
                 allCards.mapNotNull { progress ->
                     typingDict[progress.flashcardId]?.second
                 }.distinct()
-            val wrongAnswers = allMeanings
-                .filter { !it.equals(correctAnswer, ignoreCase = true) }
-                .sortedBy { levenshteinDistance(it, correctAnswer) }
-                .take(3)
+
+            val allWrong = allMeanings.filter { !it.equals(correctAnswer, ignoreCase = true) }
+
+            val wrongAnswers = if (allWrong.size <= 3){
+                allWrong
+            } else{
+                allWrong.sortedBy { levenshteinDistance(it, correctAnswer) }.take(3)
+            }
             (wrongAnswers + correctAnswer).shuffled()
         }
 
