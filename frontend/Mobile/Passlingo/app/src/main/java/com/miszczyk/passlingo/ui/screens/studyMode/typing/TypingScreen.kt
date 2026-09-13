@@ -91,7 +91,7 @@ fun TypingScreen(
 
     if (uiState.isBreather) {
         BreatherScreen(
-            continueLearning ={ viewModel.continueLearningClicked()},
+            continueLearning = { viewModel.continueLearningClicked()},
             onBack = onBack,
             modifier = modifier
         )
@@ -101,7 +101,7 @@ fun TypingScreen(
     val borderColor = when(uiState.userAnswer) {
         TypeAnswer.NONE -> MaterialTheme.colorScheme.onBackground
         TypeAnswer.BAD -> MaterialTheme.colorScheme.error
-        TypeAnswer.GOOD -> Color(0xFF10B981)
+        TypeAnswer.GOOD -> Color(color = 0xFF10B981)
     }
 
     val check = uiState.userAnswerState.text.toString().isNotBlank()
@@ -211,7 +211,7 @@ fun TypingScreen(
         }
 
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(weight = 1f))
         when (uiState.userAnswer){
             TypeAnswer.NONE -> {
                 ButtonBeforeAnswer(

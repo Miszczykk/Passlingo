@@ -50,6 +50,7 @@ fun HomeScreen(
     onEditDeckClicked: (String) -> Unit,
     onFlashcardsClicked: (String, Int) -> Unit,
     onTypingClicked: (String, Int) -> Unit,
+    onQuizClicked: (String, Int) -> Unit,
     appViewModel: AppViewModel = viewModel(),
     deckViewModel: DeckViewModel = viewModel()
 ) {
@@ -118,7 +119,7 @@ fun HomeScreen(
                     deckName = state.deckName,
                     onDismissRequest = { deckViewModel.hideBottomSheet() },
                     onFlashcardClicked = {deckViewModel.onStudyModeSelected(mode = StudyMode.FLASHCARDS)},
-                    onQuizClicked = {},
+                    onQuizClicked = { deckViewModel.onStudyModeSelected(mode = StudyMode.QUIZ) },
                     onTypingClicked = {deckViewModel.onStudyModeSelected(mode = StudyMode.TYPING)}
                 )
             }
@@ -134,6 +135,8 @@ fun HomeScreen(
                                 onFlashcardsClicked(deckId, selectedRounds)
                             } else if (deckViewModel.currentStudyMode == StudyMode.TYPING) {
                                 onTypingClicked(deckId, selectedRounds)
+                            }else{
+                                onQuizClicked(deckId, selectedRounds)
                             }
                         }
                     }
@@ -165,6 +168,6 @@ fun HomeScreen(
 @Composable
 fun HomePreview() {
     PasslingoTheme {
-        HomeScreen(onCreateDeckClicked = {}, onEditDeckClicked = {}, onFlashcardsClicked = {_, _ -> }, onTypingClicked = {_, _ ->})
+        HomeScreen(onCreateDeckClicked = {}, onEditDeckClicked = {}, onFlashcardsClicked = {_, _ -> }, onTypingClicked = {_, _ ->}, onQuizClicked = {_, _ ->})
     }
 }

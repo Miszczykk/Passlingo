@@ -136,7 +136,7 @@ private fun FrontCard(definition: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(size = cornerRadiusLarge))
+            .clip(shape = RoundedCornerShape(size = cornerRadiusLarge))
             .background(
                 color = MaterialTheme.colorScheme.primary,
                 shape = RoundedCornerShape(size = cornerRadiusLarge)

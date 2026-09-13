@@ -8,4 +8,5 @@ sealed interface Screen {
 
     data class Flashcard(val deckId: String, val rounds: Int) : Screen
     data class Typing(val deckId: String, val rounds: Int) : Screen
+    data class Quiz(val deckId: String, val rounds: Int) : Screen
 }

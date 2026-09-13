@@ -22,6 +22,7 @@ import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 import androidx.activity.enableEdgeToEdge
 import com.miszczyk.passlingo.ui.screens.decks.editDeck.EditDeckScreen
 import com.miszczyk.passlingo.ui.screens.studyMode.flashcards.FlashcardScreen
+import com.miszczyk.passlingo.ui.screens.studyMode.quiz.QuizScreen
 import com.miszczyk.passlingo.ui.screens.studyMode.typing.TypingScreen
 
 class MainActivity : ComponentActivity() {
@@ -53,6 +54,9 @@ class MainActivity : ComponentActivity() {
                             },
                             onTypingClicked = { deckId, rounds ->
                                 currentScreen = Screen.Typing(deckId = deckId, rounds = rounds)
+                            },
+                            onQuizClicked = { deckId, rounds ->
+                                currentScreen = Screen.Quiz(deckId = deckId, rounds = rounds)
                             }
                         )
 
@@ -83,6 +87,16 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.padding(innerPadding),
                                 deckId = typingScreen.deckId,
                                 rounds = typingScreen.rounds,
+                                onBack = { currentScreen = Screen.Home }
+                            )
+                        }
+
+                        is Screen.Quiz -> {
+                            val quizScreen = currentScreen as Screen.Quiz
+                            QuizScreen(
+                                modifier = Modifier.padding(innerPadding),
+                                deckId = quizScreen.deckId,
+                                rounds = quizScreen.rounds,
                                 onBack = { currentScreen = Screen.Home }
                             )
                         }
