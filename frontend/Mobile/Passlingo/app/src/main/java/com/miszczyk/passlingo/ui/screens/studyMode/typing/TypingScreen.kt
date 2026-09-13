@@ -10,15 +10,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -41,23 +37,22 @@ import com.miszczyk.passlingo.ui.components.cardSurface
 import com.miszczyk.passlingo.ui.screens.studyMode.components.BreatherScreen
 import com.miszczyk.passlingo.ui.screens.studyMode.components.LoadingScreen
 import com.miszczyk.passlingo.ui.screens.studyMode.components.SessionSummarySection
-import com.miszczyk.passlingo.ui.screens.studyMode.typing.components.TypingViewModel
-import com.miszczyk.passlingo.ui.screens.studyMode.typing.model.TypeAnswer
+import com.miszczyk.passlingo.ui.screens.studyMode.model.TypeAnswer
+import com.miszczyk.passlingo.ui.screens.studyMode.typing.components.ButtonAfterAnswer
+import com.miszczyk.passlingo.ui.screens.studyMode.typing.components.ButtonBeforeAnswer
+import com.miszczyk.passlingo.ui.screens.studyMode.typing.viewmodel.TypingViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDash
 import com.miszczyk.passlingo.ui.theme.Dimens.borderGap
 import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.maxHeightCardContent
-import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
-import com.miszczyk.passlingo.ui.theme.Dimens.spaceMedium
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceVeryLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.TextSize.titleMediumLarge
-import com.miszczyk.passlingo.ui.theme.TextSize.titleSmall
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
@@ -239,75 +234,5 @@ fun TypingScreen(
             }
         }
         Spacer(modifier = Modifier.height(height = spaceLarge))
-    }
-}
-
-@Composable
-private fun ButtonBeforeAnswer(buttonColor: Color, textColor: Color, textDescription: String, enabled: Boolean, onClick: () -> Unit){
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = spaceExtraLarge),
-        shape = RoundedCornerShape(size = cornerRadiusDefault),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = buttonColor
-        ),
-        enabled = enabled,
-        onClick = {
-            onClick()
-        }) {
-        Text(
-            text = textDescription,
-            fontSize = titleLarge,
-            color = textColor,
-            fontFamily = vagRoundedBold,
-            modifier = Modifier.padding(vertical = spaceDefault)
-        )
-    }
-}
-
-@Composable
-private fun ButtonAfterAnswer(checkAgain: () -> Unit = {}, continueLearning: () -> Unit, badAnswer: Boolean){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = spaceExtraLarge),
-    ) {
-
-
-        Button(
-            modifier = Modifier
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(size = cornerRadiusDefault),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary
-            ),
-            onClick = { continueLearning() }
-        ) {
-            Text(
-                text = if (badAnswer) stringResource(id = R.string.action_try_again) else stringResource(id = R.string.action_continue),
-                fontSize = titleLarge,
-                color = MaterialTheme.colorScheme.background,
-                fontFamily = vagRoundedBold,
-                modifier = Modifier.padding(vertical = spaceDefault)
-            )
-        }
-
-        if(badAnswer){
-            Spacer(modifier = Modifier.height(height = spaceMedium))
-            TextButton(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = { checkAgain() }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.action_my_answer_was_good),
-                    fontSize = titleSmall,
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    fontFamily = vagRoundedBold,
-                    modifier = Modifier.padding(vertical = spaceDefault)
-                )
-            }
-        }
     }
 }

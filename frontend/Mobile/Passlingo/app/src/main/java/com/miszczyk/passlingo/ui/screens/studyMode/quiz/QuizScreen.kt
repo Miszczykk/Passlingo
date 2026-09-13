@@ -1,7 +1,6 @@
 package com.miszczyk.passlingo.ui.screens.studyMode.quiz
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -30,12 +29,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.ScreenHeader
-import com.miszczyk.passlingo.ui.components.cardSurface
 import com.miszczyk.passlingo.ui.screens.studyMode.components.BreatherScreen
 import com.miszczyk.passlingo.ui.screens.studyMode.components.LoadingScreen
 import com.miszczyk.passlingo.ui.screens.studyMode.components.SessionSummarySection
-import com.miszczyk.passlingo.ui.screens.studyMode.quiz.components.QuizViewModel
-import com.miszczyk.passlingo.ui.screens.studyMode.quiz.model.TypeAnswer
+import com.miszczyk.passlingo.ui.screens.studyMode.model.TypeAnswer
+import com.miszczyk.passlingo.ui.screens.studyMode.quiz.components.AnswerCard
+import com.miszczyk.passlingo.ui.screens.studyMode.quiz.viewmodel.QuizViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.iconGiant
@@ -45,9 +44,7 @@ import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
-import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
-import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
 fun QuizScreen(
@@ -132,7 +129,7 @@ fun QuizScreen(
 
             val shouldShow = !isAnswered || isCorrectAnswer || isSelectedAnswer
 
-            if(shouldShow){
+            if (shouldShow) {
                 val borderColor = when {
                     !isAnswered -> MaterialTheme.colorScheme.onBackground
                     isCorrectAnswer -> Color(color = 0xFF10B981)
@@ -149,52 +146,29 @@ fun QuizScreen(
                     }
                 )
             }
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
-            if (isAnswered) {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = spaceExtraLarge),
-                    shape = RoundedCornerShape(size = cornerRadiusDefault),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    ),
-                    onClick = {
-                        viewModel.moveToNextCard()
-                    }) {
-                    Text(
-                        text = stringResource(id = R.string.action_continue),
-                        fontSize = titleLarge,
-                        color = MaterialTheme.colorScheme.background,
-                        fontFamily = vagRoundedBold,
-                        modifier = Modifier.padding(vertical = spaceDefault)
-                    )
-                }
-            }
         }
-    }
 
-    @Composable
-    fun AnswerCard(text: String, textColor: Color, borderColor: Color, onClick: () -> Unit) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = spaceExtraLarge)
-                .padding(bottom = spaceDefault)
-                .clip(RoundedCornerShape(cornerRadiusDefault))
-                .clickable(onClick = onClick)
-                .cardSurface(
-                    borderColor = borderColor
+        Spacer(modifier = Modifier.weight(1f))
+        if (isAnswered) {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = spaceExtraLarge),
+                shape = RoundedCornerShape(size = cornerRadiusDefault),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                ),
+                onClick = {
+                    viewModel.moveToNextCard()
+                }) {
+                Text(
+                    text = stringResource(id = R.string.action_continue),
+                    fontSize = titleLarge,
+                    color = MaterialTheme.colorScheme.background,
+                    fontFamily = vagRoundedBold,
+                    modifier = Modifier.padding(vertical = spaceDefault)
                 )
-                .padding(all = spaceLarge)
-        ) {
-            Text(
-                text = text,
-                fontSize = titleMedium,
-                color = textColor,
-                fontFamily = vagRoundedLight
-            )
+            }
         }
     }
+}

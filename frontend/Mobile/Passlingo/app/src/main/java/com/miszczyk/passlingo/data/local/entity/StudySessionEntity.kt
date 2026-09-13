@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey
         childColumns = ["deckId"],
         onDelete = ForeignKey.CASCADE
     )],
-    indices = [Index("deckId", unique = true)]
+    indices = [Index(value = ["deckId", "mode"], unique = true)]
 )
 data class StudySessionEntity(
     @PrimaryKey val id: String,
