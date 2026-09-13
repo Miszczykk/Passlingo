@@ -211,7 +211,7 @@ fun TypingScreen(
         Spacer(modifier = Modifier.weight(1f))
         when (uiState.userAnswer){
             TypeAnswer.NONE -> {
-                buttonBeforeAnswer(
+                ButtonBeforeAnswer(
                     buttonColor = buttonColor,
                     textColor = textColor,
                     textDescription = textDescription,
@@ -221,14 +221,14 @@ fun TypingScreen(
             }
 
             TypeAnswer.GOOD -> {
-                buttonAfterAnswer(
+                ButtonAfterAnswer(
                     continueLearning = {viewModel.moveToNextCard()},
                     badAnswer = false
                 )
             }
 
             TypeAnswer.BAD -> {
-                buttonAfterAnswer(
+                ButtonAfterAnswer(
                     checkAgain = {viewModel.checkAgain(userAnswer = uiState.userAnswerState, correctAnswer = uiState.currentBack)},
                     continueLearning = {viewModel.moveToNextCard()},
                     badAnswer = true
@@ -240,7 +240,7 @@ fun TypingScreen(
 }
 
 @Composable
-private fun buttonBeforeAnswer(buttonColor: Color, textColor: Color, textDescription: String, enabled: Boolean, onClick: () -> Unit){
+private fun ButtonBeforeAnswer(buttonColor: Color, textColor: Color, textDescription: String, enabled: Boolean, onClick: () -> Unit){
     Button(
         modifier = Modifier
             .fillMaxWidth()
@@ -264,7 +264,7 @@ private fun buttonBeforeAnswer(buttonColor: Color, textColor: Color, textDescrip
 }
 
 @Composable
-private fun buttonAfterAnswer(checkAgain: () -> Unit = {}, continueLearning: () -> Unit, badAnswer: Boolean){
+private fun ButtonAfterAnswer(checkAgain: () -> Unit = {}, continueLearning: () -> Unit, badAnswer: Boolean){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -305,8 +305,6 @@ private fun buttonAfterAnswer(checkAgain: () -> Unit = {}, continueLearning: () 
                     modifier = Modifier.padding(vertical = spaceDefault)
                 )
             }
-
-
         }
     }
 }

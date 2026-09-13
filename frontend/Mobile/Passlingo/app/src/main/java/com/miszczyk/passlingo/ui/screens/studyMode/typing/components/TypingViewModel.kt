@@ -39,6 +39,7 @@ class TypingViewModel(application: Application) : AndroidViewModel(application) 
     private var typingDict: Map<String, Pair<String, String>> = emptyMap()
     private var timeToBreath = 0
     private var repeatCard: StudyCardProgressEntity? = null
+    private var totalCardsInSession: Int = 0
 
     fun startSession(deckId: String, rounds: Int) {
         currentDeckId = deckId
@@ -70,6 +71,8 @@ class TypingViewModel(application: Application) : AndroidViewModel(application) 
                     targetRounds = rounds
                     createNewSession(deckId, deckWithCards)
                 }
+
+                totalCardsInSession = sessionRepository.getTotalCardCount(currentSessionId)
                 loadNextBatchAndShow()
             }.onFailure { error ->
                 Log.e("TypingViewModel", "Failed to start session", error)
@@ -121,7 +124,16 @@ class TypingViewModel(application: Application) : AndroidViewModel(application) 
 
 
     fun checkUserAnswer(userAnswer: TextFieldState, correctAnswer: String?) {
-        if (userAnswer.text.toString() == correctAnswer) {
+        val cleanUser = userAnswer.text.toString()
+            .trim()
+            .replace("\\s+".toRegex(), " ")
+
+        val cleanCorrect = correctAnswer
+            ?.trim()
+            ?.replace("\\s+".toRegex(), " ")
+            ?: ""
+
+        if (cleanUser.equals(cleanCorrect, ignoreCase = true)) {
             _uiState.update { it.copy(userAnswer = TypeAnswer.GOOD) }
             timeToBreath++
         } else {
@@ -137,14 +149,13 @@ class TypingViewModel(application: Application) : AndroidViewModel(application) 
 
         val flashcardData = typingDict[currentProgress.flashcardId]
         val finished = sessionRepository.getFinishedCard(currentSessionId, targetRounds)
-        val total = sessionRepository.getTotalCardCount(currentSessionId)
 
         _uiState.update {
             it.copy(
                 isLoading = false,
                 currentFront = flashcardData?.first ?: "Unknown",
                 currentBack = flashcardData?.second ?: "Unknown",
-                progressText = "$finished / $total"
+                progressText = "$finished / $totalCardsInSession"
             )
         }
     }
@@ -192,37 +203,31 @@ class TypingViewModel(application: Application) : AndroidViewModel(application) 
 
             runCatching {
                 if(isGoodAnswer){
-                    sessionRepository.incrementCurrentRound(currentSessionId, currentProgress.flashcardId)
                     if (repeatCard != null) {
                         repeatCard = null
                     } else {
+                        sessionRepository.incrementCurrentRound(currentSessionId, currentProgress.flashcardId)
                         if(currentProgress.currentRound + 1 == targetRounds){
                             timeRepository.addCreditTime(secondsEarned = ((10 * targetRounds).toLong()))
                         }
                         currentBatch = currentBatch.drop(1)
                     }
-
                 }else{
                     sessionRepository.resetCurrentRound(currentSessionId, currentProgress.flashcardId)
                     sessionRepository.incrementAttempts(currentSessionId, currentProgress.flashcardId)
 
-                    if (repeatCard != null && currentBatch.firstOrNull()?.id == repeatCard?.id) {
+                    if (currentBatch.firstOrNull()?.id == currentProgress.id) {
                         currentBatch = currentBatch.drop(1)
                     }
                 }
 
                 _uiState.update { it.copy(userAnswer = TypeAnswer.NONE) }
 
-                if(currentBatch.isNotEmpty() || repeatCard != null){
-                    showCurrentCard()
-                }else{
-                    if(timeToBreath >= 10){
-                        _uiState.update { it.copy(isBreather = true) }
-                    }else{
-                        loadNextBatchAndShow()
-                    }
+                when {
+                    currentBatch.isNotEmpty() || repeatCard != null -> showCurrentCard()
+                    timeToBreath >= 10 -> _uiState.update { it.copy(isBreather = true) }
+                    else -> loadNextBatchAndShow()
                 }
-
             }.onFailure { it ->
                 Log.e("TypingViewModel", "Failed to update card progress", it)
                 _uiState.update {
