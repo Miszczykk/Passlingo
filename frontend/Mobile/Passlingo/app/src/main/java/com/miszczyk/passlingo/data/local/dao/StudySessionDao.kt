@@ -68,4 +68,7 @@ interface StudySessionDao {
 
     @Query("SELECT * FROM study_card_progress WHERE sessionId = :sessionId AND attempts > 0 ORDER BY attempts DESC")
     suspend fun getCardToPractice(sessionId: String): List<StudyCardProgressEntity>
+
+    @Query("SELECT * FROM study_card_progress WHERE sessionId = :sessionId")
+    suspend fun getAllCards(sessionId: String): List<StudyCardProgressEntity>
 }

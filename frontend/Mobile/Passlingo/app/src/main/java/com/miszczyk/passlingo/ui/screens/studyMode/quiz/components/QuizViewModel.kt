@@ -38,6 +38,7 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
     private var typingDict: Map<String, Pair<String, String>> = emptyMap()
     private var timeToBreath = 0
     private var totalCardsInSession: Int = 0
+    private var allCards: List<StudyCardProgressEntity> = emptyList()
 
     fun startSession(deckId: String, rounds: Int){
         currentDeckId = deckId
@@ -69,6 +70,7 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
                     createNewSession(deckId, deckWithCards)
                 }
 
+                allCards = sessionRepository.getAllCards(currentSessionId)
                 totalCardsInSession = sessionRepository.getTotalCardCount(currentSessionId)
                 loadNextBatchAndShow()
             }.onFailure { error ->
@@ -136,9 +138,17 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
         val correctAnswer = flashcardData?.second ?: "Unknown"
         val finished = sessionRepository.getFinishedCard(currentSessionId, targetRounds)
 
-        val allMeanings = typingDict.values.map { it.second }.distinct()
-        val wrongAnswer = allMeanings.filter { it != correctAnswer }.shuffled().take(3)
-        val options = (wrongAnswer + correctAnswer).shuffled()
+        val options = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+            val allMeanings =
+                allCards.mapNotNull { progress ->
+                    typingDict[progress.flashcardId]?.second
+                }.distinct()
+            val wrongAnswers = allMeanings
+                .filter { !it.equals(correctAnswer, ignoreCase = true) }
+                .sortedBy { levenshteinDistance(it, correctAnswer) }
+                .take(3)
+            (wrongAnswers + correctAnswer).shuffled()
+        }
 
         _uiState.update {
             it.copy(
@@ -151,6 +161,28 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
                 progressText = "$finished / $totalCardsInSession"
             )
         }
+    }
+
+    private fun levenshteinDistance(correctAnswer: String, proposition: String): Int {
+        val m = correctAnswer.length
+        val n = proposition.length
+        var cost = IntArray(m + 1) { it }
+        var newCost = IntArray(m + 1) { 0 }
+
+        for(i in 1..n){
+            newCost[0] = i
+            for(j in 1..m){
+                val match = if (correctAnswer[j - 1] == proposition[i - 1]) 0 else 1
+                val costReplace = cost[j - 1] + match
+                val costInsert = cost[j] + 1
+                val costDelete = newCost[j - 1] + 1
+                newCost[j] = minOf(costInsert, costDelete, costReplace)
+            }
+            val swap = cost
+            cost = newCost
+            newCost = swap
+        }
+        return cost[m]
     }
 
     private suspend fun loadNextBatchAndShow(){

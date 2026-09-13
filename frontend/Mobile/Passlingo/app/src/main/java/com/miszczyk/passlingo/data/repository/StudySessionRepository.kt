@@ -20,6 +20,7 @@ interface StudySessionRepository {
     suspend fun incrementAttempts(sessionId: String, flashcardId: String)
     suspend fun getNextBatch(sessionId: String, targetRound: Int): List<StudyCardProgressEntity>
     suspend fun getCardToPractice(sessionId: String): List<StudyCardProgressEntity>
+    suspend fun getAllCards(sessionId: String): List<StudyCardProgressEntity>
 }
 
 class StudySessionRepositoryImpl(context: Context): StudySessionRepository {
@@ -71,5 +72,9 @@ class StudySessionRepositoryImpl(context: Context): StudySessionRepository {
 
     override suspend fun getCardToPractice(sessionId: String): List<StudyCardProgressEntity> {
         return dao.getCardToPractice(sessionId)
+    }
+
+    override suspend fun getAllCards(sessionId: String): List<StudyCardProgressEntity> {
+        return dao.getAllCards(sessionId)
     }
 }

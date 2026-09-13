@@ -131,12 +131,16 @@ fun HomeScreen(
                     onStartSessionClicked = { selectedRounds ->
                         deckUiState.selectedDeckId?.let { deckId ->
                             deckViewModel.hideBottomSheet()
-                            if (deckViewModel.currentStudyMode == StudyMode.FLASHCARDS) {
-                                onFlashcardsClicked(deckId, selectedRounds)
-                            } else if (deckViewModel.currentStudyMode == StudyMode.TYPING) {
-                                onTypingClicked(deckId, selectedRounds)
-                            }else{
-                                onQuizClicked(deckId, selectedRounds)
+                            when (deckViewModel.currentStudyMode) {
+                                StudyMode.FLASHCARDS -> {
+                                    onFlashcardsClicked(deckId, selectedRounds)
+                                }
+                                StudyMode.TYPING -> {
+                                    onTypingClicked(deckId, selectedRounds)
+                                }
+                                else -> {
+                                    onQuizClicked(deckId, selectedRounds)
+                                }
                             }
                         }
                     }
@@ -152,10 +156,16 @@ fun HomeScreen(
             deckUiState.selectedDeckId?.let { deckId ->
                 deckViewModel.onDialogConfirmed()
                 deckViewModel.hideBottomSheet()
-                if (deckViewModel.currentStudyMode == StudyMode.FLASHCARDS) {
-                    onFlashcardsClicked(deckId, 0)
-                } else if (deckViewModel.currentStudyMode == StudyMode.TYPING) {
-                    onTypingClicked(deckId, 0)
+                when (deckViewModel.currentStudyMode) {
+                    StudyMode.FLASHCARDS -> {
+                        onFlashcardsClicked(deckId, 0)
+                    }
+                    StudyMode.TYPING -> {
+                        onTypingClicked(deckId, 0)
+                    }
+                    else -> {
+                        onQuizClicked(deckId, 0)
+                    }
                 }
             }
         }
