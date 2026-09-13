@@ -30,11 +30,11 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.HintedTextField
 import com.miszczyk.passlingo.ui.components.ScreenHeader
 import com.miszczyk.passlingo.ui.components.cardSurface
@@ -47,6 +47,7 @@ import com.miszczyk.passlingo.ui.theme.Dimens.borderDash
 import com.miszczyk.passlingo.ui.theme.Dimens.borderGap
 import com.miszczyk.passlingo.ui.theme.Dimens.borderThin
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
+import com.miszczyk.passlingo.ui.theme.Dimens.maxHeightCardContent
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
@@ -55,6 +56,8 @@ import com.miszczyk.passlingo.ui.theme.Dimens.spaceMedium
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceVeryLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
+import com.miszczyk.passlingo.ui.theme.TextSize.titleMediumLarge
+import com.miszczyk.passlingo.ui.theme.TextSize.titleSmall
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
@@ -113,7 +116,7 @@ fun TypingScreen(
         label = "textColor"
     )
 
-    val textDescription = if (check) "Check answer" else "Enter your answer"
+    val textDescription = if (check) stringResource(id = R.string.action_check_answer) else stringResource(id = R.string.prompt_enter_your_answer)
 
     val boxBorderColor = Color(color = 0xFF10B981)
 
@@ -126,12 +129,12 @@ fun TypingScreen(
 
         Text(
             text = uiState.currentFront ?: "",
-            fontSize = 23.sp,
+            fontSize = titleMediumLarge,
             color = MaterialTheme.colorScheme.primary,
             fontFamily = vagRoundedBold,
             modifier = Modifier
                 .padding(horizontal = spaceExtraLarge)
-                .heightIn(max = 150.dp)
+                .heightIn(max = maxHeightCardContent)
                 .verticalScroll(state = rememberScrollState()
                 )
         )
@@ -139,7 +142,7 @@ fun TypingScreen(
         Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
         BasicTextField(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = spaceExtraLarge).heightIn(max = 150.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = spaceExtraLarge).heightIn(max = maxHeightCardContent),
             state = uiState.userAnswerState,
             readOnly = uiState.userAnswer != TypeAnswer.NONE,
             keyboardOptions = KeyboardOptions(
@@ -161,7 +164,7 @@ fun TypingScreen(
                 ) {
                     HintedTextField(
                         state = uiState.userAnswerState,
-                        hintText = "Your answer",
+                        hintText = stringResource(id = R.string.prompt_your_answer_hint),
                         fontFamily = vagRoundedLight
                     )
                     innerTextField()
@@ -174,7 +177,7 @@ fun TypingScreen(
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = spaceExtraLarge)
-                .heightIn(max = 150.dp)
+                .heightIn(max = maxHeightCardContent)
                 .drawWithCache {
                     val strokeWidthPx = borderThin.toPx()
                     val dashLengthPx = borderDash.toPx()
@@ -282,7 +285,7 @@ private fun ButtonAfterAnswer(checkAgain: () -> Unit = {}, continueLearning: () 
             onClick = { continueLearning() }
         ) {
             Text(
-                text = if (badAnswer) "Try again" else "Continue",
+                text = if (badAnswer) stringResource(id = R.string.action_try_again) else stringResource(id = R.string.action_continue),
                 fontSize = titleLarge,
                 color = MaterialTheme.colorScheme.background,
                 fontFamily = vagRoundedBold,
@@ -298,8 +301,8 @@ private fun ButtonAfterAnswer(checkAgain: () -> Unit = {}, continueLearning: () 
                 onClick = { checkAgain() }
             ) {
                 Text(
-                    text = "My answer was good",
-                    fontSize = 18.sp,
+                    text = stringResource(id = R.string.action_my_answer_was_good),
+                    fontSize = titleSmall,
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontFamily = vagRoundedBold,
                     modifier = Modifier.padding(vertical = spaceDefault)

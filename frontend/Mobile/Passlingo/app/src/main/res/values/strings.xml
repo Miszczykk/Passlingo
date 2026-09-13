@@ -40,6 +40,9 @@
     <string name="action_quit_for_now">Quit for now</string>
     <string name="action_again">Again</string>
     <string name="action_got_it">Got it</string>
+    <string name="action_try_again">Try again</string>
+    <string name="action_my_answer_was_good">My answer was good</string>
+    <string name="action_check_answer">Check answer</string>
 
     <!-- Labels / Titles -->
     <string name="label_app_lock">App Lock</string>
@@ -100,6 +103,8 @@
     <string name="error_missing_usage_permission">Missing usage access permission. Please grant it in Settings.</string>
     <string name="error_study_session">A critical error occurred during the study session.</string>
     <string name="error_deck_not_found">Deck not found. It might have been deleted.</string>
+    <string name="prompt_your_answer_hint">Your answer</string>
+    <string name="prompt_enter_your_answer">Enter your answer</string>
 
     <!-- Dialogs -->
     <string name="dialog_title_confirm_lock">Are you sure?</string>

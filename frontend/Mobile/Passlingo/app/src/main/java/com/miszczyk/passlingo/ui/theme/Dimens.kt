@@ -47,4 +47,5 @@ object Dimens {
     val spaceExtraLarge = 30.dp
     val spaceHuge = 40.dp
     val spaceExtraHuge = 60.dp
+    val maxHeightCardContent = 150.dp
 }
