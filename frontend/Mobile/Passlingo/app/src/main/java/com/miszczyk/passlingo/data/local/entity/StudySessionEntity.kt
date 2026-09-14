@@ -20,4 +20,5 @@ data class StudySessionEntity(
     val deckId: String,
     val mode: StudyMode,
     val targetRounds: Int,
+    val isFrontFirst: Boolean = true
 )

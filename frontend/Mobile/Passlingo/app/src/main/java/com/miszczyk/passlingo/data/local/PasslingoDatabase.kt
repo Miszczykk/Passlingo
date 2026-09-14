@@ -12,7 +12,7 @@ import com.miszczyk.passlingo.data.local.entity.StudySessionEntity
 import com.miszczyk.passlingo.data.local.entity.StudyCardProgressEntity
 @Database(
     entities = [DeckEntity::class, FlashcardEntity::class, StudySessionEntity::class, StudyCardProgressEntity::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class PasslingoDatabase : RoomDatabase(){

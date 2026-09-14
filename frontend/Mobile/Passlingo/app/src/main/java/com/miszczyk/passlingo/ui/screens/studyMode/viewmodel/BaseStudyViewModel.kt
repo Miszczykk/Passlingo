@@ -51,21 +51,23 @@ abstract class BaseStudyViewModel(application: Application, private val studyMod
             runCatching {
                 val deckWithCards = deckRepository.getDeckWithFlashcardsById(deckId = deckId)
 
-                deckDictionary = deckWithCards?.flashcards?.associate { card ->
-                    val question = if (isFrontFirst) card.front else card.back
-                    val answer = if (isFrontFirst) card.back else card.front
-                    card.id to Pair(first = question, second = answer)
-                } ?: emptyMap()
-
                 val activeSession =
                     sessionRepository.getActiveSession(deckId = deckId, mode = studyMode)
+
+                val sessionIsFrontFirst = activeSession?.session?.isFrontFirst ?: isFrontFirst
+
+                deckDictionary = deckWithCards?.flashcards?.associate { card ->
+                    val question = if (sessionIsFrontFirst) card.front else card.back
+                    val answer = if (sessionIsFrontFirst) card.back else card.front
+                    card.id to Pair(first = question, second = answer)
+                } ?: emptyMap()
 
                 if (activeSession != null) {
                     currentSessionId = activeSession.session.id
                     targetRounds = activeSession.session.targetRounds
                 } else {
                     targetRounds = rounds
-                    createNewSession(deckId, deckWithCards)
+                    createNewSession(deckId, deckWithCards, isFrontFirst)
                 }
 
                 totalCardsInSession = sessionRepository.getTotalCardCount(currentSessionId)
@@ -78,10 +80,10 @@ abstract class BaseStudyViewModel(application: Application, private val studyMod
         }
     }
 
-    private suspend fun createNewSession(deckId: String, deckWithCards: DeckWithFlashcards?) {
+    private suspend fun createNewSession(deckId: String, deckWithCards: DeckWithFlashcards?, isFrontFirst: Boolean) {
         currentSessionId = UUID.randomUUID().toString()
         val session = StudySessionEntity(
-            id = currentSessionId, deckId = deckId, mode = studyMode, targetRounds = targetRounds
+            id = currentSessionId, deckId = deckId, mode = studyMode, targetRounds = targetRounds, isFrontFirst = isFrontFirst
         )
 
         val progressList = deckWithCards?.flashcards?.shuffled()?.mapIndexed { index, card ->
