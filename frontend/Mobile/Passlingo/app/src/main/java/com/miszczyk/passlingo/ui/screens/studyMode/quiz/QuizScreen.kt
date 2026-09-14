@@ -43,13 +43,14 @@ fun QuizScreen(
     modifier: Modifier = Modifier,
     deckId: String,
     rounds: Int,
+    isFrontFirst: Boolean,
     onBack: () -> Unit,
     viewModel: QuizViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.startSession(deckId, rounds)
+        viewModel.startSession(deckId, rounds, isFrontFirst = isFrontFirst)
     }
 
     BaseStudyScreen(

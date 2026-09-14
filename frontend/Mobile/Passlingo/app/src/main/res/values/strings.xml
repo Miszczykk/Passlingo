@@ -79,6 +79,9 @@
     <string name="label_back">BACK</string>
     <string name="label_tap_to_flip">Tap to flip</string>
     <string name="label_tap_card_to_reveal">TAP CARD TO REVEAL ANSWER</string>
+    <string name="label_starting_side">STARTING SIDE</string>
+    <string name="side_front">Front</string>
+    <string name="side_back">Back</string>
 
     <!-- Prompts & Messages -->
     <string name="prompt_app_lock_description">Select apps you want to restrict access to.\nUnlocking them will require studying!</string>
@@ -105,6 +108,7 @@
     <string name="error_deck_not_found">Deck not found. It might have been deleted.</string>
     <string name="prompt_your_answer_hint">Your answer</string>
     <string name="prompt_enter_your_answer">Enter your answer</string>
+    <string name="desc_starting_side">Which side of the card should be shown first as the question?</string>
 
     <!-- Dialogs -->
     <string name="dialog_title_confirm_lock">Are you sure?</string>

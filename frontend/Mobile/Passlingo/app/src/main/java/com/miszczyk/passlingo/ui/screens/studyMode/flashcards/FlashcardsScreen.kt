@@ -28,13 +28,14 @@ fun FlashcardScreen(
     modifier: Modifier = Modifier,
     deckId: String,
     rounds: Int,
+    isFrontFirst: Boolean,
     onBack: () -> Unit,
     viewModel: FlashcardsViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = deckId) {
-        viewModel.startSession(deckId, rounds = rounds)
+        viewModel.startSession(deckId, rounds = rounds, isFrontFirst = isFrontFirst)
     }
 
     BaseStudyScreen(

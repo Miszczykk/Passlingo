@@ -9,9 +9,10 @@ import androidx.compose.ui.graphics.Color
 
 @Composable
 fun ThemedDivider(
+    modifier: Modifier = Modifier,
     colorLine: Color, strokeWidth: Float = 1f
 ) {
-    Canvas(modifier = Modifier.fillMaxWidth()) {
+    Canvas(modifier = modifier.fillMaxWidth()) {
         drawLine(
             start = Offset(x = 0f, y = 0f),
             end = Offset(x = size.width, y = 0f),

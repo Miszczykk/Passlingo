@@ -70,6 +70,7 @@ fun CardSideInput(
 
                     Spacer(modifier = Modifier.height(height = spaceExtraSmall))
                     ThemedDivider(
+                        modifier = Modifier,
                         (if (!isFocused) colorLine else MaterialTheme.colorScheme.secondary),
                         strokeWidth = 3f
                     )

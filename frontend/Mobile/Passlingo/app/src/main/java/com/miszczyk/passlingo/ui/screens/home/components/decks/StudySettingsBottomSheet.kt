@@ -25,9 +25,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,6 +43,7 @@ import com.miszczyk.passlingo.ui.components.ThemedDivider
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusMedium
+import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.iconHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.iconLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.sizeIndicator
@@ -61,10 +64,11 @@ import com.miszczyk.passlingo.ui.util.rememberSheetCloseHandler
 fun StudySettingsBottomSheet(
     sheetState: SheetState,
     onDismissRequest: () -> Unit,
-    onStartSessionClicked: (Int) -> Unit,
+    onStartSessionClicked: (rounds: Int, isFrontFirst: Boolean) -> Unit,
 ) {
     val closeSheet = rememberSheetCloseHandler(sheetState, onDismissRequest)
     var selectedRound by remember { mutableIntStateOf(value = 1) }
+    var isFrontFirst by remember { mutableStateOf(value = true) }
 
     ModalBottomSheet(
         onDismissRequest = closeSheet, sheetState = sheetState
@@ -122,9 +126,44 @@ fun StudySettingsBottomSheet(
                 currentSelectedRound = selectedRound,
                 onRoundSelected = { round -> selectedRound = round })
 
+
+            Spacer(modifier = Modifier.height(height = spaceExtraLarge))
+            ThemedDivider(modifier = Modifier.padding(horizontal = spaceExtraLarge) , colorLine = MaterialTheme.colorScheme.onSurface)
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
-            BottomButton(onClick = { onStartSessionClicked(selectedRound) })
+            Text(
+                text = stringResource(id = R.string.label_starting_side),
+                fontSize = titleMedium,
+                fontFamily = vagRoundedBold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(horizontal = spaceExtraLarge)
+            )
+
+            Spacer(modifier = Modifier.height(height = spaceMediumLarge))
+
+            Text(
+                text = stringResource(id = R.string.desc_starting_side),
+                fontSize = body,
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontFamily = vagRoundedLight,
+                modifier = Modifier.padding(horizontal = spaceExtraLarge)
+            )
+            Spacer(modifier = Modifier.height(height = spaceLarge))
+
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = spaceExtraLarge),
+                horizontalArrangement = Arrangement.spacedBy(spaceLarge)
+            ){
+                ButtonSide(textSide = stringResource(id = R.string.side_front), isSelected = (isFrontFirst), onClick = {isFrontFirst = true}, modifier = Modifier.weight(weight = 1f))
+                ButtonSide(textSide = stringResource(id = R.string.side_back), isSelected = (!isFrontFirst), onClick = {isFrontFirst = false}, modifier = Modifier.weight(weight = 1f))
+            }
+
+            Spacer(modifier = Modifier.height(height = spaceExtraLarge))
+
+            BottomButton(onClick = { onStartSessionClicked(selectedRound, isFrontFirst) })
 
             Spacer(modifier = Modifier.height(height = spaceDefault))
         }
@@ -225,6 +264,44 @@ private fun TargetRoundItem(
             fontSize = titleMedium,
             color = textColor,
             fontFamily = vagRoundedBold
+        )
+    }
+}
+
+@Composable
+private fun ButtonSide(
+    textSide: String, isSelected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier
+){
+    val backgroundColor =
+        if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.background
+    val borderColor =
+        if (isSelected) Color.Transparent else MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.3f)
+    val textColor =
+        if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary
+
+    TextButton(
+        onClick = onClick,
+        enabled = !isSelected,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = backgroundColor,
+            disabledContainerColor = backgroundColor
+        ),
+        modifier = modifier
+            .fillMaxWidth()
+            .border(
+                width = borderDefault,
+                color = borderColor,
+                shape = RoundedCornerShape(size = cornerRadiusSmall)
+            )
+        ,
+        shape = RoundedCornerShape(size = cornerRadiusSmall)
+    ) {
+        Text(
+            text = textSide,
+            fontSize = titleMedium,
+            color = textColor,
+            fontFamily = vagRoundedBold,
+            modifier = Modifier.padding(vertical = spaceMedium)
         )
     }
 }

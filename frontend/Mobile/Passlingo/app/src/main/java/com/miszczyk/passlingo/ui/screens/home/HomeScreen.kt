@@ -48,9 +48,9 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     onCreateDeckClicked: () -> Unit,
     onEditDeckClicked: (String) -> Unit,
-    onFlashcardsClicked: (String, Int) -> Unit,
-    onTypingClicked: (String, Int) -> Unit,
-    onQuizClicked: (String, Int) -> Unit,
+    onFlashcardsClicked: (String, Int, Boolean) -> Unit,
+    onTypingClicked: (String, Int, Boolean) -> Unit,
+    onQuizClicked: (String, Int, Boolean) -> Unit,
     appViewModel: AppViewModel = viewModel(),
     deckViewModel: DeckViewModel = viewModel()
 ) {
@@ -134,20 +134,20 @@ fun HomeScreen(
             StudySettingsBottomSheet(
                 sheetState = sheetStateToStudySettings,
                 onDismissRequest = { deckViewModel.hideBottomSheet() },
-                onStartSessionClicked = { selectedRounds ->
+                onStartSessionClicked = { selectedRounds, isFrontFirst ->
                     deckUiState.selectedDeckId?.let { deckId ->
                         deckViewModel.hideBottomSheet()
                         when (deckViewModel.currentStudyMode) {
                             StudyMode.FLASHCARDS -> {
-                                onFlashcardsClicked(deckId, selectedRounds)
+                                onFlashcardsClicked(deckId, selectedRounds, isFrontFirst)
                             }
 
                             StudyMode.TYPING -> {
-                                onTypingClicked(deckId, selectedRounds)
+                                onTypingClicked(deckId, selectedRounds, isFrontFirst)
                             }
 
                             else -> {
-                                onQuizClicked(deckId, selectedRounds)
+                                onQuizClicked(deckId, selectedRounds, isFrontFirst)
                             }
                         }
                     }
@@ -166,15 +166,15 @@ fun HomeScreen(
                 deckViewModel.hideBottomSheet()
                 when (deckViewModel.currentStudyMode) {
                     StudyMode.FLASHCARDS -> {
-                        onFlashcardsClicked(deckId, 0)
+                        onFlashcardsClicked(deckId, 0, true)
                     }
 
                     StudyMode.TYPING -> {
-                        onTypingClicked(deckId, 0)
+                        onTypingClicked(deckId, 0, true)
                     }
 
                     else -> {
-                        onQuizClicked(deckId, 0)
+                        onQuizClicked(deckId, 0, true)
                     }
                 }
             }
@@ -190,9 +190,9 @@ fun HomePreview() {
         HomeScreen(
             onCreateDeckClicked = {},
             onEditDeckClicked = {},
-            onFlashcardsClicked = { _, _ -> },
-            onTypingClicked = { _, _ -> },
-            onQuizClicked = { _, _ -> }
+            onFlashcardsClicked = { _, _, _ -> },
+            onTypingClicked = { _, _, _ -> },
+            onQuizClicked = { _, _, _ -> }
         )
     }
 }

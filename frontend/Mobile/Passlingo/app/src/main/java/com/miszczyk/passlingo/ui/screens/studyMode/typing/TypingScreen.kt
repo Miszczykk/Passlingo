@@ -55,13 +55,14 @@ fun TypingScreen(
     modifier: Modifier = Modifier,
     deckId: String,
     rounds: Int,
+    isFrontFirst: Boolean,
     onBack: () -> Unit,
     viewModel: TypingViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = deckId) {
-        viewModel.startSession(deckId, rounds = rounds)
+        viewModel.startSession(deckId, rounds = rounds, isFrontFirst = isFrontFirst)
     }
 
     BaseStudyScreen(

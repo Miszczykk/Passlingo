@@ -50,14 +50,14 @@ class MainActivity : ComponentActivity() {
                             onEditDeckClicked = { id ->
                                 currentScreen = Screen.EditDeck(deckId = id)
                             },
-                            onFlashcardsClicked = { deckId, rounds ->
-                                currentScreen = Screen.Flashcard(deckId = deckId, rounds = rounds)
+                            onFlashcardsClicked = { deckId, rounds, isFrontFirst ->
+                                currentScreen = Screen.Flashcard(deckId = deckId, rounds = rounds, isFrontFirst = isFrontFirst)
                             },
-                            onTypingClicked = { deckId, rounds ->
-                                currentScreen = Screen.Typing(deckId = deckId, rounds = rounds)
+                            onTypingClicked = { deckId, rounds, isFrontFirst ->
+                                currentScreen = Screen.Typing(deckId = deckId, rounds = rounds, isFrontFirst = isFrontFirst)
                             },
-                            onQuizClicked = { deckId, rounds ->
-                                currentScreen = Screen.Quiz(deckId = deckId, rounds = rounds)
+                            onQuizClicked = { deckId, rounds, isFrontFirst ->
+                                currentScreen = Screen.Quiz(deckId = deckId, rounds = rounds, isFrontFirst = isFrontFirst)
                             }
                         )
 
@@ -79,6 +79,7 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.padding(paddingValues = innerPadding),
                                 deckId = flashcardScreen.deckId,
                                 rounds = flashcardScreen.rounds,
+                                isFrontFirst = flashcardScreen.isFrontFirst,
                                 onBack = { currentScreen = Screen.Home }
                             )
                         }
@@ -89,6 +90,7 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.padding(paddingValues = innerPadding),
                                 deckId = typingScreen.deckId,
                                 rounds = typingScreen.rounds,
+                                isFrontFirst = typingScreen.isFrontFirst,
                                 onBack = { currentScreen = Screen.Home }
                             )
                         }
@@ -99,6 +101,7 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.padding(paddingValues = innerPadding),
                                 deckId = quizScreen.deckId,
                                 rounds = quizScreen.rounds,
+                                isFrontFirst = quizScreen.isFrontFirst,
                                 onBack = { currentScreen = Screen.Home }
                             )
                         }

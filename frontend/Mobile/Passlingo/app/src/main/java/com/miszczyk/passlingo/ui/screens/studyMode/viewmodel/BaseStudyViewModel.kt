@@ -41,7 +41,7 @@ abstract class BaseStudyViewModel(application: Application, private val studyMod
     protected abstract suspend fun showCurrentCard()
     protected open suspend fun onSessionInitialized() {}
 
-    fun startSession(deckId: String, rounds: Int) {
+    fun startSession(deckId: String, rounds: Int, isFrontFirst: Boolean = true) {
         currentDeckId = deckId
         timeToBreath = 0
 
@@ -51,8 +51,10 @@ abstract class BaseStudyViewModel(application: Application, private val studyMod
             runCatching {
                 val deckWithCards = deckRepository.getDeckWithFlashcardsById(deckId = deckId)
 
-                deckDictionary = deckWithCards?.flashcards?.associate {
-                    it.id to Pair(first = it.front, second = it.back)
+                deckDictionary = deckWithCards?.flashcards?.associate { card ->
+                    val question = if (isFrontFirst) card.front else card.back
+                    val answer = if (isFrontFirst) card.back else card.front
+                    card.id to Pair(first = question, second = answer)
                 } ?: emptyMap()
 
                 val activeSession =

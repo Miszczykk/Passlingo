@@ -108,7 +108,7 @@ fun DialogComponent(
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f),
+                        .weight(weight = 1f),
                     shape = RoundedCornerShape(size = cornerRadiusSmall)
                 ) {
                     Text(
