@@ -172,7 +172,6 @@ fun TypingScreen(
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = spaceExtraLarge)
-                .heightIn(max = maxHeightCardContent)
                 .drawWithCache {
                     val strokeWidthPx = borderThin.toPx()
                     val dashLengthPx = borderDash.toPx()
@@ -194,7 +193,6 @@ fun TypingScreen(
                     }
                 }
                 .padding(all = spaceLarge)
-                .verticalScroll(state = rememberScrollState())
             ){
                 Text(
                     text = uiState.currentBack ?: "",
@@ -203,8 +201,8 @@ fun TypingScreen(
                     fontFamily = vagRoundedLight
                 )
             }
+            Spacer(modifier = Modifier.height(height = spaceExtraLarge))
         }
-
 
         Spacer(modifier = Modifier.weight(weight = 1f))
         when (uiState.userAnswer){

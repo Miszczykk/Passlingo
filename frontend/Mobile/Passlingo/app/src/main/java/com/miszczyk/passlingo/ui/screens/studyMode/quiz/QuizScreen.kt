@@ -36,7 +36,6 @@ import com.miszczyk.passlingo.ui.screens.studyMode.model.TypeAnswer
 import com.miszczyk.passlingo.ui.screens.studyMode.quiz.components.AnswerCard
 import com.miszczyk.passlingo.ui.screens.studyMode.quiz.viewmodel.QuizViewModel
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
-import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.iconGiant
 import com.miszczyk.passlingo.ui.theme.Dimens.maxHeightCardContent
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
@@ -86,7 +85,7 @@ fun QuizScreen(
     val circleColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f)
     val isAnswered = uiState.userAnswer != TypeAnswer.NONE
 
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize().verticalScroll(state = rememberScrollState())) {
         Spacer(modifier = Modifier.height(height = spaceLarge))
         ScreenHeader(title = uiState.progressText, titleFontSize = titleLarge, onClick = onBack)
         Spacer(modifier = Modifier.height(height = spaceExtraHuge))
@@ -95,10 +94,10 @@ fun QuizScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = spaceExtraLarge)
-                .clip(shape = RoundedCornerShape(size = cornerRadiusLarge))
+                .clip(shape = RoundedCornerShape(size = cornerRadiusDefault))
                 .background(
                     color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(size = cornerRadiusLarge)
+                    shape = RoundedCornerShape(size = cornerRadiusDefault)
                 )
                 .drawBehind {
                     drawCircle(
