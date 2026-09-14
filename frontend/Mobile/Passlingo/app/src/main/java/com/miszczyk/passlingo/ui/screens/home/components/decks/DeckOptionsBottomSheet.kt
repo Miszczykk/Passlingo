@@ -93,7 +93,7 @@ fun DeckOptionsBottomSheet(
                 textDescription = stringResource(id = R.string.action_study_now),
                 textColor = MaterialTheme.colorScheme.background,
                 backgroundColor = MaterialTheme.colorScheme.primary,
-                onClick = { onStudyClicked()}
+                onClick = { onStudyClicked() }
             )
 
             Spacer(modifier = Modifier.height(height = spaceMediumLarge))
@@ -105,7 +105,7 @@ fun DeckOptionsBottomSheet(
                 textColor = MaterialTheme.colorScheme.primary,
                 backgroundColor = MaterialTheme.colorScheme.background,
                 borderColor = MaterialTheme.colorScheme.onBackground,
-                onClick = { onEditClicked()}
+                onClick = { onEditClicked() }
             )
 
             Spacer(modifier = Modifier.height(height = spaceMediumLarge))
@@ -116,7 +116,7 @@ fun DeckOptionsBottomSheet(
                 textDescription = stringResource(id = R.string.action_delete_deck),
                 textColor = MaterialTheme.colorScheme.background,
                 backgroundColor = MaterialTheme.colorScheme.error,
-                onClick = { onDeleteClicked()}
+                onClick = { onDeleteClicked() }
             )
 
             Spacer(modifier = Modifier.height(height = spaceDefault))
@@ -135,7 +135,7 @@ private fun Header(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(modifier = Modifier.weight(weight = 1f, fill = false),) {
+        Row(modifier = Modifier.weight(weight = 1f, fill = false)) {
             Box(
                 contentAlignment = Alignment.Center, modifier = Modifier.background(
                     color = MaterialTheme.colorScheme.onBackground,
@@ -166,7 +166,9 @@ private fun Header(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = pluralStringResource(id = R.plurals.label_cards_count, count = flashcardCount, flashcardCount),
+                    text = pluralStringResource(
+                        id = R.plurals.label_cards_count, count = flashcardCount, flashcardCount
+                    ),
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = body,
                     fontFamily = vagRoundedBold,
@@ -176,8 +178,7 @@ private fun Header(
         Spacer(modifier = Modifier.width(width = spaceLarge))
 
         IconButton(
-            onClick = onCloseClicked
-            , modifier = Modifier.background(
+            onClick = onCloseClicked, modifier = Modifier.background(
                 color = MaterialTheme.colorScheme.onBackground, shape = CircleShape
             )
         ) {

@@ -27,7 +27,7 @@ class TimeAndAppsRepository(
         updateTimeAndApps(timeDelta = -secondsLost, appsToUnlock = setOf(packageName))
     }
 
-    suspend fun addCreditTime(secondsEarned: Long){
+    suspend fun addCreditTime(secondsEarned: Long) {
         updateTimeAndApps(timeDelta = secondsEarned)
     }
 
@@ -35,7 +35,7 @@ class TimeAndAppsRepository(
         timeDelta: Long,
         appsToLock: Set<String> = emptySet(),
         appsToUnlock: Set<String> = emptySet()
-    ){
+    ) {
         context.dataStore.edit { prefs ->
             val currentTime = prefs[BALANCE_TIME_KEY] ?: 0L
             prefs[BALANCE_TIME_KEY] = (currentTime + timeDelta).coerceAtLeast(minimumValue = 0L)

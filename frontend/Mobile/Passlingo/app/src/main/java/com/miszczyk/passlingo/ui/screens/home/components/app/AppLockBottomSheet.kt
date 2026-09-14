@@ -75,14 +75,14 @@ fun AppLockBottomSheet(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            BottomSheetHeader(label = stringResource(R.string.label_app_lock)) {
+            BottomSheetHeader(label = stringResource(id = R.string.label_app_lock)) {
                 closeSheet()
             }
 
             Spacer(modifier = Modifier.height(height = spaceMediumLarge))
 
             Text(
-                text = stringResource(R.string.prompt_app_lock_description),
+                text = stringResource(id = R.string.prompt_app_lock_description),
                 fontSize = body,
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontFamily = vagRoundedLight,
@@ -117,7 +117,7 @@ private fun PermissionRequiredContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = stringResource(R.string.prompt_usage_access_required),
+            text = stringResource(id = R.string.prompt_usage_access_required),
             fontSize = titleMedium,
             color = MaterialTheme.colorScheme.onSecondary,
             fontFamily = vagRoundedBold
@@ -144,14 +144,14 @@ private fun PermissionRequiredContent(
             ) {
                 Icon(
                     imageVector = Icons.Default.Accessibility,
-                    contentDescription = stringResource(R.string.content_desc_accessibility),
+                    contentDescription = stringResource(id = R.string.content_desc_accessibility),
                     tint = MaterialTheme.colorScheme.secondary,
                 )
 
                 Spacer(modifier = Modifier.width(width = spaceMedium))
 
                 Text(
-                    text = stringResource(R.string.action_grant_permission),
+                    text = stringResource(id = R.string.action_grant_permission),
                     fontSize = titleLarge,
                     color = MaterialTheme.colorScheme.background,
                     fontFamily = vagRoundedBold
@@ -212,9 +212,9 @@ private fun ColumnScope.AppListContent(
     )
 
     val textDescription = if (selectedApps.isNotEmpty()) stringResource(
-        R.string.action_lock_selected,
+        id = R.string.action_lock_selected,
         (earnedTimeFor(numberOfApplications = selectedApps.size) / 60).toInt()
-    ) else stringResource(R.string.prompt_select_apps_to_lock)
+    ) else stringResource(id = R.string.prompt_select_apps_to_lock)
 
     Button(
         modifier = Modifier
@@ -227,7 +227,8 @@ private fun ColumnScope.AppListContent(
         ),
         onClick = {
             if (selectedApps.isNotEmpty()) onLockClicked()
-        }) {
+        }
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

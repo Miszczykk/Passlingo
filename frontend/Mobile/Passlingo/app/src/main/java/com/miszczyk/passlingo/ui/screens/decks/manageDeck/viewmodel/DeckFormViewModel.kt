@@ -40,7 +40,7 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
         externalScope = viewModelScope,
         navigateBack = _navigateBack,
         saveDeck = { saveDeckToDatabase() },
-        clearScreen = { viewModelScope.launch { clearScreen() }},
+        clearScreen = { viewModelScope.launch { clearScreen() } },
         onEditCardConfirmed = { id ->
             editCard(
                 id = id,
@@ -48,12 +48,12 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
                 newBackText = editBackState.text.toString()
             )
         },
-        onDeleteConfirmed = {id -> deleteCard(id)}
+        onDeleteConfirmed = { id -> deleteCard(id) }
     )
 
     protected abstract suspend fun saveDeckToDatabase()
 
-    open fun clearScreen(){
+    open fun clearScreen() {
         frontCreateCardState.clear()
         backCreateCardState.clear()
     }
@@ -68,11 +68,14 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
     fun onBack() = dialogAction.onDiscardDialogConfirmed()
 
 
-    fun onSaveDeckClicked(){
-        if (deckName.text.toString().isNotBlank() && _uiState.value.cards.size >= MIN_CARDS_REQUIRES) {
+    fun onSaveDeckClicked() {
+        if (deckName.text.toString()
+                .isNotBlank() && _uiState.value.cards.size >= MIN_CARDS_REQUIRES
+        ) {
             _uiState.update { it.copy(dialogState = DeckFormDialogState.SaveDeckForm) }
         }
     }
+
     fun onBackClicked() {
         if (deckName.text.toString().isNotBlank() || _uiState.value.cards.isNotEmpty()) {
             _uiState.update { it.copy(dialogState = DeckFormDialogState.DiscardChanges) }
@@ -85,6 +88,7 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
     fun onSelectIconClicked() {
         _uiState.update { it.copy(showBottomSheet = true) }
     }
+
     fun onIconClicked(selectedIcon: DeckIcons) {
         _uiState.update { it.copy(deckIcon = selectedIcon) }
         onSheetDismissed()
@@ -126,6 +130,7 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
             )
         }
     }
+
     private fun editCard(id: String, newFrontText: String, newBackText: String) {
         _uiState.update { state ->
             state.copy(
@@ -149,6 +154,7 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
             )
         }
     }
+
     private fun deleteCard(id: String) {
         _uiState.update { state ->
             state.copy(cards = state.cards.filterNot { it.id == id })

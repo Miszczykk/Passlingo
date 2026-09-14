@@ -89,8 +89,7 @@ fun QuizScreen(
                     fontSize = titleLarge,
                     color = MaterialTheme.colorScheme.background,
                     fontFamily = vagRoundedBold,
-                    modifier = Modifier
-                        .padding(horizontal = spaceExtraLarge)
+                    modifier = Modifier.padding(horizontal = spaceExtraLarge)
                 )
             }
 
@@ -116,7 +115,8 @@ fun QuizScreen(
                             if (!isAnswered) {
                                 viewModel.checkUserAnswer(selectedText = option)
                             }
-                        })
+                        }
+                    )
                 }
             }
         }

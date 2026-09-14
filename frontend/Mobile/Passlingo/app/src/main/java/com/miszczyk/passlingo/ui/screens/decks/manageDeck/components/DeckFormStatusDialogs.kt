@@ -30,7 +30,7 @@ import com.miszczyk.passlingo.ui.theme.TextSize.small
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun DeckStatusDialogs(
+fun DeckFormStatusDialogs(
     dialogState: DeckFormDialogState,
     editFrontState: TextFieldState,
     editBackState: TextFieldState,
@@ -47,17 +47,12 @@ fun DeckStatusDialogs(
         )
 
         is DeckFormDialogState.EditFlashcard -> editFlashcard(
-            stateFront = editFrontState,
-            stateBack = editBackState
+            stateFront = editFrontState, stateBack = editBackState
         )
     }
 
 
-    DialogComponent(
-        dialog = dialogItem,
-        onConfirm = { onConfirm() },
-        onCancel = { onDismiss() }
-    )
+    DialogComponent(dialog = dialogItem, onConfirm = { onConfirm() }, onCancel = { onDismiss() })
 }
 
 @Composable

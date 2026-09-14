@@ -3,6 +3,7 @@ package com.miszczyk.passlingo.ui.screens.home.model.app
 sealed interface HasPackageName {
     val packageName: String
 }
+
 sealed interface AppDialogState {
     data object None : AppDialogState
     data object ConfirmLock : AppDialogState

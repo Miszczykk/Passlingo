@@ -15,8 +15,7 @@ object SettingsDataStore {
         name = "passlingo_settings", corruptionHandler = ReplaceFileCorruptionHandler { exception ->
             Log.e("SettingsDataStore", "File DataStore is corruption!", exception)
             emptyPreferences()
-        }
-    )
+        })
     val LOCKED_APPS_KEY = stringSetPreferencesKey("locked_apps")
     val BALANCE_TIME_KEY = longPreferencesKey("balance_time")
 }

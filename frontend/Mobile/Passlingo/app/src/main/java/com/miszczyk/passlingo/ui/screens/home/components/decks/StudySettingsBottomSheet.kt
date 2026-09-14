@@ -62,7 +62,7 @@ fun StudySettingsBottomSheet(
     sheetState: SheetState,
     onDismissRequest: () -> Unit,
     onStartSessionClicked: (Int) -> Unit,
-){
+) {
     val closeSheet = rememberSheetCloseHandler(sheetState, onDismissRequest)
     var selectedRound by remember { mutableIntStateOf(value = 1) }
 
@@ -80,7 +80,12 @@ fun StudySettingsBottomSheet(
             ThemedDivider(colorLine = MaterialTheme.colorScheme.onSecondary)
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
-            Row(modifier = Modifier.fillMaxWidth().padding(horizontal = spaceExtraLarge), horizontalArrangement = Arrangement.SpaceBetween){
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = spaceExtraLarge),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(
                     text = stringResource(id = R.string.label_target_rounds),
                     fontSize = titleMedium,
@@ -94,7 +99,7 @@ fun StudySettingsBottomSheet(
                         .size(size = sizeIndicator)
                         .clip(CircleShape)
                         .background(color = MaterialTheme.colorScheme.primary, shape = CircleShape)
-                ){
+                ) {
                     Text(
                         text = "$selectedRound",
                         color = MaterialTheme.colorScheme.secondary,
@@ -115,8 +120,7 @@ fun StudySettingsBottomSheet(
 
             TargetRoundsSelector(
                 currentSelectedRound = selectedRound,
-                onRoundSelected = {round -> selectedRound = round}
-            )
+                onRoundSelected = { round -> selectedRound = round })
 
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
@@ -126,6 +130,7 @@ fun StudySettingsBottomSheet(
         }
     }
 }
+
 @Composable
 private fun BottomButton(
     onClick: () -> Unit
@@ -170,34 +175,35 @@ private fun BottomButton(
 
 @Composable
 private fun TargetRoundsSelector(
-    currentSelectedRound: Int,
-    onRoundSelected: (Int) -> Unit
-){
+    currentSelectedRound: Int, onRoundSelected: (Int) -> Unit
+) {
     val rounds = listOf(1, 2, 3, 4, 5, 6)
 
     Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = spaceExtraLarge),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = spaceExtraLarge),
         horizontalArrangement = Arrangement.SpaceBetween
-    ){
+    ) {
         rounds.forEach { round ->
             TargetRoundItem(
                 roundNumber = round,
                 isSelected = round == currentSelectedRound,
-                onClick = {onRoundSelected(round)}
-            )
+                onClick = { onRoundSelected(round) })
         }
     }
 }
 
 @Composable
 private fun TargetRoundItem(
-    roundNumber: Int,
-    isSelected: Boolean,
-    onClick: () -> Unit
-){
-    val backgroundColor = if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.background
-    val borderColor = if (isSelected) Color.Transparent else MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.3f)
-    val textColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary
+    roundNumber: Int, isSelected: Boolean, onClick: () -> Unit
+) {
+    val backgroundColor =
+        if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.background
+    val borderColor =
+        if (isSelected) Color.Transparent else MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.3f)
+    val textColor =
+        if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary
 
     Box(
         contentAlignment = Alignment.Center,
@@ -211,10 +217,9 @@ private fun TargetRoundItem(
                 shape = RoundedCornerShape(size = cornerRadiusMedium)
             )
             .selectable(
-                selected = isSelected,
-                onClick = onClick
+                selected = isSelected, onClick = onClick
             )
-    ){
+    ) {
         Text(
             text = roundNumber.toString(),
             fontSize = titleMedium,

@@ -24,7 +24,12 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
     private val _deckUiState = MutableStateFlow(value = DeckUiState())
     val deckUiState: StateFlow<DeckUiState> = _deckUiState.asStateFlow()
 
-    private val deckDialogAction = DeckDialogAction(uiStateFlow = _deckUiState, externalScope = viewModelScope, deckRepository = deckRepository, sessionRepository = studySessionRepository)
+    private val deckDialogAction = DeckDialogAction(
+        uiStateFlow = _deckUiState,
+        externalScope = viewModelScope,
+        deckRepository = deckRepository,
+        sessionRepository = studySessionRepository
+    )
     private val deckSelectionAction = DeckSelectionAction(uiStateFlow = _deckUiState)
 
     private var observationJob: Job? = null
@@ -35,17 +40,22 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
     init {
         startObservingData()
     }
+
     private fun startObservingData() {
         observationJob?.cancel()
-        observationJob = deckRepository.allDecks.observeWithRetry(
-            scope = viewModelScope,
-            onError = { e->
-                _deckUiState.update { it.copy(deckDialogState = DeckDialogState.Error(e.localizedMessage ?: "Failed to load decks")) }
-            },
-            onEachAction = { decksList ->
+        observationJob =
+            deckRepository.allDecks.observeWithRetry(scope = viewModelScope, onError = { e ->
+                _deckUiState.update {
+                    it.copy(
+                        deckDialogState = DeckDialogState.Error(
+                            e.localizedMessage ?: "Failed to load decks"
+                        )
+                    )
+                }
+            }, onEachAction = { decksList ->
                 _deckUiState.update { it.copy(decks = decksList) }
             }
-        )
+            )
     }
 
     private fun getDeckById(id: String?): DeckWithFlashcards? {
@@ -66,8 +76,7 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
     fun hideBottomSheet() {
         _deckUiState.update { currentState ->
             currentState.copy(
-                deckBottomSheetState = DeckBottomSheetState.None,
-                selectedDeckId = null
+                deckBottomSheetState = DeckBottomSheetState.None, selectedDeckId = null
             )
         }
     }
@@ -77,8 +86,7 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
         if (deckWithCards != null) {
             _deckUiState.update { currentState ->
                 currentState.copy(
-                    selectedDeckId = id,
-                    deckBottomSheetState = DeckBottomSheetState.DeckOptions(
+                    selectedDeckId = id, deckBottomSheetState = DeckBottomSheetState.DeckOptions(
                         deckName = deckWithCards.deck.name,
                         iconResId = deckWithCards.deck.iconResId,
                         flashcardCount = deckWithCards.flashcards.size
@@ -106,7 +114,7 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
         startObservingData()
     }
 
-    fun onStudyModeSelected(mode: StudyMode){
+    fun onStudyModeSelected(mode: StudyMode) {
         currentStudyMode = mode
         val deckId = _deckUiState.value.selectedDeckId ?: return
         val deckWithCards = getSelectedDeck() ?: return
@@ -114,14 +122,14 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val hasSession = studySessionRepository.doesSessionExist(deckId, mode)
 
-            if(hasSession){
+            if (hasSession) {
                 _deckUiState.update { currentState ->
                     currentState.copy(
                         deckDialogState = DeckDialogState.ResumeSession(deckName = deckWithCards.deck.name)
                     )
                 }
-            }else{
-                _deckUiState.update {  currentState ->
+            } else {
+                _deckUiState.update { currentState ->
                     currentState.copy(
                         deckBottomSheetState = DeckBottomSheetState.StudySettings
                     )
@@ -129,5 +137,4 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-
 }

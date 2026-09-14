@@ -39,15 +39,11 @@ fun FrontButton(onClick: () -> Unit) {
                     drawContent()
 
                     drawRoundRect(
-                        color = borderColor,
-                        style = Stroke(
-                            width = strokeWidthPx,
-                            pathEffect = PathEffect.dashPathEffect(
-                                intervals = floatArrayOf(dashLengthPx, gapLengthPx),
-                                phase = 0f
+                        color = borderColor, style = Stroke(
+                            width = strokeWidthPx, pathEffect = PathEffect.dashPathEffect(
+                                intervals = floatArrayOf(dashLengthPx, gapLengthPx), phase = 0f
                             )
-                        ),
-                        cornerRadius = CornerRadius(cornerRadiusDefault.toPx())
+                        ), cornerRadius = CornerRadius(x = cornerRadiusDefault.toPx())
                     )
                 }
             },

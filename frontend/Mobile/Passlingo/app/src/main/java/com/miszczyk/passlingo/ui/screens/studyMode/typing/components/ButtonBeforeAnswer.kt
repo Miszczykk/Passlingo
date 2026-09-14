@@ -16,7 +16,13 @@ import com.miszczyk.passlingo.ui.theme.TextSize.titleLarge
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun ButtonBeforeAnswer(buttonColor: Color, textColor: Color, textDescription: String, enabled: Boolean, onClick: () -> Unit){
+fun ButtonBeforeAnswer(
+    buttonColor: Color,
+    textColor: Color,
+    textDescription: String,
+    enabled: Boolean,
+    onClick: () -> Unit
+) {
     Button(
         modifier = Modifier
             .fillMaxWidth()
@@ -28,7 +34,8 @@ fun ButtonBeforeAnswer(buttonColor: Color, textColor: Color, textDescription: St
         enabled = enabled,
         onClick = {
             onClick()
-        }) {
+        }
+    ) {
         Text(
             text = textDescription,
             fontSize = titleLarge,

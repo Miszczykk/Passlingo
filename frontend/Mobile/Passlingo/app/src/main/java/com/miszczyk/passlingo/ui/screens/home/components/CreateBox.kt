@@ -53,7 +53,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateBox(
-    modifier: Modifier = Modifier, onClick: () -> Unit
+    onClick: () -> Unit
 ) {
     var isAnimating by remember { mutableStateOf(value = false) }
     val coroutineScope = rememberCoroutineScope()
@@ -78,6 +78,7 @@ fun CreateBox(
 
     CompositionLocalProvider(value = LocalRippleConfiguration provides null) {
         Button(
+            enabled = !isAnimating,
             onClick = {
                 coroutineScope.launch {
                     isAnimating = true
@@ -88,7 +89,10 @@ fun CreateBox(
             },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(size = cornerRadiusDefault),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                disabledContainerColor = MaterialTheme.colorScheme.primary,
+            ),
             elevation = ButtonDefaults.buttonElevation(
                 defaultElevation = elevationMedium, pressedElevation = elevationMedium
             ),

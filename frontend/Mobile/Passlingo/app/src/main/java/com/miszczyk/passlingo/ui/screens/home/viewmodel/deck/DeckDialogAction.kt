@@ -21,11 +21,12 @@ class DeckDialogAction(
     override fun createErrorDialogState(message: String): DeckDialogState =
         DeckDialogState.Error(message)
 
-    override fun updateStateWithDialog(state: DeckUiState, dialogState: DeckDialogState): DeckUiState =
-        state.copy(deckDialogState = dialogState)
+    override fun updateStateWithDialog(
+        state: DeckUiState, dialogState: DeckDialogState
+    ): DeckUiState = state.copy(deckDialogState = dialogState)
 
-    override fun onDialogConfirmed(){
-        when(val currentState = uiStateFlow.value.deckDialogState){
+    override fun onDialogConfirmed() {
+        when (val currentState = uiStateFlow.value.deckDialogState) {
             is DeckDialogState.None -> error("onDialogConfirmed called with no dialog visible")
             is DeckDialogState.ConfirmDelete -> onDeleteDeckConfirmed()
             is DeckDialogState.Error -> onDialogCancelled()
@@ -33,7 +34,7 @@ class DeckDialogAction(
         }
     }
 
-    private fun onDeleteDeckConfirmed(){
+    private fun onDeleteDeckConfirmed() {
         val deckId = uiStateFlow.value.selectedDeckId ?: return
         executeDialogTask(
             task = { deckRepository.deleteDeck(deckId) },
@@ -46,21 +47,21 @@ class DeckDialogAction(
             }
         )
     }
-    fun onContinueSessionCancelled(){
+
+    fun onContinueSessionCancelled() {
         val deckId = uiStateFlow.value.selectedDeckId ?: return
-        executeDialogTask(
-            task = {
-                sessionRepository.deleteSessionByDeckId(deckId)
-            }, onSuccessStateUpdate = {state ->
-                state.copy(
-                    deckDialogState = DeckDialogState.None,
-                    deckBottomSheetState = DeckBottomSheetState.StudySettings
-                )
-            }
+        executeDialogTask(task = {
+            sessionRepository.deleteSessionByDeckId(deckId)
+        }, onSuccessStateUpdate = { state ->
+            state.copy(
+                deckDialogState = DeckDialogState.None,
+                deckBottomSheetState = DeckBottomSheetState.StudySettings
+            )
+        }
         )
     }
 
-    private fun onContinueSessionConfirmed(){
+    private fun onContinueSessionConfirmed() {
         uiStateFlow.update {
             it.copy(
                 deckDialogState = DeckDialogState.None,

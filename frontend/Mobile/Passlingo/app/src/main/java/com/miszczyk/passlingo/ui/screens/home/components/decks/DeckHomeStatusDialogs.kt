@@ -10,8 +10,11 @@ import com.miszczyk.passlingo.ui.screens.home.model.deck.DeckDialogState
 import com.miszczyk.passlingo.ui.screens.home.viewmodel.deck.DeckViewModel
 
 @Composable
-fun DeckStatusDialogs(
-    deckDialogState: DeckDialogState, deckViewModel: DeckViewModel, deckName: String, onContinueSession: () -> Unit = {}
+fun DeckHomeStatusDialogs(
+    deckDialogState: DeckDialogState,
+    deckViewModel: DeckViewModel,
+    deckName: String,
+    onContinueSession: () -> Unit = {}
 ) {
     val dialogItem = when (deckDialogState) {
         is DeckDialogState.None -> return
@@ -21,7 +24,7 @@ fun DeckStatusDialogs(
     }
 
     DialogComponent(dialog = dialogItem, onConfirm = {
-        when(deckDialogState){
+        when (deckDialogState) {
             is DeckDialogState.Error -> deckViewModel.onRetryErrorClicked()
             is DeckDialogState.ResumeSession -> onContinueSession()
             else -> deckViewModel.onDialogConfirmed()

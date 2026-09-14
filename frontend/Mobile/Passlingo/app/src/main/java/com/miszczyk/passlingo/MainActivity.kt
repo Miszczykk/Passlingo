@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PasslingoTheme {
-                var currentScreen by remember { mutableStateOf<Screen>(Screen.Loading) }
+                var currentScreen by remember { mutableStateOf<Screen>(value = Screen.Loading) }
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
@@ -40,11 +40,12 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     when (currentScreen) {
                         is Screen.Loading -> LoadingScreen(
-                            modifier = Modifier.padding(innerPadding),
-                            onAnimationFinished = { currentScreen = Screen.Home })
+                            modifier = Modifier.padding(paddingValues = innerPadding),
+                            onAnimationFinished = { currentScreen = Screen.Home }
+                        )
 
                         is Screen.Home -> HomeScreen(
-                            modifier = Modifier.padding(innerPadding),
+                            modifier = Modifier.padding(paddingValues = innerPadding),
                             onCreateDeckClicked = { currentScreen = Screen.CreateDeck },
                             onEditDeckClicked = { id ->
                                 currentScreen = Screen.EditDeck(deckId = id)
@@ -62,11 +63,12 @@ class MainActivity : ComponentActivity() {
 
                         is Screen.CreateDeck -> CreateDeckScreen(
                             modifier = Modifier.padding(
-                                innerPadding
-                            ), onBack = { currentScreen = Screen.Home })
+                                paddingValues = innerPadding
+                            ), onBack = { currentScreen = Screen.Home }
+                        )
 
                         is Screen.EditDeck -> EditDeckScreen(
-                            modifier = Modifier.padding(innerPadding),
+                            modifier = Modifier.padding(paddingValues = innerPadding),
                             deckId = (currentScreen as Screen.EditDeck).deckId,
                             onBack = { currentScreen = Screen.Home }
                         )
@@ -74,7 +76,7 @@ class MainActivity : ComponentActivity() {
                         is Screen.Flashcard -> {
                             val flashcardScreen = currentScreen as Screen.Flashcard
                             FlashcardScreen(
-                                modifier = Modifier.padding(innerPadding),
+                                modifier = Modifier.padding(paddingValues = innerPadding),
                                 deckId = flashcardScreen.deckId,
                                 rounds = flashcardScreen.rounds,
                                 onBack = { currentScreen = Screen.Home }
@@ -84,7 +86,7 @@ class MainActivity : ComponentActivity() {
                         is Screen.Typing -> {
                             val typingScreen = currentScreen as Screen.Typing
                             TypingScreen(
-                                modifier = Modifier.padding(innerPadding),
+                                modifier = Modifier.padding(paddingValues = innerPadding),
                                 deckId = typingScreen.deckId,
                                 rounds = typingScreen.rounds,
                                 onBack = { currentScreen = Screen.Home }
@@ -94,7 +96,7 @@ class MainActivity : ComponentActivity() {
                         is Screen.Quiz -> {
                             val quizScreen = currentScreen as Screen.Quiz
                             QuizScreen(
-                                modifier = Modifier.padding(innerPadding),
+                                modifier = Modifier.padding(paddingValues = innerPadding),
                                 deckId = quizScreen.deckId,
                                 rounds = quizScreen.rounds,
                                 onBack = { currentScreen = Screen.Home }

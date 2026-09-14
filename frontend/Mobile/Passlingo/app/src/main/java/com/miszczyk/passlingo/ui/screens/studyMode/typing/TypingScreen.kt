@@ -57,7 +57,7 @@ fun TypingScreen(
     rounds: Int,
     onBack: () -> Unit,
     viewModel: TypingViewModel = viewModel()
-    ) {
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = deckId) {
@@ -70,7 +70,7 @@ fun TypingScreen(
         onContinueBreather = { viewModel.continueLearningClicked() },
         modifier = modifier
     ) {
-        val borderColor = when(uiState.userAnswer) {
+        val borderColor = when (uiState.userAnswer) {
             TypeAnswer.NONE -> MaterialTheme.colorScheme.onBackground
             TypeAnswer.BAD -> MaterialTheme.colorScheme.error
             TypeAnswer.GOOD -> Color(color = 0xFF10B981)
@@ -88,7 +88,8 @@ fun TypingScreen(
             label = "textColor"
         )
 
-        val textDescription = if (check) stringResource(id = R.string.action_check_answer) else stringResource(id = R.string.prompt_enter_your_answer)
+        val textDescription =
+            if (check) stringResource(id = R.string.action_check_answer) else stringResource(id = R.string.prompt_enter_your_answer)
 
         val boxBorderColor = Color(color = 0xFF10B981)
 
@@ -102,19 +103,20 @@ fun TypingScreen(
                 fontSize = titleMediumLarge,
                 color = MaterialTheme.colorScheme.primary,
                 fontFamily = vagRoundedBold,
-                modifier = Modifier
-                    .padding(horizontal = spaceExtraLarge)
+                modifier = Modifier.padding(horizontal = spaceExtraLarge)
             )
 
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
 
             BasicTextField(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = spaceExtraLarge).heightIn(max = maxHeightCardContent),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = spaceExtraLarge)
+                    .heightIn(max = maxHeightCardContent),
                 state = uiState.userAnswerState,
                 readOnly = uiState.userAnswer != TypeAnswer.NONE,
                 keyboardOptions = KeyboardOptions(
-                    autoCorrectEnabled = false,
-                    keyboardType = KeyboardType.Password
+                    autoCorrectEnabled = false, keyboardType = KeyboardType.Password
                 ),
                 textStyle = TextStyle(
                     fontFamily = vagRoundedLight,
@@ -139,33 +141,31 @@ fun TypingScreen(
                 },
             )
 
-            if(uiState.userAnswer == TypeAnswer.BAD){
+            if (uiState.userAnswer == TypeAnswer.BAD) {
                 Spacer(modifier = Modifier.height(height = spaceExtraLarge))
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = spaceExtraLarge)
-                    .drawWithCache {
-                        val strokeWidthPx = borderThin.toPx()
-                        val dashLengthPx = borderDash.toPx()
-                        val gapLengthPx = borderGap.toPx()
-                        onDrawWithContent {
-                            drawContent()
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = spaceExtraLarge)
+                        .drawWithCache {
+                            val strokeWidthPx = borderThin.toPx()
+                            val dashLengthPx = borderDash.toPx()
+                            val gapLengthPx = borderGap.toPx()
+                            onDrawWithContent {
+                                drawContent()
 
-                            drawRoundRect(
-                                color = boxBorderColor,
-                                style = Stroke(
-                                    width = strokeWidthPx,
-                                    pathEffect = PathEffect.dashPathEffect(
-                                        intervals = floatArrayOf(dashLengthPx, gapLengthPx),
-                                        phase = 0f
-                                    )
-                                ),
-                                cornerRadius = CornerRadius(x = cornerRadiusDefault.toPx())
-                            )
+                                drawRoundRect(
+                                    color = boxBorderColor, style = Stroke(
+                                        width = strokeWidthPx,
+                                        pathEffect = PathEffect.dashPathEffect(
+                                            intervals = floatArrayOf(dashLengthPx, gapLengthPx),
+                                            phase = 0f
+                                        )
+                                    ), cornerRadius = CornerRadius(x = cornerRadiusDefault.toPx())
+                                )
+                            }
                         }
-                    }
-                    .padding(all = spaceLarge)
-                ){
+                        .padding(all = spaceLarge)) {
                     Text(
                         text = uiState.currentBack ?: "",
                         fontSize = titleMedium,
@@ -177,29 +177,36 @@ fun TypingScreen(
             Spacer(modifier = Modifier.height(height = spaceExtraLarge))
         }
 
-        when (uiState.userAnswer){
+        when (uiState.userAnswer) {
             TypeAnswer.NONE -> {
                 ButtonBeforeAnswer(
                     buttonColor = buttonColor,
                     textColor = textColor,
                     textDescription = textDescription,
                     enabled = check,
-                    onClick = {viewModel.checkUserAnswer(userAnswer = uiState.userAnswerState, correctAnswer = uiState.currentBack)}
+                    onClick = {
+                        viewModel.checkUserAnswer(
+                            userAnswer = uiState.userAnswerState,
+                            correctAnswer = uiState.currentBack
+                        )
+                    }
                 )
             }
 
             TypeAnswer.GOOD -> {
                 ButtonAfterAnswer(
-                    continueLearning = {viewModel.moveToNextCard()},
-                    badAnswer = false
+                    continueLearning = { viewModel.moveToNextCard() }, badAnswer = false
                 )
             }
 
             TypeAnswer.BAD -> {
                 ButtonAfterAnswer(
-                    checkAgain = {viewModel.checkAgain(userAnswer = uiState.userAnswerState, correctAnswer = uiState.currentBack)},
-                    continueLearning = {viewModel.moveToNextCard()},
-                    badAnswer = true
+                    checkAgain = {
+                    viewModel.checkAgain(
+                        userAnswer = uiState.userAnswerState,
+                        correctAnswer = uiState.currentBack
+                    )
+                }, continueLearning = { viewModel.moveToNextCard() }, badAnswer = true
                 )
             }
         }

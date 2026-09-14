@@ -20,11 +20,11 @@ import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 
 @Composable
 fun BalanceBox(
-    modifier: Modifier = Modifier, balanceTime: Long
+    balanceTime: Long
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         CardTitle(
-            titleText = stringResource(R.string.label_available_balance),
+            titleText = stringResource(id = R.string.label_available_balance),
             titleFontSize = titleMedium
         )
 

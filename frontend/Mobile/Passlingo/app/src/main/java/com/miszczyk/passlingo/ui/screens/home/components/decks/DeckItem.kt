@@ -104,7 +104,9 @@ fun DeckItem(
                 fontFamily = vagRoundedBold,
             )
             Text(
-                text = pluralStringResource(id = R.plurals.label_cards_count, count = flashcardCount, flashcardCount),
+                text = pluralStringResource(
+                    id = R.plurals.label_cards_count, count = flashcardCount, flashcardCount
+                ),
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = body,
                 fontFamily = vagRoundedBold,

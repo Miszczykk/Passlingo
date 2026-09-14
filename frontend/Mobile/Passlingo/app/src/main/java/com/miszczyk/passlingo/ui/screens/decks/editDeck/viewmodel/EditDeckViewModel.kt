@@ -12,7 +12,7 @@ import com.miszczyk.passlingo.ui.util.setText
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class EditDeckViewModel(application: Application) : DeckFormViewModel(application){
+class EditDeckViewModel(application: Application) : DeckFormViewModel(application) {
     private var currentDeckId: String = ""
 
 
@@ -23,41 +23,39 @@ class EditDeckViewModel(application: Application) : DeckFormViewModel(applicatio
         viewModelScope.launch {
             runCatching {
                 deckRepository.getDeckWithFlashcardsById(deckId)
-            }.fold(
-                onSuccess = { deckData ->
-                    if (deckData != null) {
-                        deckName.setText(deckData.deck.name)
-                        val uiFlashcards = deckData.flashcards.map {
-                            Flashcard(id = it.id, front = it.front, back = it.back)
-                        }
-                        _uiState.update {
-                            it.copy(
-                                deckIcon = DeckIcons.findIconFromId(deckData.deck.iconResId),
-                                cards = uiFlashcards
-                            )
-                        }
-                    } else{
-                        Log.w("EditDeckViewModel", "Deck with id $deckId not found (returned null)")
-                        _uiState.update {
-                            it.copy(
-                                dialogState = DeckFormDialogState.Error(
-                                    getApplication<Application>().getString(R.string.error_deck_not_found)
-                                )
-                            )
-                        }
+            }.fold(onSuccess = { deckData ->
+                if (deckData != null) {
+                    deckName.setText(deckData.deck.name)
+                    val uiFlashcards = deckData.flashcards.map {
+                        Flashcard(id = it.id, front = it.front, back = it.back)
                     }
-                },
-                onFailure = { error ->
-                    Log.e("EditDeckViewModel", "Failed to load deck data", error)
+                    _uiState.update {
+                        it.copy(
+                            deckIcon = DeckIcons.findIconFromId(deckData.deck.iconResId),
+                            cards = uiFlashcards
+                        )
+                    }
+                } else {
+                    Log.w("EditDeckViewModel", "Deck with id $deckId not found (returned null)")
                     _uiState.update {
                         it.copy(
                             dialogState = DeckFormDialogState.Error(
-                                error.localizedMessage ?: getApplication<Application>().getString(R.string.error_deck_not_found)
+                                getApplication<Application>().getString(R.string.error_deck_not_found)
                             )
                         )
                     }
                 }
-            )
+            }, onFailure = { error ->
+                Log.e("EditDeckViewModel", "Failed to load deck data", error)
+                _uiState.update {
+                    it.copy(
+                        dialogState = DeckFormDialogState.Error(
+                            error.localizedMessage
+                                ?: getApplication<Application>().getString(R.string.error_deck_not_found)
+                        )
+                    )
+                }
+            })
         }
     }
 

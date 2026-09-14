@@ -32,7 +32,8 @@ fun IconItem(
         if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurface
 
     IconButton(
-        onClick = { onClick() }, modifier = Modifier
+        onClick = { onClick() },
+        modifier = Modifier
             .aspectRatio(ratio = 1f)
             .clip(shape = RoundedCornerShape(size = cornerRadiusDefault))
             .cardSurface(

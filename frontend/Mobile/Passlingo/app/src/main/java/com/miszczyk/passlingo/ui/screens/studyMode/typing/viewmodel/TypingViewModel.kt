@@ -18,8 +18,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class TypingViewModel(application: Application) : BaseStudyViewModel(application, StudyMode.TYPING) {
-    private val _uiState = MutableStateFlow(TypingUiState())
+class TypingViewModel(application: Application) :
+    BaseStudyViewModel(application, StudyMode.TYPING) {
+    private val _uiState = MutableStateFlow(value = TypingUiState())
     val uiState: StateFlow<TypingUiState> = _uiState.asStateFlow()
 
     private var repeatCard: StudyCardProgressEntity? = null
@@ -56,9 +57,7 @@ class TypingViewModel(application: Application) : BaseStudyViewModel(application
     override fun onSessionEndedUiState() {
         _uiState.update {
             it.copy(
-                isLoading = false,
-                currentFront = null,
-                currentBack = null
+                isLoading = false, currentFront = null, currentBack = null
             )
         }
     }
@@ -87,17 +86,12 @@ class TypingViewModel(application: Application) : BaseStudyViewModel(application
         }
     }
 
-    fun checkUserAnswer(userAnswer: TextFieldState, correctAnswer: String?){
-        val cleanUser = userAnswer.text.toString()
-            .trim()
-            .replace("\\s+".toRegex(), " ")
+    fun checkUserAnswer(userAnswer: TextFieldState, correctAnswer: String?) {
+        val cleanUser = userAnswer.text.toString().trim().replace(regex = "\\s+".toRegex(), replacement = " ")
 
-        val cleanCorrect = correctAnswer
-            ?.trim()
-            ?.replace("\\s+".toRegex(), " ")
-            ?: ""
+        val cleanCorrect = correctAnswer?.trim()?.replace(regex = "\\s+".toRegex(), replacement = " ") ?: ""
 
-        if (cleanUser.equals(cleanCorrect, ignoreCase = true)) {
+        if (cleanUser.equals(other = cleanCorrect, ignoreCase = true)) {
             _uiState.update { it.copy(userAnswer = TypeAnswer.GOOD) }
             timeToBreath++
         } else {
@@ -108,28 +102,34 @@ class TypingViewModel(application: Application) : BaseStudyViewModel(application
         }
     }
 
-    fun moveToNextCard(){
+    fun moveToNextCard() {
         viewModelScope.launch {
             val currentProgress = repeatCard ?: currentBatch.firstOrNull() ?: return@launch
             val isGoodAnswer = _uiState.value.userAnswer == TypeAnswer.GOOD
 
             runCatching {
-                if(isGoodAnswer){
+                if (isGoodAnswer) {
                     if (repeatCard != null) {
                         repeatCard = null
                     } else {
-                        sessionRepository.incrementCurrentRound(currentSessionId, currentProgress.flashcardId)
+                        sessionRepository.incrementCurrentRound(
+                            currentSessionId, currentProgress.flashcardId
+                        )
                         if (currentProgress.currentRound + 1 == targetRounds) {
                             timeRepository.addCreditTime(secondsEarned = (10L * targetRounds))
                         }
-                        currentBatch = currentBatch.drop(1)
+                        currentBatch = currentBatch.drop(n = 1)
                     }
-                }else{
-                    sessionRepository.resetCurrentRound(currentSessionId, currentProgress.flashcardId)
-                    sessionRepository.incrementAttempts(currentSessionId, currentProgress.flashcardId)
+                } else {
+                    sessionRepository.resetCurrentRound(
+                        currentSessionId, currentProgress.flashcardId
+                    )
+                    sessionRepository.incrementAttempts(
+                        currentSessionId, currentProgress.flashcardId
+                    )
 
                     if (currentBatch.firstOrNull()?.id == currentProgress.id) {
-                        currentBatch = currentBatch.drop(1)
+                        currentBatch = currentBatch.drop(n = 1)
                     }
                 }
 
@@ -147,7 +147,8 @@ class TypingViewModel(application: Application) : BaseStudyViewModel(application
             _uiState.value.userAnswerState.clear()
         }
     }
+
     fun checkAgain(userAnswer: TextFieldState, correctAnswer: String?) {
-    //TODO implement AI
-}
+        //TODO implement AI
+    }
 }

@@ -22,10 +22,8 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
 fun DeckFormBottomBar(
-    deckName: String,
-    addedCards: Int,
-    onSaveDeckClicked: () -> Unit
-){
+    deckName: String, addedCards: Int, onSaveDeckClicked: () -> Unit
+) {
     val check = deckName.isNotBlank() && addedCards >= MIN_CARDS_REQUIRES
 
     val buttonColor by animateColorAsState(
@@ -56,7 +54,8 @@ fun DeckFormBottomBar(
         enabled = check,
         onClick = {
             onSaveDeckClicked()
-        }) {
+        }
+    ) {
         Text(
             text = textDescription,
             fontSize = titleLarge,

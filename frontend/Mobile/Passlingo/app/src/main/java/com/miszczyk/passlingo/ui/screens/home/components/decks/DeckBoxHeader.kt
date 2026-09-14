@@ -44,7 +44,7 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeckBoxHeader(
-    modifier: Modifier = Modifier, appViewModel: AppViewModel
+    appViewModel: AppViewModel
 ) {
     val uiState by appViewModel.appUiState.collectAsState()
     val sheetState = rememberModalBottomSheetState()
@@ -81,7 +81,7 @@ fun DeckBoxHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(R.string.label_earn_from_decks),
+            text = stringResource(id = R.string.label_earn_from_decks),
             color = MaterialTheme.colorScheme.primary,
             fontSize = titleLarge,
             fontFamily = vagRoundedBold,
@@ -95,7 +95,7 @@ fun DeckBoxHeader(
         ) {
             Icon(
                 imageVector = Icons.Default.Lock,
-                contentDescription = stringResource(R.string.content_desc_lock),
+                contentDescription = stringResource(id = R.string.content_desc_lock),
                 tint = animatedColorLock,
                 modifier = Modifier.scale(scale = animatedScaleMultiplier)
             )
@@ -117,8 +117,7 @@ fun DeckBoxHeader(
                     context,
                     onError = { errorMessage -> appViewModel.showPermissionError(errorMessage) })
             },
-            onDismissRequest = { appViewModel.onSheetDismissed() }
-        )
+            onDismissRequest = { appViewModel.onSheetDismissed() })
     }
 
     val appName = when (val state = uiState.appDialogState) {

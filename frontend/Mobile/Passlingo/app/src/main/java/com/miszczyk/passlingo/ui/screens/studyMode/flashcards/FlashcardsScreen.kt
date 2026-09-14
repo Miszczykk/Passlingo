@@ -47,8 +47,7 @@ fun FlashcardScreen(
             modifier = Modifier
                 .weight(weight = 1f)
                 .padding(horizontal = spaceExtraLarge)
-                .clickable { viewModel.flipCard() }
-        ) {
+                .clickable { viewModel.flipCard() }) {
 
             if (!uiState.isFlipped) {
                 FrontCard(definition = uiState.currentFront ?: "")

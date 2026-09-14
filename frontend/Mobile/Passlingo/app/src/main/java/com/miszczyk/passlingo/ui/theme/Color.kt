@@ -1,7 +1,8 @@
 package com.miszczyk.passlingo.ui.theme
 
 import androidx.compose.ui.graphics.Color
-object Color{
+
+object Color {
     val mono50 = Color(color = 0xFFfafafa)
     val mono100 = Color(color = 0xFFf4f4f5)
     val mono200 = Color(color = 0xFFe4e4e7)

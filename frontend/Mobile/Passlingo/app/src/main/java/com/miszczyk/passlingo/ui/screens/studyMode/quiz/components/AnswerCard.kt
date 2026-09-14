@@ -25,7 +25,7 @@ fun AnswerCard(text: String, textColor: Color, borderColor: Color, onClick: () -
             .fillMaxWidth()
             .padding(horizontal = spaceExtraLarge)
             .padding(bottom = spaceDefault)
-            .clip(RoundedCornerShape(cornerRadiusDefault))
+            .clip(shape = RoundedCornerShape(size = cornerRadiusDefault))
             .clickable(onClick = onClick)
             .cardSurface(
                 borderColor = borderColor
@@ -33,10 +33,7 @@ fun AnswerCard(text: String, textColor: Color, borderColor: Color, onClick: () -
             .padding(all = spaceLarge)
     ) {
         Text(
-            text = text,
-            fontSize = titleMedium,
-            color = textColor,
-            fontFamily = vagRoundedLight
+            text = text, fontSize = titleMedium, color = textColor, fontFamily = vagRoundedLight
         )
     }
 }

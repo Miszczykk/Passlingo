@@ -39,7 +39,9 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
-fun BreatherScreen(continueLearning: () -> Unit, onBack: () -> Unit, modifier: Modifier = Modifier){
+fun BreatherScreen(
+    continueLearning: () -> Unit, onBack: () -> Unit, modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -48,14 +50,13 @@ fun BreatherScreen(continueLearning: () -> Unit, onBack: () -> Unit, modifier: M
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            painter = painterResource(R.drawable.coffee),
+            painter = painterResource(id = R.drawable.coffee),
             contentDescription = "coffee",
-            tint = Color(0xFF3b82f6),
+            tint = Color(color = 0xFF3b82f6),
             modifier = Modifier
                 .size(size = iconMassive)
                 .background(
-                    color = Color(0xFF3b82f6).copy(alpha = 0.2f),
-                    shape = CircleShape
+                    color = Color(color = 0xFF3b82f6).copy(alpha = 0.2f), shape = CircleShape
                 )
                 .padding(all = spaceMedium)
         )
@@ -91,7 +92,8 @@ fun BreatherScreen(continueLearning: () -> Unit, onBack: () -> Unit, modifier: M
             ),
             onClick = {
                 continueLearning()
-            }) {
+            }
+        ) {
             Text(
                 text = stringResource(id = R.string.action_continue_studying),
                 fontSize = titleLarge,
@@ -104,10 +106,7 @@ fun BreatherScreen(continueLearning: () -> Unit, onBack: () -> Unit, modifier: M
         Spacer(modifier = Modifier.height(height = spaceMedium))
 
         TextButton(
-            modifier = Modifier
-                .fillMaxWidth(),
-            onClick = { onBack() }
-        ) {
+            modifier = Modifier.fillMaxWidth(), onClick = { onBack() }) {
             Text(
                 text = stringResource(id = R.string.action_quit_for_now),
                 fontSize = titleMediumLarge,

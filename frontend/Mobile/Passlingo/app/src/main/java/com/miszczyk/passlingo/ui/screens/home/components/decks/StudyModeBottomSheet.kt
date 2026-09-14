@@ -55,7 +55,7 @@ fun StudyModeBottomSheet(
     onFlashcardClicked: () -> Unit,
     onQuizClicked: () -> Unit,
     onTypingClicked: () -> Unit
-){
+) {
     val closeSheet = rememberSheetCloseHandler(sheetState, onDismissRequest)
 
     ModalBottomSheet(
@@ -64,7 +64,7 @@ fun StudyModeBottomSheet(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            BottomSheetHeader(label = stringResource(id = R.string.label_select_study_mode) ){
+            BottomSheetHeader(label = stringResource(id = R.string.label_select_study_mode)) {
                 closeSheet()
             }
 
@@ -110,11 +110,8 @@ fun StudyModeBottomSheet(
 
 @Composable
 private fun ModeButton(
-    iconResId: Int,
-    textTitle: String,
-    textDescription: String,
-    onClick: () -> Unit
-){
+    iconResId: Int, textTitle: String, textDescription: String, onClick: () -> Unit
+) {
     Button(
         modifier = Modifier
             .fillMaxWidth()
@@ -133,30 +130,30 @@ private fun ModeButton(
         onClick = {
             onClick()
         }
-    ){
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(all = spaceVeryLarge),
             horizontalArrangement = Arrangement.Start
         ) {
-                Icon(
-                    painter = painterResource(id = iconResId),
-                    contentDescription = stringResource(id = iconResId),
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .size(size = iconExtraHuge)
-                        .background(
-                            color = MaterialTheme.colorScheme.onBackground,
-                            shape = RoundedCornerShape(size = cornerRadiusDefault)
-                        )
-                        .padding(all = spaceExtraSmall)
+            Icon(
+                painter = painterResource(id = iconResId),
+                contentDescription = stringResource(id = iconResId),
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .size(size = iconExtraHuge)
+                    .background(
+                        color = MaterialTheme.colorScheme.onBackground,
+                        shape = RoundedCornerShape(size = cornerRadiusDefault)
+                    )
+                    .padding(all = spaceExtraSmall)
 
-                )
+            )
 
             Spacer(modifier = Modifier.width(width = spaceLarge))
 
-            Column{
+            Column {
                 Text(
                     text = textTitle,
                     color = MaterialTheme.colorScheme.primary,

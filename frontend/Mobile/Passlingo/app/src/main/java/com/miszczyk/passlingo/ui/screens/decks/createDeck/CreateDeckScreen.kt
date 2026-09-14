@@ -12,7 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.screens.decks.createDeck.viewmodel.CreateDeckViewModel
 import com.miszczyk.passlingo.ui.screens.decks.manageDeck.components.DeckFormContent
-import com.miszczyk.passlingo.ui.screens.decks.manageDeck.components.DeckStatusDialogs
+import com.miszczyk.passlingo.ui.screens.decks.manageDeck.components.DeckFormStatusDialogs
 import com.miszczyk.passlingo.ui.screens.decks.manageDeck.components.IconSelectBottomSheet
 import com.miszczyk.passlingo.ui.util.DeckIcons
 
@@ -33,7 +33,7 @@ fun CreateDeckScreen(
 
     DeckFormContent(
         modifier = modifier,
-        headerTitle = stringResource(R.string.label_create_deck),
+        headerTitle = stringResource(id = R.string.label_create_deck),
 
         deckNameState = viewModel.deckName,
         deckIcon = uiState.deckIcon,
@@ -61,7 +61,7 @@ fun CreateDeckScreen(
         )
     }
 
-    DeckStatusDialogs(
+    DeckFormStatusDialogs(
         dialogState = uiState.dialogState,
         editFrontState = viewModel.editFrontState,
         editBackState = viewModel.editBackState,

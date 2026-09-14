@@ -1,4 +1,5 @@
 package com.miszczyk.passlingo.ui.util
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
@@ -16,8 +17,8 @@ fun <T> Flow<T>.observeWithRetry(
 ) = this.onEach { value ->
     onEachAction(value)
 }.retry(retries = retries) { _ ->
-    delay(delayMillis)
+    delay(timeMillis = delayMillis)
     true
-}.catch{ e ->
+}.catch { e ->
     onError(e)
 }.launchIn(scope)

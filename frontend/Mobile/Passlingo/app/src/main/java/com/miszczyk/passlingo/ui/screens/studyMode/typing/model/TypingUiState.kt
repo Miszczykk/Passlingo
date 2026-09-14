@@ -5,7 +5,7 @@ import com.miszczyk.passlingo.ui.screens.studyMode.model.BaseStudyUiState
 import com.miszczyk.passlingo.ui.screens.studyMode.model.PracticeCardUiModel
 import com.miszczyk.passlingo.ui.screens.studyMode.model.TypeAnswer
 
-data class TypingUiState (
+data class TypingUiState(
     override val isLoading: Boolean = true,
     override val isBreather: Boolean = false,
     override val currentFront: String? = null,

@@ -10,12 +10,11 @@ import kotlinx.coroutines.launch
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun rememberSheetCloseHandler(
-    sheetState: SheetState,
-    onDismissRequest: () -> Unit
+    sheetState: SheetState, onDismissRequest: () -> Unit
 ): () -> Unit {
     val coroutineScope = rememberCoroutineScope()
 
-    return remember(sheetState, onDismissRequest){
+    return remember(key1 = sheetState, key2 = onDismissRequest) {
         {
             coroutineScope.launch {
                 sheetState.hide()

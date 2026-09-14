@@ -72,7 +72,9 @@ fun IconSelectBottomSheet(
 }
 
 @Composable
-private fun IconListContent(icons: List<DeckIcons>, currentIcon: DeckIcons, onIconClicked: (DeckIcons) -> Unit) {
+private fun IconListContent(
+    icons: List<DeckIcons>, currentIcon: DeckIcons, onIconClicked: (DeckIcons) -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(count = 4),
         contentPadding = PaddingValues(all = spaceExtraLarge),

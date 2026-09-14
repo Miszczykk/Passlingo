@@ -52,7 +52,7 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
 fun AppListItem(
-    modifier: Modifier = Modifier, app: AppItem, appRowState: AppRowState, onClick: () -> Unit
+    app: AppItem, appRowState: AppRowState, onClick: () -> Unit
 ) {
     val targetStyle = getAppItemStyle(appRowState)
 
@@ -62,12 +62,10 @@ fun AppListItem(
         label = "RowBackgroundColor"
     )
     val circleColor by animateColorAsState(
-        targetValue = targetStyle.circleColor,
-        label = "CircleColor"
+        targetValue = targetStyle.circleColor, label = "CircleColor"
     )
     val borderColor by animateColorAsState(
-        targetValue = targetStyle.borderColor,
-        label = "BorderColor"
+        targetValue = targetStyle.borderColor, label = "BorderColor"
     )
     val checkboxScale by animateFloatAsState(
         targetValue = targetStyle.checkboxScale,
@@ -137,6 +135,7 @@ fun AppListItem(
                         modifier = Modifier.size(iconSmall)
                     )
                 }
+
                 AppRowState.Selected -> {
                     Icon(
                         imageVector = Icons.Default.Check,
@@ -145,6 +144,7 @@ fun AppListItem(
                         modifier = Modifier.size(iconSmall)
                     )
                 }
+
                 else -> {}
             }
         }
@@ -152,22 +152,24 @@ fun AppListItem(
 }
 
 @Composable
-private fun getAppItemStyle(state: AppRowState): AppItemStyle{
+private fun getAppItemStyle(state: AppRowState): AppItemStyle {
     val colors = MaterialTheme.colorScheme
 
-    return when(state){
+    return when (state) {
         AppRowState.Locked -> AppItemStyle(
             checkboxScale = 1.0f,
             rowBackgroundColor = colors.onBackground,
             circleColor = Color.Transparent,
             borderColor = colors.onBackground
         )
+
         AppRowState.Selected -> AppItemStyle(
             checkboxScale = 1.2f,
             rowBackgroundColor = colors.secondary.copy(alpha = 0.15f),
             circleColor = colors.secondary,
             borderColor = colors.secondary
         )
+
         else -> AppItemStyle(
             checkboxScale = 1.0f,
             rowBackgroundColor = Color.Transparent,

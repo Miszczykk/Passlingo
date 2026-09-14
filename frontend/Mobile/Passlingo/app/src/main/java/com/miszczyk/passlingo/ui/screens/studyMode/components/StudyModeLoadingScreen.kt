@@ -12,7 +12,7 @@ import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun LoadingScreen(){
+fun StudyModeLoadingScreen() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
             text = stringResource(id = R.string.label_loading),

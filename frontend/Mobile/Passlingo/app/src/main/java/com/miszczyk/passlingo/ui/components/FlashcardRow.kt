@@ -26,7 +26,7 @@ import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun FlashcardRow(frontText: String, backText: String, trailingContent: @Composable () -> Unit){
+fun FlashcardRow(frontText: String, backText: String, trailingContent: @Composable () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -37,12 +37,12 @@ fun FlashcardRow(frontText: String, backText: String, trailingContent: @Composab
                 elevation = elevationNone
             )
             .padding(all = spaceLarge), verticalAlignment = Alignment.CenterVertically
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .weight(weight = 1f)
-        ){
+        ) {
             Text(
                 text = frontText,
                 fontFamily = vagRoundedBold,

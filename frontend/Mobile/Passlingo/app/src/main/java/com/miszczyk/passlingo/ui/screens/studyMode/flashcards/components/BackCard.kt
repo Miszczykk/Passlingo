@@ -33,7 +33,7 @@ fun BackCard(definition: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(size = cornerRadiusLarge))
+            .clip(shape = RoundedCornerShape(size = cornerRadiusLarge))
             .background(
                 color = MaterialTheme.colorScheme.primary,
                 shape = RoundedCornerShape(size = cornerRadiusLarge)
@@ -48,8 +48,7 @@ fun BackCard(definition: String) {
             .verticalScroll(state = rememberScrollState())
             .padding(all = spaceExtraLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
+        verticalArrangement = Arrangement.SpaceBetween) {
         Text(
             text = stringResource(id = R.string.label_back),
             fontSize = bodyExtraLarge,

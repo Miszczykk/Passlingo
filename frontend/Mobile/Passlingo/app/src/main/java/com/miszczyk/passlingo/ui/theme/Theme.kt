@@ -31,7 +31,7 @@ fun PasslingoTheme(
 ) {
     val view = LocalView.current
 
-    if(!LocalView.current.isInEditMode){
+    if (!LocalView.current.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
             val insetsController = WindowCompat.getInsetsController(window, view)
@@ -40,8 +40,6 @@ fun PasslingoTheme(
         }
     }
     MaterialTheme(
-        colorScheme = LightColorScheme,
-        typography = Typography,
-        content = content
+        colorScheme = LightColorScheme, typography = Typography, content = content
     )
 }

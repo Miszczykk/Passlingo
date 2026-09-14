@@ -17,4 +17,4 @@ data class QuizUiState(
     val options: List<String> = emptyList(),
     val selectedAnswer: String? = null,
     val userAnswer: TypeAnswer = TypeAnswer.NONE
-): BaseStudyUiState
+) : BaseStudyUiState

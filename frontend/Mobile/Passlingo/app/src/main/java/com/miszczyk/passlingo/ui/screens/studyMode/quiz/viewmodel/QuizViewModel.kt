@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class QuizViewModel(application: Application) : BaseStudyViewModel(application, StudyMode.QUIZ) {
-    private val _uiState = MutableStateFlow(QuizUiState())
+    private val _uiState = MutableStateFlow(value = QuizUiState())
     val uiState: StateFlow<QuizUiState> = _uiState.asStateFlow()
 
     private var allCards: List<StudyCardProgressEntity> = emptyList()
@@ -29,9 +29,7 @@ class QuizViewModel(application: Application) : BaseStudyViewModel(application, 
     override fun onResetUiState() {
         _uiState.update {
             it.copy(
-                isLoading = false,
-                isBreather = false,
-                userAnswer = TypeAnswer.NONE
+                isLoading = false, isBreather = false, userAnswer = TypeAnswer.NONE
             )
         }
     }
@@ -55,9 +53,7 @@ class QuizViewModel(application: Application) : BaseStudyViewModel(application, 
     override fun onSessionEndedUiState() {
         _uiState.update {
             it.copy(
-                isLoading = false,
-                currentFront = null,
-                currentBack = null
+                isLoading = false, currentFront = null, currentBack = null
             )
         }
     }
@@ -70,7 +66,7 @@ class QuizViewModel(application: Application) : BaseStudyViewModel(application, 
         }
     }
 
-    override suspend fun onSessionInitialized(){
+    override suspend fun onSessionInitialized() {
         allCards = sessionRepository.getAllCards(currentSessionId)
     }
 
@@ -81,21 +77,20 @@ class QuizViewModel(application: Application) : BaseStudyViewModel(application, 
         val correctAnswer = flashcardData?.second ?: "Unknown"
         val finished = sessionRepository.getFinishedCard(currentSessionId, targetRounds)
 
-        val options = withContext(Dispatchers.Default) {
+        val options = withContext(context = Dispatchers.Default) {
             val allMeanings = allCards.mapNotNull { progress ->
                 deckDictionary[progress.flashcardId]?.second
             }.distinct()
 
-            val allWrong = allMeanings.filter { !it.equals(correctAnswer, ignoreCase = true) }
+            val allWrong = allMeanings.filter { !it.equals(other = correctAnswer, ignoreCase = true) }
 
             val wrongAnswers = if (allWrong.size <= 3) {
                 allWrong
             } else {
-                allWrong.sortedBy { levenshteinDistance(it, correctAnswer) }.take(3)
+                allWrong.sortedBy { levenshteinDistance(a = it, b = correctAnswer) }.take(n = 3)
             }
             (wrongAnswers + correctAnswer).shuffled()
         }
-
         _uiState.update {
             it.copy(
                 isLoading = false,
@@ -119,20 +114,20 @@ class QuizViewModel(application: Application) : BaseStudyViewModel(application, 
         }
     }
 
-    private fun levenshteinDistance(correctAnswer: String, proposition: String): Int {
-        val m = correctAnswer.length
-        val n = proposition.length
-        var cost = IntArray(m + 1) { it }
-        var newCost = IntArray(m + 1) { 0 }
+    private fun levenshteinDistance(a: String, b: String): Int {
+        val m = a.length
+        val n = b.length
+        var cost = IntArray(size = m + 1) { it }
+        var newCost = IntArray(size = m + 1) { 0 }
 
         for (i in 1..n) {
             newCost[0] = i
             for (j in 1..m) {
-                val match = if (correctAnswer[j - 1] == proposition[i - 1]) 0 else 1
+                val match = if (a[j - 1] == b[i - 1]) 0 else 1
                 val costReplace = cost[j - 1] + match
                 val costInsert = cost[j] + 1
                 val costDelete = newCost[j - 1] + 1
-                newCost[j] = minOf(costInsert, costDelete, costReplace)
+                newCost[j] = minOf(a = costInsert, b = costDelete, c = costReplace)
             }
             val swap = cost
             cost = newCost
@@ -148,17 +143,23 @@ class QuizViewModel(application: Application) : BaseStudyViewModel(application, 
 
             runCatching {
                 if (isGoodAnswer) {
-                    sessionRepository.incrementCurrentRound(currentSessionId, currentProgress.flashcardId)
+                    sessionRepository.incrementCurrentRound(
+                        currentSessionId, currentProgress.flashcardId
+                    )
                     if (currentProgress.currentRound + 1 == targetRounds) {
                         timeRepository.addCreditTime(secondsEarned = 10L * targetRounds)
                     }
                 } else {
-                    sessionRepository.resetCurrentRound(currentSessionId, currentProgress.flashcardId)
-                    sessionRepository.incrementAttempts(currentSessionId, currentProgress.flashcardId)
+                    sessionRepository.resetCurrentRound(
+                        currentSessionId, currentProgress.flashcardId
+                    )
+                    sessionRepository.incrementAttempts(
+                        currentSessionId, currentProgress.flashcardId
+                    )
                 }
 
                 timeToBreath++
-                currentBatch = currentBatch.drop(1)
+                currentBatch = currentBatch.drop(n = 1)
 
                 when {
                     currentBatch.isNotEmpty() -> showCurrentCard()

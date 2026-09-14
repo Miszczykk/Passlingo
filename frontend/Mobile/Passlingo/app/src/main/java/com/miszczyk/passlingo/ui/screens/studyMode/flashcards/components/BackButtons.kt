@@ -23,8 +23,7 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
 fun BackButtons(
-    onCorrect: () -> Unit,
-    onIncorrect: () -> Unit
+    onCorrect: () -> Unit, onIncorrect: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -33,8 +32,7 @@ fun BackButtons(
         horizontalArrangement = Arrangement.spacedBy(spaceLarge)
     ) {
         Button(
-            modifier = Modifier
-                .weight(weight = 1f),
+            modifier = Modifier.weight(weight = 1f),
             shape = RoundedCornerShape(size = cornerRadiusDefault),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.error
@@ -53,11 +51,10 @@ fun BackButtons(
         }
 
         Button(
-            modifier = Modifier
-                .weight(weight = 1f),
+            modifier = Modifier.weight(weight = 1f),
             shape = RoundedCornerShape(size = cornerRadiusDefault),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF10B981)
+                containerColor = Color(color = 0xFF10B981)
             ),
             onClick = {
                 onCorrect()

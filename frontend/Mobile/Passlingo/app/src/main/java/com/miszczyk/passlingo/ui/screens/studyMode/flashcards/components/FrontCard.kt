@@ -48,8 +48,7 @@ fun FrontCard(definition: String) {
             .verticalScroll(state = rememberScrollState())
             .padding(all = spaceExtraLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
+        verticalArrangement = Arrangement.SpaceBetween) {
         Text(
             text = stringResource(id = R.string.label_front),
             fontSize = bodyExtraLarge,

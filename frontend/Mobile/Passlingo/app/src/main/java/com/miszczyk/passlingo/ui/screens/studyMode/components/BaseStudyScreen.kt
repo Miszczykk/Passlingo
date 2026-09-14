@@ -20,37 +20,33 @@ fun BaseStudyScreen(
     onContinueBreather: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
-){
-    if(uiState.isLoading){
-        LoadingScreen()
+) {
+    if (uiState.isLoading) {
+        StudyModeLoadingScreen()
         return
     }
 
-    if(uiState.currentFront == null){
+    if (uiState.currentFront == null) {
         SessionSummarySection(
-            cardsToPractice = uiState.cardsToPractice,
-            onBack = onBack,
-            modifier = modifier
+            cardsToPractice = uiState.cardsToPractice, onBack = onBack, modifier = modifier
         )
         return
     }
 
     if (uiState.isBreather) {
         BreatherScreen(
-            continueLearning = onContinueBreather,
-            onBack = onBack,
-            modifier = modifier
+            continueLearning = onContinueBreather, onBack = onBack, modifier = modifier
         )
         return
     }
 
     Column(
         modifier = modifier.fillMaxSize()
-    ){
+    ) {
         Spacer(modifier = Modifier.height(height = spaceLarge))
         ScreenHeader(title = uiState.progressText, titleFontSize = titleLarge, onClick = onBack)
-        Spacer(modifier = Modifier.height(height = spaceExtraHuge))
-
+        Spacer(modifier = Modifier.height(height = spaceExtraHuge)
+        )
         content()
     }
 }

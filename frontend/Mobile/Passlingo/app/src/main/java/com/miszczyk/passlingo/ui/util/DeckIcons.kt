@@ -3,7 +3,7 @@ package com.miszczyk.passlingo.ui.util
 import androidx.annotation.DrawableRes
 import com.miszczyk.passlingo.R
 
-enum class DeckIcons(val id: Int, @DrawableRes val resId: Int){
+enum class DeckIcons(val id: Int, @DrawableRes val resId: Int) {
     BEAR(id = 1, resId = R.drawable.deck_animal_bear),
     COW(id = 2, resId = R.drawable.deck_animal_cow),
     DOG(id = 3, resId = R.drawable.deck_animal_dog_walking),
@@ -33,10 +33,10 @@ enum class DeckIcons(val id: Int, @DrawableRes val resId: Int){
     GLOBE(id = 27, resId = R.drawable.deck_world_square_globe),
     SUITCASE(id = 28, resId = R.drawable.deck_world_suitcase);
 
-    companion object{
+    companion object {
         val all: List<DeckIcons> = entries
 
-        fun findIconFromId(id: Int): DeckIcons{
+        fun findIconFromId(id: Int): DeckIcons {
             return entries.find { it.id == id } ?: BEAR
         }
     }

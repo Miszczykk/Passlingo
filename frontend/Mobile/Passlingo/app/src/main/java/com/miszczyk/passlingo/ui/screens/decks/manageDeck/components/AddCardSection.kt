@@ -35,7 +35,6 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
 fun AddCardSection(
-    modifier: Modifier = Modifier,
     addedCards: Int,
     stateFront: TextFieldState,
     stateBack: TextFieldState,
@@ -78,19 +77,6 @@ fun AddCardSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .cardSurface(),
-//                .shadow(
-//                    elevation = elevationExtraSmall,
-//                    shape = RoundedCornerShape(size = cornerRadiusDefault)
-//                )
-//                .background(
-//                    color = MaterialTheme.colorScheme.background,
-//                    shape = RoundedCornerShape(size = cornerRadiusDefault)
-//                )
-//                .border(
-//                    width = borderThin,
-//                    color = MaterialTheme.colorScheme.onBackground,
-//                    shape = RoundedCornerShape(size = cornerRadiusDefault)
-//                ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CardSideInput(

@@ -10,7 +10,8 @@ class DeckSelectionAction(private val uiStateFlow: MutableStateFlow<DeckUiState>
         uiStateFlow.update { state ->
             val deckId = state.selectedDeckId
             if (deckId != null) {
-                val deckName = state.decks.find { it.deck.id == deckId }?.deck?.name ?: "Unknown Deck"
+                val deckName =
+                    state.decks.find { it.deck.id == deckId }?.deck?.name ?: "Unknown Deck"
                 state.copy(deckDialogState = DeckDialogState.ConfirmDelete(deckName))
             } else {
                 state

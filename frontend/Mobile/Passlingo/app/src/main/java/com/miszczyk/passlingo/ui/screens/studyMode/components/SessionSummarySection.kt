@@ -42,8 +42,10 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
-fun SessionSummarySection(cardsToPractice: List<PracticeCardUiModel>, onBack: () -> Unit, modifier: Modifier = Modifier){
-    if(cardsToPractice.isEmpty()){
+fun SessionSummarySection(
+    cardsToPractice: List<PracticeCardUiModel>, onBack: () -> Unit, modifier: Modifier = Modifier
+) {
+    if (cardsToPractice.isEmpty()) {
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -52,7 +54,7 @@ fun SessionSummarySection(cardsToPractice: List<PracticeCardUiModel>, onBack: ()
             verticalArrangement = Arrangement.Center
         ) {
             Icon(
-                painter = painterResource(R.drawable.cup),
+                painter = painterResource(id = R.drawable.cup),
                 contentDescription = "cup",
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
@@ -86,15 +88,15 @@ fun SessionSummarySection(cardsToPractice: List<PracticeCardUiModel>, onBack: ()
             Spacer(modifier = Modifier.height(height = spaceHuge))
 
             Button(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(size = cornerRadiusDefault),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 ),
                 onClick = {
                     onBack()
-                }) {
+                }
+            ) {
                 Text(
                     text = stringResource(id = R.string.action_finish_and_return),
                     fontSize = titleLarge,
@@ -104,17 +106,17 @@ fun SessionSummarySection(cardsToPractice: List<PracticeCardUiModel>, onBack: ()
                 )
             }
         }
-    } else{
+    } else {
         LazyColumn(
             modifier = modifier
                 .fillMaxSize()
                 .padding(horizontal = spaceExtraLarge),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            item{
+            item {
                 Spacer(modifier = Modifier.height(height = spaceExtraHuge))
                 Icon(
-                    painter = painterResource(R.drawable.cup),
+                    painter = painterResource(id = R.drawable.cup),
                     contentDescription = "cup",
                     tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier
@@ -148,28 +150,26 @@ fun SessionSummarySection(cardsToPractice: List<PracticeCardUiModel>, onBack: ()
                 Spacer(modifier = Modifier.height(height = spaceExtraLarge))
             }
 
-            items(items = cardsToPractice, key = {it.id}) {card ->
+            items(items = cardsToPractice, key = { it.id }) { card ->
                 FlashcardToPracticeItem(
-                    frontText = card.front,
-                    backText = card.back,
-                    attempts = card.attempts
+                    frontText = card.front, backText = card.back, attempts = card.attempts
                 )
                 Spacer(modifier = Modifier.height(height = spaceLarge))
             }
 
-            item{
+            item {
                 Spacer(modifier = Modifier.height(height = spaceMedium))
 
                 Button(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(size = cornerRadiusDefault),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
                     ),
                     onClick = {
                         onBack()
-                    }) {
+                    }
+                ) {
                     Text(
                         text = stringResource(id = R.string.action_finish_and_return),
                         fontSize = titleLarge,

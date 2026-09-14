@@ -24,17 +24,16 @@ import com.miszczyk.passlingo.ui.theme.TextSize.titleSmall
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
-fun ButtonAfterAnswer(checkAgain: () -> Unit = {}, continueLearning: () -> Unit, badAnswer: Boolean){
+fun ButtonAfterAnswer(
+    checkAgain: () -> Unit = {}, continueLearning: () -> Unit, badAnswer: Boolean
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = spaceExtraLarge),
     ) {
-
-
         Button(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(size = cornerRadiusDefault),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary
@@ -42,7 +41,9 @@ fun ButtonAfterAnswer(checkAgain: () -> Unit = {}, continueLearning: () -> Unit,
             onClick = { continueLearning() }
         ) {
             Text(
-                text = if (badAnswer) stringResource(id = R.string.action_try_again) else stringResource(id = R.string.action_continue),
+                text = if (badAnswer) stringResource(id = R.string.action_try_again) else stringResource(
+                    id = R.string.action_continue
+                ),
                 fontSize = titleLarge,
                 color = MaterialTheme.colorScheme.background,
                 fontFamily = vagRoundedBold,
@@ -50,12 +51,10 @@ fun ButtonAfterAnswer(checkAgain: () -> Unit = {}, continueLearning: () -> Unit,
             )
         }
 
-        if(badAnswer){
+        if (badAnswer) {
             Spacer(modifier = Modifier.height(height = spaceMedium))
             TextButton(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = { checkAgain() }
+                modifier = Modifier.fillMaxWidth(), onClick = { checkAgain() }
             ) {
                 Text(
                     text = stringResource(id = R.string.action_my_answer_was_good),

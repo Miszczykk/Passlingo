@@ -23,7 +23,7 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
-fun FlashcardToPracticeItem(frontText: String, backText: String, attempts: Int){
+fun FlashcardToPracticeItem(frontText: String, backText: String, attempts: Int) {
     FlashcardRow(frontText = frontText, backText = backText) {
         Column(
             modifier = Modifier
@@ -36,7 +36,7 @@ fun FlashcardToPracticeItem(frontText: String, backText: String, attempts: Int){
                 )
                 .padding(all = spaceExtraSmall),
             horizontalAlignment = Alignment.CenterHorizontally,
-        ){
+        ) {
             Text(
                 text = attempts.toString(),
                 fontFamily = vagRoundedBold,

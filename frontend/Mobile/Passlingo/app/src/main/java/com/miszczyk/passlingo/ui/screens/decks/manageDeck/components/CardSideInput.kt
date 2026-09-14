@@ -74,6 +74,7 @@ fun CardSideInput(
                         strokeWidth = 3f
                     )
                 }
-            })
+            }
+        )
     }
 }

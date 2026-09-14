@@ -25,7 +25,7 @@ import com.miszczyk.passlingo.ui.screens.home.components.CreateBox
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckOptionsBottomSheet
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckBoxHeader
 import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckItem
-import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckStatusDialogs
+import com.miszczyk.passlingo.ui.screens.home.components.decks.DeckHomeStatusDialogs
 import com.miszczyk.passlingo.ui.screens.home.components.decks.StudyModeBottomSheet
 import com.miszczyk.passlingo.ui.screens.home.components.decks.StudySettingsBottomSheet
 import com.miszczyk.passlingo.ui.screens.home.components.decks.WithoutDecks
@@ -97,58 +97,66 @@ fun HomeScreen(
         }
     }
 
-        when(val state = deckUiState.deckBottomSheetState){
-            is DeckBottomSheetState.None -> {}
+    when (val state = deckUiState.deckBottomSheetState) {
+        is DeckBottomSheetState.None -> {}
 
-            is DeckBottomSheetState.DeckOptions -> {
-                DeckOptionsBottomSheet(
-                    sheetState = sheetStateToOptions,
-                    deckIcon = DeckIcons.findIconFromId(state.iconResId).resId,
-                    deckName = state.deckName,
-                    flashcardCount = state.flashcardCount,
-                    onDismissRequest = { deckViewModel.hideBottomSheet() },
-                    onStudyClicked = { deckViewModel.onStudyModeClicked() },
-                    onEditClicked = { deckUiState.selectedDeckId?.let {deckId -> deckViewModel.hideBottomSheet(); onEditDeckClicked(deckId) } },
-                    onDeleteClicked = { deckViewModel.deleteDeck() }
-                )
-            }
+        is DeckBottomSheetState.DeckOptions -> {
+            DeckOptionsBottomSheet(
+                sheetState = sheetStateToOptions,
+                deckIcon = DeckIcons.findIconFromId(state.iconResId).resId,
+                deckName = state.deckName,
+                flashcardCount = state.flashcardCount,
+                onDismissRequest = { deckViewModel.hideBottomSheet() },
+                onStudyClicked = { deckViewModel.onStudyModeClicked() },
+                onEditClicked = {
+                    deckUiState.selectedDeckId?.let { deckId ->
+                        deckViewModel.hideBottomSheet(); onEditDeckClicked(
+                        deckId
+                    )
+                    }
+                },
+                onDeleteClicked = { deckViewModel.deleteDeck() }
+            )
+        }
 
-            is DeckBottomSheetState.StudyMode -> {
-                StudyModeBottomSheet(
-                    sheetState = sheetStateToStudyMode,
-                    deckName = state.deckName,
-                    onDismissRequest = { deckViewModel.hideBottomSheet() },
-                    onFlashcardClicked = {deckViewModel.onStudyModeSelected(mode = StudyMode.FLASHCARDS)},
-                    onQuizClicked = { deckViewModel.onStudyModeSelected(mode = StudyMode.QUIZ) },
-                    onTypingClicked = {deckViewModel.onStudyModeSelected(mode = StudyMode.TYPING)}
-                )
-            }
+        is DeckBottomSheetState.StudyMode -> {
+            StudyModeBottomSheet(
+                sheetState = sheetStateToStudyMode,
+                deckName = state.deckName,
+                onDismissRequest = { deckViewModel.hideBottomSheet() },
+                onFlashcardClicked = { deckViewModel.onStudyModeSelected(mode = StudyMode.FLASHCARDS) },
+                onQuizClicked = { deckViewModel.onStudyModeSelected(mode = StudyMode.QUIZ) },
+                onTypingClicked = { deckViewModel.onStudyModeSelected(mode = StudyMode.TYPING) }
+            )
+        }
 
-            is DeckBottomSheetState.StudySettings -> {
-                StudySettingsBottomSheet(
-                    sheetState = sheetStateToStudySettings,
-                    onDismissRequest = {deckViewModel.hideBottomSheet()},
-                    onStartSessionClicked = { selectedRounds ->
-                        deckUiState.selectedDeckId?.let { deckId ->
-                            deckViewModel.hideBottomSheet()
-                            when (deckViewModel.currentStudyMode) {
-                                StudyMode.FLASHCARDS -> {
-                                    onFlashcardsClicked(deckId, selectedRounds)
-                                }
-                                StudyMode.TYPING -> {
-                                    onTypingClicked(deckId, selectedRounds)
-                                }
-                                else -> {
-                                    onQuizClicked(deckId, selectedRounds)
-                                }
+        is DeckBottomSheetState.StudySettings -> {
+            StudySettingsBottomSheet(
+                sheetState = sheetStateToStudySettings,
+                onDismissRequest = { deckViewModel.hideBottomSheet() },
+                onStartSessionClicked = { selectedRounds ->
+                    deckUiState.selectedDeckId?.let { deckId ->
+                        deckViewModel.hideBottomSheet()
+                        when (deckViewModel.currentStudyMode) {
+                            StudyMode.FLASHCARDS -> {
+                                onFlashcardsClicked(deckId, selectedRounds)
+                            }
+
+                            StudyMode.TYPING -> {
+                                onTypingClicked(deckId, selectedRounds)
+                            }
+
+                            else -> {
+                                onQuizClicked(deckId, selectedRounds)
                             }
                         }
                     }
-                )
-            }
+                }
+            )
         }
+    }
 
-    DeckStatusDialogs(
+    DeckHomeStatusDialogs(
         deckDialogState = deckUiState.deckDialogState,
         deckViewModel = deckViewModel,
         deckName = (deckUiState.deckDialogState as? HasDeckName)?.deckName ?: "",
@@ -160,9 +168,11 @@ fun HomeScreen(
                     StudyMode.FLASHCARDS -> {
                         onFlashcardsClicked(deckId, 0)
                     }
+
                     StudyMode.TYPING -> {
                         onTypingClicked(deckId, 0)
                     }
+
                     else -> {
                         onQuizClicked(deckId, 0)
                     }
@@ -170,7 +180,6 @@ fun HomeScreen(
             }
         }
     )
-
 }
 
 @RequiresApi(value = Build.VERSION_CODES.Q)
@@ -178,6 +187,12 @@ fun HomeScreen(
 @Composable
 fun HomePreview() {
     PasslingoTheme {
-        HomeScreen(onCreateDeckClicked = {}, onEditDeckClicked = {}, onFlashcardsClicked = {_, _ -> }, onTypingClicked = {_, _ ->}, onQuizClicked = {_, _ ->})
+        HomeScreen(
+            onCreateDeckClicked = {},
+            onEditDeckClicked = {},
+            onFlashcardsClicked = { _, _ -> },
+            onTypingClicked = { _, _ -> },
+            onQuizClicked = { _, _ -> }
+        )
     }
 }

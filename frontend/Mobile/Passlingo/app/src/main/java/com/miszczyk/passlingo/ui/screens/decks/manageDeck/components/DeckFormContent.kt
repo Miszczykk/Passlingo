@@ -46,7 +46,7 @@ fun DeckFormContent(
     onEditCardClicked: (Flashcard) -> Unit,
     onDeleteCardClicked: (Flashcard) -> Unit,
     onSaveDeckClicked: () -> Unit
-){
+) {
     BackHandler {
         onBackClicked()
     }
@@ -62,7 +62,7 @@ fun DeckFormContent(
                 .padding(horizontal = spaceExtraLarge),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item{
+            item {
                 DeckDetailsSection(
                     state = deckNameState,
                     onSelectIconClicked = { onSelectIconClicked() },
@@ -83,8 +83,8 @@ fun DeckFormContent(
                 Spacer(modifier = Modifier.height(height = spaceExtraHuge))
             }
 
-            if(cards.isEmpty()) {
-                item{
+            if (cards.isEmpty()) {
+                item {
                     Text(
                         text = stringResource(id = R.string.prompt_no_cards_added),
                         color = MaterialTheme.colorScheme.onSurface,
@@ -92,14 +92,13 @@ fun DeckFormContent(
                         fontSize = bodySmall,
                     )
                 }
-            }else {
-                items(items = cards, key = {it.id}) { card ->
+            } else {
+                items(items = cards, key = { it.id }) { card ->
                     FlashcardItem(
                         frontText = card.front,
                         backText = card.back,
                         onEditClicked = { onEditCardClicked(card) },
-                        onDeleteClicked = { onDeleteCardClicked(card) }
-                    )
+                        onDeleteClicked = { onDeleteCardClicked(card) })
                     Spacer(modifier = Modifier.height(height = spaceLarge))
                 }
             }

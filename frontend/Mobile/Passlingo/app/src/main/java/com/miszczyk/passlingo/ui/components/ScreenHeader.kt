@@ -24,18 +24,15 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
 fun ScreenHeader(
-    title: String,
-    titleFontSize: TextUnit = headline,
-    onClick: () -> Unit
-){
+    title: String, titleFontSize: TextUnit = headline, onClick: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = spaceExtraLarge)
-    ){
+    ) {
         IconButton(
-            onClick = { onClick() },
-            modifier = Modifier
+            onClick = { onClick() }, modifier = Modifier
                 .align(Alignment.CenterStart)
                 .background(
                     color = MaterialTheme.colorScheme.onBackground,

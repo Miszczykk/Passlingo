@@ -48,23 +48,23 @@ fun AppStatusDialogs(
 @Composable
 private fun lockAppDialog(): DialogItem {
     return DialogItem(
-        title = stringResource(R.string.dialog_title_confirm_lock),
-        message = stringResource(R.string.dialog_message_confirm_lock),
+        title = stringResource(id = R.string.dialog_title_confirm_lock),
+        message = stringResource(id = R.string.dialog_message_confirm_lock),
         onConfirmText = stringResource(id = R.string.action_lock),
-        onCancelText = stringResource(R.string.action_cancel),
+        onCancelText = stringResource(id = R.string.action_cancel),
     )
 }
 
 @Composable
 private fun unlockAppDialog(appName: String): DialogItem {
     return DialogItem(
-        title = stringResource(R.string.dialog_title_confirm_unlock),
-        message = stringResource(R.string.dialog_message_confirm_unlock, appName),
-        onConfirmText = stringResource(R.string.action_pay_and_unlock),
-        onCancelText = stringResource(R.string.action_cancel),
+        title = stringResource(id = R.string.dialog_title_confirm_unlock),
+        message = stringResource(id = R.string.dialog_message_confirm_unlock, appName),
+        onConfirmText = stringResource(id = R.string.action_pay_and_unlock),
+        onCancelText = stringResource(id = R.string.action_cancel),
         extraContent = {
             TimerLock(
-                title = stringResource(R.string.label_cost_to_unlock),
+                title = stringResource(id = R.string.label_cost_to_unlock),
                 time = formatTime(totalSeconds = COST_TIME_SECONDS, forceFullFormat = false)
             )
         }
@@ -74,13 +74,13 @@ private fun unlockAppDialog(appName: String): DialogItem {
 @Composable
 private fun insufficientTimeDialog(appName: String): DialogItem {
     return DialogItem(
-        title = stringResource(R.string.dialog_title_insufficient_time),
-        message = stringResource(R.string.dialog_message_insufficient_time, appName),
-        onConfirmText = stringResource(R.string.action_keep_studying),
+        title = stringResource(id = R.string.dialog_title_insufficient_time),
+        message = stringResource(id = R.string.dialog_message_insufficient_time, appName),
+        onConfirmText = stringResource(id = R.string.action_keep_studying),
         onConfirmTextColor = MaterialTheme.colorScheme.background,
         extraContent = {
             TimerLock(
-                title = stringResource(R.string.label_requires),
+                title = stringResource(id = R.string.label_requires),
                 time = formatTime(totalSeconds = COST_TIME_SECONDS, forceFullFormat = false)
             )
         }
@@ -90,9 +90,9 @@ private fun insufficientTimeDialog(appName: String): DialogItem {
 @Composable
 private fun errorDialog(errorMessage: String): DialogItem {
     return DialogItem(
-        title = stringResource(R.string.dialog_title_error),
+        title = stringResource(id = R.string.dialog_title_error),
         message = errorMessage,
-        onConfirmText = stringResource(R.string.action_close),
+        onConfirmText = stringResource(id = R.string.action_close),
         onConfirmTextColor = MaterialTheme.colorScheme.background
     )
 }

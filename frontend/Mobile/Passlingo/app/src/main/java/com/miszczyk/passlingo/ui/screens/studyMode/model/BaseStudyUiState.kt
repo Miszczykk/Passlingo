@@ -1,6 +1,6 @@
 package com.miszczyk.passlingo.ui.screens.studyMode.model
 
-interface BaseStudyUiState{
+interface BaseStudyUiState {
     val isLoading: Boolean
     val isBreather: Boolean
     val currentFront: String?

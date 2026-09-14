@@ -46,7 +46,7 @@ fun DeckDetailsSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
         LabeledContent(
-            modifier.weight(weight = 1f), label = stringResource(R.string.label_deck_name)
+            modifier.weight(weight = 1f), label = stringResource(id = R.string.label_deck_name)
         ) {
             BasicTextField(
                 state = state,
@@ -79,18 +79,23 @@ fun DeckDetailsSection(
 
         LabeledContent(
             modifier,
-            label = stringResource(R.string.label_icon),
+            label = stringResource(id = R.string.label_icon),
             horizontal = Alignment.CenterHorizontally
         ) {
             IconButton(
                 onClick = { onSelectIconClicked() }, modifier = Modifier
-                    .cardSurface(borderColor = MaterialTheme.colorScheme.primary, borderWidth = borderDefault, elevation = elevationSmall, backgroundColor = MaterialTheme.colorScheme.primary)
+                    .cardSurface(
+                        borderColor = MaterialTheme.colorScheme.primary,
+                        borderWidth = borderDefault,
+                        elevation = elevationSmall,
+                        backgroundColor = MaterialTheme.colorScheme.primary
+                    )
                     .size(size = iconGiant)
                     .clip(shape = RoundedCornerShape(size = cornerRadiusDefault))
             ) {
                 Icon(
                     painter = painterResource(id = icon),
-                    contentDescription = stringResource(R.string.content_desc_deck_icon),
+                    contentDescription = stringResource(id = R.string.content_desc_deck_icon),
                     tint = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.size(size = iconHuge)
                 )

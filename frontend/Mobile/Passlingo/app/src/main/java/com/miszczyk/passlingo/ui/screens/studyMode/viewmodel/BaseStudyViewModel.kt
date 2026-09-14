@@ -16,7 +16,8 @@ import com.miszczyk.passlingo.ui.screens.studyMode.model.PracticeCardUiModel
 import kotlinx.coroutines.launch
 import java.util.UUID
 
-abstract class BaseStudyViewModel(application: Application, private val studyMode: StudyMode) : AndroidViewModel(application) {
+abstract class BaseStudyViewModel(application: Application, private val studyMode: StudyMode) :
+    AndroidViewModel(application) {
     protected val sessionRepository = StudySessionRepositoryImpl(context = application)
     protected val timeRepository = TimeAndAppsRepository(context = application)
     protected val deckRepository = DeckRepository(context = application)
@@ -40,7 +41,7 @@ abstract class BaseStudyViewModel(application: Application, private val studyMod
     protected abstract suspend fun showCurrentCard()
     protected open suspend fun onSessionInitialized() {}
 
-    fun startSession(deckId: String, rounds: Int){
+    fun startSession(deckId: String, rounds: Int) {
         currentDeckId = deckId
         timeToBreath = 0
 
@@ -51,12 +52,13 @@ abstract class BaseStudyViewModel(application: Application, private val studyMod
                 val deckWithCards = deckRepository.getDeckWithFlashcardsById(deckId = deckId)
 
                 deckDictionary = deckWithCards?.flashcards?.associate {
-                    it.id to Pair(first = it.front, second =  it.back)
+                    it.id to Pair(first = it.front, second = it.back)
                 } ?: emptyMap()
 
-                val activeSession = sessionRepository.getActiveSession(deckId = deckId, mode = studyMode)
+                val activeSession =
+                    sessionRepository.getActiveSession(deckId = deckId, mode = studyMode)
 
-                if(activeSession != null){
+                if (activeSession != null) {
                     currentSessionId = activeSession.session.id
                     targetRounds = activeSession.session.targetRounds
                 } else {
@@ -74,13 +76,10 @@ abstract class BaseStudyViewModel(application: Application, private val studyMod
         }
     }
 
-    private suspend fun createNewSession(deckId: String, deckWithCards: DeckWithFlashcards?){
+    private suspend fun createNewSession(deckId: String, deckWithCards: DeckWithFlashcards?) {
         currentSessionId = UUID.randomUUID().toString()
         val session = StudySessionEntity(
-            id = currentSessionId,
-            deckId = deckId,
-            mode = studyMode,
-            targetRounds = targetRounds
+            id = currentSessionId, deckId = deckId, mode = studyMode, targetRounds = targetRounds
         )
 
         val progressList = deckWithCards?.flashcards?.shuffled()?.mapIndexed { index, card ->
@@ -93,11 +92,10 @@ abstract class BaseStudyViewModel(application: Application, private val studyMod
                 orderIndex = index
             )
         } ?: emptyList()
-
         sessionRepository.createSession(session, progressList)
     }
 
-    fun continueLearningClicked(){
+    fun continueLearningClicked() {
         viewModelScope.launch {
             runCatching {
                 timeToBreath = 0
@@ -110,12 +108,12 @@ abstract class BaseStudyViewModel(application: Application, private val studyMod
         }
     }
 
-    protected suspend fun loadNextBatchAndShow(){
+    protected suspend fun loadNextBatchAndShow() {
         currentBatch = sessionRepository.getNextBatch(currentSessionId, targetRounds)
-        if(currentBatch.isEmpty()){
+        if (currentBatch.isEmpty()) {
             loadCardsToPractice()
 
-            if(currentSessionId.isNotEmpty()) {
+            if (currentSessionId.isNotEmpty()) {
                 sessionRepository.deleteSessionById(currentSessionId)
             }
             onSessionEndedUiState()

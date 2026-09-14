@@ -24,7 +24,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     private val timeAndAppsRepository = TimeAndAppsRepository(context = application)
     private val _appUiState = MutableStateFlow(value = AppUiState())
     val appUiState: StateFlow<AppUiState> = _appUiState.asStateFlow()
-    private val appDialogAction = AppDialogAction(uiStateFlow = _appUiState, externalScope = viewModelScope, repository = timeAndAppsRepository)
+    private val appDialogAction = AppDialogAction(
+        uiStateFlow = _appUiState,
+        externalScope = viewModelScope,
+        repository = timeAndAppsRepository
+    )
     private val appSelectionAction = AppSelectionAction(uiStateFlow = _appUiState)
 
     private var observationJob: Job? = null
@@ -36,17 +40,20 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     private fun startObservingData() {
         observationJob?.cancel()
         observationJob = combine(
-            flow = timeAndAppsRepository.lockedApps, flow2 =  timeAndAppsRepository.balanceTime
+            flow = timeAndAppsRepository.lockedApps, flow2 = timeAndAppsRepository.balanceTime
         ) { locked, time ->
             locked to time
-        }.observeWithRetry(
-            scope = viewModelScope,
-            onError = { e ->
-                _appUiState.update { it.copy(appDialogState = AppDialogState.Error(e.localizedMessage ?: "Failed to load data")) }
-            },
-            onEachAction = { (locked, time) ->
-                _appUiState.update { it.copy(lockedApps = locked, balanceTime = time) }
+        }.observeWithRetry(scope = viewModelScope, onError = { e ->
+            _appUiState.update {
+                it.copy(
+                    appDialogState = AppDialogState.Error(
+                        e.localizedMessage ?: "Failed to load data"
+                    )
+                )
             }
+        }, onEachAction = { (locked, time) ->
+            _appUiState.update { it.copy(lockedApps = locked, balanceTime = time) }
+        }
         )
     }
 
@@ -54,7 +61,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         _appUiState.update { it.copy(isLoadingApps = true) }
         viewModelScope.launch {
             val result = runCatching {
-                    appUsageProvider.getInstalledAppsWithUsage()
+                appUsageProvider.getInstalledAppsWithUsage()
             }
             result.fold(onSuccess = { apps ->
                 _appUiState.update { it.copy(userApps = apps, isLoadingApps = false) }
@@ -68,7 +75,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     )
 
                 }
-            })
+            }
+            )
         }
     }
 

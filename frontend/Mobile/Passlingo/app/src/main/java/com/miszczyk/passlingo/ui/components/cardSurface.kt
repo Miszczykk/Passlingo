@@ -14,15 +14,19 @@ import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.elevationExtraSmall
 
 @Composable
-fun Modifier.cardSurface(cornerRadius: Dp = cornerRadiusDefault, borderColor: Color = MaterialTheme.colorScheme.onBackground, borderWidth: Dp = borderThin, elevation: Dp = elevationExtraSmall, backgroundColor: Color = MaterialTheme.colorScheme.background): Modifier{
+fun Modifier.cardSurface(
+    cornerRadius: Dp = cornerRadiusDefault,
+    borderColor: Color = MaterialTheme.colorScheme.onBackground,
+    borderWidth: Dp = borderThin,
+    elevation: Dp = elevationExtraSmall,
+    backgroundColor: Color = MaterialTheme.colorScheme.background
+): Modifier {
     return this
         .shadow(
-            elevation = elevation,
-            shape = RoundedCornerShape(size = cornerRadius)
+            elevation = elevation, shape = RoundedCornerShape(size = cornerRadius)
         )
         .background(
-            color = backgroundColor,
-            shape = RoundedCornerShape(size = cornerRadius)
+            color = backgroundColor, shape = RoundedCornerShape(size = cornerRadius)
         )
         .border(
             width = borderWidth,
