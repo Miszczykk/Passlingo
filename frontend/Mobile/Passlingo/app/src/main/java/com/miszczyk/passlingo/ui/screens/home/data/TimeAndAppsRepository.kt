@@ -30,6 +30,9 @@ class TimeAndAppsRepository(
     suspend fun addCreditTime(secondsEarned: Long) {
         updateTimeAndApps(timeDelta = secondsEarned)
     }
+    suspend fun consumeCreditTime(secondsLost: Long) {
+        updateTimeAndApps(timeDelta = -secondsLost)
+    }
 
     private suspend fun updateTimeAndApps(
         timeDelta: Long,

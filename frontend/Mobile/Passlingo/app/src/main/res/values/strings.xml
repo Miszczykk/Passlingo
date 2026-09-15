@@ -141,4 +141,7 @@
 
     <string name="dialog_title_resume_session">Resume Session?</string>
     <string name="dialog_message_resume_session">You have an unfinished study session for this deck. Would you like to pick up exactly where you left off?</string>
+
+
+    <string name="accessibility_service_description">Passlingo uses this service to detect when a locked app is opened and to enforce the time limit.</string>
 </resources>

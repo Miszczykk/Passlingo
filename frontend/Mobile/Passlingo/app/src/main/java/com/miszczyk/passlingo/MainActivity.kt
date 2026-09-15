@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,22 +15,28 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.miszczyk.passlingo.ui.screens.decks.createDeck.CreateDeckScreen
-import com.miszczyk.passlingo.ui.screens.home.HomeScreen
+import com.miszczyk.passlingo.service.isAccessibilityServiceEnabled
+import com.miszczyk.passlingo.service.openAccessibilitySettings
 import com.miszczyk.passlingo.ui.model.Screen
-import com.miszczyk.passlingo.ui.screens.loading.LoadingScreen
-import com.miszczyk.passlingo.ui.theme.PasslingoTheme
-import androidx.activity.enableEdgeToEdge
+import com.miszczyk.passlingo.ui.screens.decks.createDeck.CreateDeckScreen
 import com.miszczyk.passlingo.ui.screens.decks.editDeck.EditDeckScreen
+import com.miszczyk.passlingo.ui.screens.home.HomeScreen
+import com.miszczyk.passlingo.ui.screens.loading.LoadingScreen
 import com.miszczyk.passlingo.ui.screens.studyMode.flashcards.FlashcardScreen
 import com.miszczyk.passlingo.ui.screens.studyMode.quiz.QuizScreen
 import com.miszczyk.passlingo.ui.screens.studyMode.typing.TypingScreen
+import com.miszczyk.passlingo.ui.theme.PasslingoTheme
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        if (!isAccessibilityServiceEnabled(this)) {
+            openAccessibilitySettings(this)
+        }
+
         setContent {
             PasslingoTheme {
                 var currentScreen by remember { mutableStateOf<Screen>(value = Screen.Loading) }
