@@ -4,7 +4,9 @@ import android.app.Application
 import android.util.Log
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.viewModelScope
+import com.miszczyk.passlingo.BuildConfig
 import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.data.ai.GeminiAnswerVerifier
 import com.miszczyk.passlingo.data.local.entity.StudyCardProgressEntity
 import com.miszczyk.passlingo.data.local.entity.StudyMode
 import com.miszczyk.passlingo.ui.screens.studyMode.model.PracticeCardUiModel
@@ -103,6 +105,7 @@ class TypingViewModel(application: Application) :
     }
 
     fun moveToNextCard() {
+        if (_uiState.value.isAiChecking) return
         viewModelScope.launch {
             val currentProgress = repeatCard ?: currentBatch.firstOrNull() ?: return@launch
             val isGoodAnswer = _uiState.value.userAnswer == TypeAnswer.GOOD
@@ -148,7 +151,40 @@ class TypingViewModel(application: Application) :
         }
     }
 
+    private val answerVerifier = GeminiAnswerVerifier(apiKey = BuildConfig.GEMINI_API_KEY)
+
     fun checkAgain(userAnswer: TextFieldState, correctAnswer: String?) {
-        //TODO implement AI
+        if (correctAnswer == null) return
+        if (_uiState.value.isAiChecking) return
+
+        viewModelScope.launch {
+            _uiState.update { it.copy(isAiChecking = true) }
+
+            answerVerifier.verify(
+                front = _uiState.value.currentFront ?: "",
+                expectedAnswer = correctAnswer,
+                userAnswer = userAnswer.text.toString()
+            ).onSuccess { isCorrect ->
+                if(isCorrect) {
+                    repeatCard = null
+                    timeToBreath++
+                }
+                _uiState.update {
+                    it.copy(
+                        isAiChecking = false,
+                        userAnswer = if (isCorrect) TypeAnswer.GOOD else TypeAnswer.BAD
+                    )
+                }
+            }.onFailure { e ->
+                Log.e(logTag, "Gemini verification failed", e)
+                _uiState.update {
+                    it.copy(
+                        isAiChecking = false,
+                        errorMessage = getApplication<Application>()
+                            .getString(R.string.error_study_session)
+                    )
+                }
+            }
+        }
     }
 }
