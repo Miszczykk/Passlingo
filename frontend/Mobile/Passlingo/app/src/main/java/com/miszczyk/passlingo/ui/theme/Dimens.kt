@@ -28,6 +28,7 @@ object Dimens {
     val iconHuge = 60.dp
     val iconExtraHuge = 65.dp
     val iconGiant = 75.dp
+    val iconSuperGiant = 80.dp
     val iconMassive = 100.dp
 
     val animatedRadiusSmall = 80.dp

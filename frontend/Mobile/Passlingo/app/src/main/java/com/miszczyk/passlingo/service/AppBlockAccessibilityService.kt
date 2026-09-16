@@ -2,6 +2,7 @@ package com.miszczyk.passlingo.service
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -9,17 +10,18 @@ import android.content.IntentFilter
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import androidx.core.content.ContextCompat
-import com.miszczyk.passlingo.MainActivity
 import com.miszczyk.passlingo.ui.screens.home.data.TimeAndAppsRepository
+import com.miszczyk.passlingo.ui.screens.lock.LockScreenActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
+@SuppressLint("AccessibilityPolicy")
 class AppBlockAccessibilityService : AccessibilityService() {
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
@@ -103,7 +105,7 @@ class AppBlockAccessibilityService : AccessibilityService() {
     }
 
     private fun blockApplication(packageName: String) {
-        val lockIntent = Intent(applicationContext, MainActivity::class.java).apply {
+        val lockIntent = Intent(applicationContext, LockScreenActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             putExtra("BLOCKED_PACKAGE", packageName)
         }

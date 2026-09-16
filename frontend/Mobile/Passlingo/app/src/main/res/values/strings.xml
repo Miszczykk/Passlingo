@@ -43,6 +43,7 @@
     <string name="action_try_again">Try again</string>
     <string name="action_my_answer_was_good">My answer was good</string>
     <string name="action_check_answer">Check answer</string>
+    <string name="action_earn_study_time">Earn study time</string>
 
     <!-- Labels / Titles -->
     <string name="label_app_lock">App Lock</string>
@@ -82,6 +83,7 @@
     <string name="label_starting_side">STARTING SIDE</string>
     <string name="side_front">Front</string>
     <string name="side_back">Back</string>
+    <string name="title_access_locked">Access Locked</string>
 
     <!-- Prompts & Messages -->
     <string name="prompt_app_lock_description">Select apps you want to restrict access to.\nUnlocking them will require studying!</string>
@@ -109,6 +111,7 @@
     <string name="prompt_your_answer_hint">Your answer</string>
     <string name="prompt_enter_your_answer">Enter your answer</string>
     <string name="desc_starting_side">Which side of the card should be shown first as the question?</string>
+    <string name="message_out_of_time">You\'ve run out of study time balance. Complete a quick session to earn more time and regain access to your apps.</string>
 
     <!-- Dialogs -->
     <string name="dialog_title_confirm_lock">Are you sure?</string>
