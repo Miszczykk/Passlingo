@@ -1,5 +1,6 @@
 package com.miszczyk.passlingo.ui.screens.studyMode.typing.components
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
@@ -25,8 +27,22 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedBold
 
 @Composable
 fun ButtonAfterAnswer(
-    checkAgain: () -> Unit = {}, continueLearning: () -> Unit, badAnswer: Boolean
+    checkAgain: () -> Unit = {}, continueLearning: () -> Unit, badAnswer: Boolean, isAiChecking: Boolean = false, hasAiRejected: Boolean = false
 ) {
+
+    val buttonColor by animateColorAsState(
+        targetValue = when {
+            !badAnswer -> MaterialTheme.colorScheme.primary
+            isAiChecking -> MaterialTheme.colorScheme.onBackground
+            else -> MaterialTheme.colorScheme.primary
+        },
+        label = "buttonColor"
+    )
+    val textButton = when {
+        !badAnswer -> stringResource(id = R.string.action_continue)
+        isAiChecking -> stringResource(id = R.string.label_ai_checking)
+        else -> stringResource(id = R.string.action_try_again)
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -36,14 +52,13 @@ fun ButtonAfterAnswer(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(size = cornerRadiusDefault),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary
+                containerColor = buttonColor
             ),
+            enabled = !isAiChecking,
             onClick = { continueLearning() }
         ) {
             Text(
-                text = if (badAnswer) stringResource(id = R.string.action_try_again) else stringResource(
-                    id = R.string.action_continue
-                ),
+                text = textButton,
                 fontSize = titleLarge,
                 color = MaterialTheme.colorScheme.background,
                 fontFamily = vagRoundedBold,
@@ -51,7 +66,7 @@ fun ButtonAfterAnswer(
             )
         }
 
-        if (badAnswer) {
+        if (badAnswer&& !isAiChecking && !hasAiRejected) {
             Spacer(modifier = Modifier.height(height = spaceMedium))
             TextButton(
                 modifier = Modifier.fillMaxWidth(), onClick = { checkAgain() }

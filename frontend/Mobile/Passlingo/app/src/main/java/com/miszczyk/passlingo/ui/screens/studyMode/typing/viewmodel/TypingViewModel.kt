@@ -35,7 +35,8 @@ class TypingViewModel(application: Application) :
                 isLoading = false,
                 isBreather = false,
                 userAnswer = TypeAnswer.NONE,
-                userAnswerState = TextFieldState(initialText = "")
+                userAnswerState = TextFieldState(initialText = ""),
+                hasAiRejected = false
             )
         }
     }
@@ -88,8 +89,8 @@ class TypingViewModel(application: Application) :
         }
     }
 
-    fun checkUserAnswer(userAnswer: TextFieldState, correctAnswer: String?) {
-        val cleanUser = userAnswer.text.toString().trim().replace(regex = "\\s+".toRegex(), replacement = " ")
+    fun checkUserAnswer(userAnswer: String, correctAnswer: String?) {
+        val cleanUser = userAnswer.trim().replace(regex = "\\s+".toRegex(), replacement = " ")
 
         val cleanCorrect = correctAnswer?.trim()?.replace(regex = "\\s+".toRegex(), replacement = " ") ?: ""
 
@@ -114,6 +115,7 @@ class TypingViewModel(application: Application) :
                 if (isGoodAnswer) {
                     if (repeatCard != null) {
                         repeatCard = null
+                        _uiState.update { it.copy(hasAiRejected = false) }
                     } else {
                         sessionRepository.incrementCurrentRound(
                             currentSessionId, currentProgress.flashcardId
@@ -158,22 +160,23 @@ class TypingViewModel(application: Application) :
         if (_uiState.value.isAiChecking) return
 
         viewModelScope.launch {
-            _uiState.update { it.copy(isAiChecking = true) }
-
+            _uiState.update { it.copy(
+                isAiChecking = true)
+            }
             answerVerifier.verify(
                 front = _uiState.value.currentFront ?: "",
                 expectedAnswer = correctAnswer,
                 userAnswer = userAnswer.text.toString()
             ).onSuccess { isCorrect ->
-                if(isCorrect) {
+                if(isCorrect){
+                    checkUserAnswer(correctAnswer, correctAnswer)
                     repeatCard = null
-                    timeToBreath++
-                }
-                _uiState.update {
-                    it.copy(
+                    _uiState.update { it.copy(isAiChecking = false) }
+                }else{
+                    _uiState.update { it.copy(
                         isAiChecking = false,
-                        userAnswer = if (isCorrect) TypeAnswer.GOOD else TypeAnswer.BAD
-                    )
+                        hasAiRejected = true
+                    ) }
                 }
             }.onFailure { e ->
                 Log.e(logTag, "Gemini verification failed", e)

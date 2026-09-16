@@ -187,7 +187,7 @@ fun TypingScreen(
                     enabled = check,
                     onClick = {
                         viewModel.checkUserAnswer(
-                            userAnswer = uiState.userAnswerState,
+                            userAnswer = uiState.userAnswerState.text.toString(),
                             correctAnswer = uiState.currentBack
                         )
                     }
@@ -207,7 +207,7 @@ fun TypingScreen(
                         userAnswer = uiState.userAnswerState,
                         correctAnswer = uiState.currentBack
                     )
-                }, continueLearning = { viewModel.moveToNextCard() }, badAnswer = true
+                }, continueLearning = { viewModel.moveToNextCard() }, badAnswer = true, isAiChecking = uiState.isAiChecking, hasAiRejected = uiState.hasAiRejected
                 )
             }
         }

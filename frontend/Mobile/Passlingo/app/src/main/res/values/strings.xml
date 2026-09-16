@@ -84,6 +84,7 @@
     <string name="side_front">Front</string>
     <string name="side_back">Back</string>
     <string name="title_access_locked">Access Locked</string>
+    <string name="label_ai_checking">Wait, AI checking…</string>
 
     <!-- Prompts & Messages -->
     <string name="prompt_app_lock_description">Select apps you want to restrict access to.\nUnlocking them will require studying!</string>

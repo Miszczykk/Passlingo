@@ -17,5 +17,6 @@ data class TypingUiState(
     val userAnswer: TypeAnswer = TypeAnswer.NONE,
     val userAnswerState: TextFieldState = TextFieldState(initialText = ""),
 
-    val isAiChecking: Boolean = false
+    val isAiChecking: Boolean = false,
+    val hasAiRejected: Boolean = false
 ) : BaseStudyUiState
