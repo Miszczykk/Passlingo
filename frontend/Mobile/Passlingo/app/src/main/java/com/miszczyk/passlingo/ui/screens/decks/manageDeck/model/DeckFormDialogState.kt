@@ -7,6 +7,7 @@ sealed interface DeckFormDialogState {
     data class Error(val message: String) : DeckFormDialogState
 
     data class EditFlashcard(val id: String, val frontText: String, val backText: String) : DeckFormDialogState
-
     data class DeleteFlashcard(val id: String, val frontText: String, val backText: String) : DeckFormDialogState
+
+    data object BulkDialog : DeckFormDialogState
 }

@@ -45,6 +45,7 @@
     <string name="action_check_answer">Check answer</string>
     <string name="action_earn_study_time">Earn study time</string>
     <string name="action_i_was_right">I was right</string>
+    <string name="action_import_cards">Import Cards</string>
 
     <!-- Labels / Titles -->
     <string name="label_app_lock">App Lock</string>
@@ -151,6 +152,9 @@
 
     <string name="dialog_title_connection_error">Connection Error</string>
     <string name="dialog_message_ai_connection_error">We couldn\'t reach the AI to verify your answer. Please check your internet connection and try again.</string>
+
+    <string name="dialog_title_bulk_import">Bulk Import</string>
+    <string name="dialog_message_bulk_import">Paste your text below. Separate the Word and Meaning with a Tab on each line.</string>
 
     <string name="accessibility_service_description">Passlingo uses this service to detect when a locked app is opened and to enforce the time limit.</string>
 </resources>

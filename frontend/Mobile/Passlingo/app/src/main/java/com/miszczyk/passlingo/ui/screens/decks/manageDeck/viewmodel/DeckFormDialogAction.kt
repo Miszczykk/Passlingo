@@ -16,6 +16,7 @@ class DeckFormDialogAction(
     private val clearScreen: () -> Unit,
     private val onEditCardConfirmed: (String) -> Unit,
     private val onDeleteConfirmed: (String) -> Unit,
+    private val onBulkConfirmed: () -> Unit
 ) {
     fun onDialogCancelled() {
         uiStateFlow.update { state -> state.copy(dialogState = DeckFormDialogState.None) }
@@ -60,6 +61,11 @@ class DeckFormDialogAction(
         uiStateFlow.update { state -> state.copy(dialogState = DeckFormDialogState.None) }
     }
 
+    private fun onImportCardDialogConfirmed(){
+        onBulkConfirmed()
+        uiStateFlow.update { state -> state.copy(dialogState = DeckFormDialogState.None) }
+    }
+
     fun onDialogConfirmed() {
         when (val currentState = uiStateFlow.value.dialogState) {
             is DeckFormDialogState.None -> error("onDialogConfirmed called with no dialog visible")
@@ -68,6 +74,7 @@ class DeckFormDialogAction(
             is DeckFormDialogState.Error -> onDialogCancelled()
             is DeckFormDialogState.DeleteFlashcard -> onDeleteCardDialogConfirmed(currentState.id)
             is DeckFormDialogState.EditFlashcard -> onEditCardDialogConfirmed(currentState.id)
+            is DeckFormDialogState.BulkDialog -> onImportCardDialogConfirmed()
         }
     }
 }

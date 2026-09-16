@@ -48,7 +48,8 @@ fun CreateDeckScreen(
         onAddToDeckClicked = { viewModel.onAddToDeckClicked() },
         onEditCardClicked = { viewModel.onEditCardClicked(card = it) },
         onDeleteCardClicked = { viewModel.onDeleteCardClicked(card = it) },
-        onSaveDeckClicked = { viewModel.onSaveDeckClicked() }
+        onSaveDeckClicked = { viewModel.onSaveDeckClicked() },
+        onBulkImportClicked = { viewModel.onImportClicked() }
     )
 
     if (uiState.showBottomSheet) {
@@ -65,7 +66,8 @@ fun CreateDeckScreen(
         dialogState = uiState.dialogState,
         editFrontState = viewModel.editFrontState,
         editBackState = viewModel.editBackState,
+        bulkState = viewModel.bulkState,
         onConfirm = { viewModel.onDialogConfirmed() },
-        onDismiss = { viewModel.onDialogCancelled() }
+        onDismiss = { viewModel.onDialogCancelled() },
     )
 }

@@ -34,6 +34,7 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
     val backCreateCardState: TextFieldState = TextFieldState(initialText = "")
     val editFrontState: TextFieldState = TextFieldState(initialText = "")
     val editBackState: TextFieldState = TextFieldState(initialText = "")
+    val bulkState: TextFieldState = TextFieldState(initialText = "")
 
     private val dialogAction = DeckFormDialogAction(
         uiStateFlow = _uiState,
@@ -48,7 +49,8 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
                 newBackText = editBackState.text.toString()
             )
         },
-        onDeleteConfirmed = { id -> deleteCard(id) }
+        onDeleteConfirmed = { id -> deleteCard(id) },
+        onBulkConfirmed = { splitBulk() }
     )
 
     protected abstract suspend fun saveDeckToDatabase()
@@ -56,6 +58,7 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
     open fun clearScreen() {
         frontCreateCardState.clear()
         backCreateCardState.clear()
+        bulkState.clear()
     }
 
     fun onSheetDismissed() {
@@ -159,5 +162,28 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
         _uiState.update { state ->
             state.copy(cards = state.cards.filterNot { it.id == id })
         }
+    }
+
+
+    fun onImportClicked(){
+        _uiState.update {
+            it.copy(
+                dialogState = DeckFormDialogState.BulkDialog
+            )
+        }
+    }
+     fun splitBulk(){
+         val inputText = bulkState.text.toString()
+         if(inputText.isBlank()) return
+         inputText.lines().filter { it.isNotBlank() }.mapNotNull { line ->
+            val parts = line.split('\t')
+            if(parts.size == 2){
+                val newCard = Flashcard(front = parts[0].trim(), back = parts[1].trim())
+                _uiState.update { currentState ->
+                    currentState.copy(cards = currentState.cards + newCard)
+                }
+            } else null
+        }
+         bulkState.clear()
     }
 }

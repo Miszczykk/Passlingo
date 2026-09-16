@@ -2,12 +2,14 @@ package com.miszczyk.passlingo.ui.screens.decks.manageDeck.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,23 +19,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.DialogComponent
+import com.miszczyk.passlingo.ui.components.HintedTextField
+import com.miszczyk.passlingo.ui.components.cardSurface
 import com.miszczyk.passlingo.ui.model.DialogItem
 import com.miszczyk.passlingo.ui.screens.decks.manageDeck.model.DeckFormDialogState
 import com.miszczyk.passlingo.ui.theme.Dimens.borderDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
+import com.miszczyk.passlingo.ui.theme.Dimens.heightTextArea
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.spaceVeryLarge
 import com.miszczyk.passlingo.ui.theme.TextSize.small
+import com.miszczyk.passlingo.ui.theme.TextSize.titleMedium
 import com.miszczyk.passlingo.ui.theme.vagRoundedBold
+import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 
 @Composable
 fun DeckFormStatusDialogs(
     dialogState: DeckFormDialogState,
     editFrontState: TextFieldState,
     editBackState: TextFieldState,
+    bulkState: TextFieldState,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -45,10 +55,10 @@ fun DeckFormStatusDialogs(
         is DeckFormDialogState.DeleteFlashcard -> deleteFlashcard(
             frontText = dialogState.frontText, backText = dialogState.backText
         )
-
         is DeckFormDialogState.EditFlashcard -> editFlashcard(
             stateFront = editFrontState, stateBack = editBackState
         )
+        is DeckFormDialogState.BulkDialog -> bulkImport(state = bulkState)
     }
 
 
@@ -168,6 +178,46 @@ private fun editFlashcard(stateFront: TextFieldState, stateBack: TextFieldState)
                     modifier = Modifier.height(height = spaceExtraLarge)
                 )
             }
+        },
+        isWide = true
+    )
+}
+
+@Composable
+private fun bulkImport(state: TextFieldState) : DialogItem{
+    return DialogItem(
+        title = stringResource(id = R.string.dialog_title_bulk_import),
+        message = stringResource(id = R.string.dialog_message_bulk_import),
+        onConfirmText = stringResource(id = R.string.action_import_cards),
+        onConfirmTextColor = MaterialTheme.colorScheme.background,
+        extraContent = {
+            BasicTextField(
+                state = state,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(height = heightTextArea),
+                textStyle = TextStyle(
+                    fontFamily = vagRoundedLight,
+                    fontSize = titleMedium,
+                    color = MaterialTheme.colorScheme.primary
+                ),
+                decorator = { innerTextField ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth().height(height = heightTextArea)
+                            .cardSurface(borderColor = MaterialTheme.colorScheme.onSurface)
+                            .padding(horizontal = spaceExtraLarge, vertical = spaceVeryLarge),
+                        contentAlignment = Alignment.CenterStart
+                    ){
+                        HintedTextField(
+                            state = state,
+                            hintText = "Here",
+                            fontFamily = vagRoundedLight
+                        )
+                        innerTextField()
+                    }
+                }
+            )
         },
         isWide = true
     )

@@ -1,6 +1,7 @@
 package com.miszczyk.passlingo.ui.screens.decks.manageDeck.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
@@ -20,9 +22,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.cardSurface
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusDefault
+import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraSmall
@@ -38,7 +42,8 @@ fun AddCardSection(
     addedCards: Int,
     stateFront: TextFieldState,
     stateBack: TextFieldState,
-    onAddToDeckClicked: () -> Unit
+    onAddToDeckClicked: () -> Unit,
+    onBulkImportClicked: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -54,21 +59,43 @@ fun AddCardSection(
                 fontSize = titleLarge,
                 fontFamily = vagRoundedBold,
             )
-            Box(
-                modifier = Modifier.background(
-                    color = MaterialTheme.colorScheme.secondary, shape = CircleShape
-                ), contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.label_cards_added, addedCards),
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = body,
-                    fontFamily = vagRoundedBold,
-                    modifier = Modifier.padding(
-                        vertical = spaceExtraSmall, horizontal = spaceMediumLarge
+            Row(verticalAlignment = Alignment.CenterVertically){
+                Box(
+                    modifier = Modifier.background(
+                        color = MaterialTheme.colorScheme.onBackground, shape =  RoundedCornerShape(size = cornerRadiusSmall)
+                    ).clickable { onBulkImportClicked() }
+                    , contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = "Import",
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = body,
+                        fontFamily = vagRoundedBold,
+                        modifier = Modifier.padding(
+                            vertical = spaceExtraSmall, horizontal = spaceMediumLarge
+                        )
                     )
-                )
+                }
+
+                Spacer(modifier = Modifier.width(width = 10.dp))
+
+                Box(
+                    modifier = Modifier.background(
+                        color = MaterialTheme.colorScheme.secondary, shape = CircleShape
+                    ), contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.label_cards_added, addedCards),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = body,
+                        fontFamily = vagRoundedBold,
+                        modifier = Modifier.padding(
+                            vertical = spaceExtraSmall, horizontal = spaceMediumLarge
+                        )
+                    )
+                }
             }
+
         }
 
         Spacer(modifier = Modifier.height(height = spaceLarge))

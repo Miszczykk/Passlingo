@@ -45,7 +45,8 @@ fun DeckFormContent(
     onAddToDeckClicked: () -> Unit,
     onEditCardClicked: (Flashcard) -> Unit,
     onDeleteCardClicked: (Flashcard) -> Unit,
-    onSaveDeckClicked: () -> Unit
+    onSaveDeckClicked: () -> Unit,
+    onBulkImportClicked: () -> Unit
 ) {
     BackHandler {
         onBackClicked()
@@ -77,7 +78,8 @@ fun DeckFormContent(
                     addedCards = cards.size,
                     stateFront = frontCardState,
                     stateBack = backCardState,
-                    onAddToDeckClicked = { onAddToDeckClicked() }
+                    onAddToDeckClicked = { onAddToDeckClicked() },
+                    onBulkImportClicked = { onBulkImportClicked() }
                 )
 
                 Spacer(modifier = Modifier.height(height = spaceExtraHuge))
