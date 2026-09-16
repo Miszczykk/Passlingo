@@ -18,5 +18,8 @@ data class TypingUiState(
     val userAnswerState: TextFieldState = TextFieldState(initialText = ""),
 
     val isAiChecking: Boolean = false,
-    val hasAiRejected: Boolean = false
+    val hasAiRejected: Boolean = false,
+
+    val aiExplanationDialogText: String? = null,
+    val hasAiError: Boolean = false
 ) : BaseStudyUiState

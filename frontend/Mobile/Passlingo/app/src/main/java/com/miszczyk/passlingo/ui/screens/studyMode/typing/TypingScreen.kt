@@ -30,8 +30,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.miszczyk.passlingo.R
+import com.miszczyk.passlingo.ui.components.DialogComponent
 import com.miszczyk.passlingo.ui.components.HintedTextField
 import com.miszczyk.passlingo.ui.components.cardSurface
+import com.miszczyk.passlingo.ui.model.DialogItem
 import com.miszczyk.passlingo.ui.screens.studyMode.components.BaseStudyScreen
 import com.miszczyk.passlingo.ui.screens.studyMode.model.TypeAnswer
 import com.miszczyk.passlingo.ui.screens.studyMode.typing.components.ButtonAfterAnswer
@@ -212,5 +214,35 @@ fun TypingScreen(
             }
         }
         Spacer(modifier = Modifier.height(height = spaceLarge))
+    }
+
+    if(uiState.aiExplanationDialogText != null){
+        DialogComponent(
+            dialog = DialogItem(
+                title = stringResource(id = R.string.dialog_title_ai_feedback),
+                message = uiState.aiExplanationDialogText!!,
+                onConfirmText = stringResource(id = R.string.action_i_was_right),
+                onCancelText = stringResource(id = R.string.action_got_it),
+                onConfirmBackgroundColor = MaterialTheme.colorScheme.error,
+                onConfirmTextColor = MaterialTheme.colorScheme.background,
+            ),
+            onConfirm = { viewModel.confirmButtonAIExplanationDialog() },
+            onCancel = { viewModel.dismissButtonAIExplanationDialog() }
+        )
+    }
+
+    if(uiState.hasAiError){
+        DialogComponent(
+            dialog = DialogItem(
+                title = stringResource(id = R.string.dialog_title_connection_error),
+                message = stringResource(id = R.string.dialog_message_ai_connection_error),
+                onConfirmText = stringResource(id = R.string.action_i_was_right),
+                onCancelText = stringResource(id = R.string.action_got_it),
+                onConfirmBackgroundColor = MaterialTheme.colorScheme.error,
+                onConfirmTextColor = MaterialTheme.colorScheme.background,
+            ),
+            onConfirm = { viewModel.confirmButtonAIExplanationDialog() },
+            onCancel = { viewModel.dismissButtonAIExplanationDialog() }
+        )
     }
 }

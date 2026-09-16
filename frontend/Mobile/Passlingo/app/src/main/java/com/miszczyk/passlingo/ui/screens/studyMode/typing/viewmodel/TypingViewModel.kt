@@ -167,27 +167,39 @@ class TypingViewModel(application: Application) :
                 front = _uiState.value.currentFront ?: "",
                 expectedAnswer = correctAnswer,
                 userAnswer = userAnswer.text.toString()
-            ).onSuccess { isCorrect ->
-                if(isCorrect){
+            ).onSuccess { verdict ->
+                if(verdict.isCorrect){
                     checkUserAnswer(correctAnswer, correctAnswer)
                     repeatCard = null
                     _uiState.update { it.copy(isAiChecking = false) }
                 }else{
                     _uiState.update { it.copy(
                         isAiChecking = false,
-                        hasAiRejected = true
+                        hasAiRejected = true,
+                        aiExplanationDialogText = verdict.explanation
                     ) }
                 }
             }.onFailure { e ->
                 Log.e(logTag, "Gemini verification failed", e)
                 _uiState.update {
                     it.copy(
+                        hasAiError = true,
                         isAiChecking = false,
+                        hasAiRejected = true,
                         errorMessage = getApplication<Application>()
                             .getString(R.string.error_study_session)
                     )
                 }
             }
         }
+    }
+
+    fun confirmButtonAIExplanationDialog(){
+        checkUserAnswer("a", "a")
+        repeatCard = null
+        _uiState.update { it.copy(aiExplanationDialogText = null, isAiChecking = false, hasAiError = false) }
+    }
+    fun dismissButtonAIExplanationDialog(){
+        _uiState.update { it.copy(aiExplanationDialogText = null, hasAiError = false) }
     }
 }
