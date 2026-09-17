@@ -211,7 +211,7 @@ private fun bulkImport(state: TextFieldState) : DialogItem{
                     ){
                         HintedTextField(
                             state = state,
-                            hintText = "Here",
+                            hintText = stringResource(id = R.string.prompt_bulk_import_hint),
                             fontFamily = vagRoundedLight
                         )
                         innerTextField()

@@ -25,6 +25,7 @@ object Dimens {
     val iconMedium = 24.dp
     val iconLarge = 40.dp
     val iconExtraLarge = 48.dp
+    val iconVeryLarge = 55.dp
     val iconHuge = 60.dp
     val iconExtraHuge = 65.dp
     val iconGiant = 75.dp

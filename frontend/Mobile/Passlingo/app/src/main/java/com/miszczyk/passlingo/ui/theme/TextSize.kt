@@ -20,6 +20,7 @@ object TextSize {
     val headline = 30.sp
     val headlineLarge = 40.sp
     val displaySmall = 55.sp
+    val displaySmallLarge = 70.sp
     val displayMedium = 75.sp
     val displayLarge = 110.sp
     val displayHuge = 150.sp

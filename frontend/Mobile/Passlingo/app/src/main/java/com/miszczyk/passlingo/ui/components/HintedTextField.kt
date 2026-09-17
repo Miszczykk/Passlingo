@@ -16,6 +16,7 @@ fun HintedTextField(state: TextFieldState, hintText: String, fontFamily: FontFam
         color = MaterialTheme.colorScheme.onSurface,
         fontSize = titleMedium,
         modifier = Modifier.alpha(alpha = if (state.text.isEmpty()) 1f else 0f),
-        fontFamily = fontFamily
+        fontFamily = fontFamily,
+        maxLines = 1
     )
 }

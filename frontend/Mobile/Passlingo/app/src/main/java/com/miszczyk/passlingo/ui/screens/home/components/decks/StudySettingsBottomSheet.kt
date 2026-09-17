@@ -1,5 +1,6 @@
 package com.miszczyk.passlingo.ui.screens.home.components.decks
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.miszczyk.passlingo.R
 import com.miszczyk.passlingo.ui.components.BottomSheetHeader
@@ -46,6 +48,7 @@ import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusMedium
 import com.miszczyk.passlingo.ui.theme.Dimens.cornerRadiusSmall
 import com.miszczyk.passlingo.ui.theme.Dimens.iconHuge
 import com.miszczyk.passlingo.ui.theme.Dimens.iconLarge
+import com.miszczyk.passlingo.ui.theme.Dimens.iconVeryLarge
 import com.miszczyk.passlingo.ui.theme.Dimens.sizeIndicator
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceDefault
 import com.miszczyk.passlingo.ui.theme.Dimens.spaceExtraLarge
@@ -233,6 +236,7 @@ private fun TargetRoundsSelector(
     }
 }
 
+@SuppressLint("LocalContextResourcesRead")
 @Composable
 private fun TargetRoundItem(
     roundNumber: Int, isSelected: Boolean, onClick: () -> Unit
@@ -244,10 +248,14 @@ private fun TargetRoundItem(
     val textColor =
         if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary
 
+    val context = LocalContext.current
+    val screenWidthPx = context.resources.displayMetrics.widthPixels
+    val dynamicBoxSize = if (screenWidthPx == 1440) iconVeryLarge else iconHuge
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .size(size = iconHuge)
+            .size(size = dynamicBoxSize)
             .clip(shape = RoundedCornerShape(size = cornerRadiusMedium))
             .background(color = backgroundColor)
             .border(

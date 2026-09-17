@@ -115,6 +115,7 @@
     <string name="prompt_enter_your_answer">Enter your answer</string>
     <string name="desc_starting_side">Which side of the card should be shown first as the question?</string>
     <string name="message_out_of_time">You\'ve run out of study time balance. Complete a quick session to earn more time and regain access to your apps.</string>
+    <string name="prompt_bulk_import_hint">Paste your list here…\n\nExample:\nWord\tMeaning\nWord\tMeaning</string>
 
     <!-- Dialogs -->
     <string name="dialog_title_confirm_lock">Are you sure?</string>
