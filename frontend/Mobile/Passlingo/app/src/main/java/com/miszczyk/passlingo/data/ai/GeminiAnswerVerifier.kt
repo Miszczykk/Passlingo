@@ -14,7 +14,7 @@ data class AnswerVerdict(
 class GeminiAnswerVerifier(apiKey: String) {
 
     private val model = GenerativeModel(
-        modelName = "gemini-3.6-flash",
+        modelName = "gemini-3.5-flash-lite",
         apiKey = apiKey,
         generationConfig = generationConfig {
             responseMimeType = "application/json"
