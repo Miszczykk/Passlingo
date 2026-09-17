@@ -1,6 +1,7 @@
 package com.miszczyk.passlingo.ui.screens.studyMode.viewmodel
 
 import android.app.Application
+import android.media.MediaPlayer
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,10 +28,12 @@ abstract class BaseStudyViewModel(application: Application, private val studyMod
     protected var targetRounds: Int = 1
     protected var currentBatch: List<StudyCardProgressEntity> = emptyList()
     protected var deckDictionary: Map<String, Pair<String, String>> = emptyMap()
-    protected var timeToBreath = 0
+    protected var timeToBreath: Int = 0
     protected var totalCardsInSession: Int = 0
 
     protected abstract val logTag: String
+
+    protected var countPerfectAnswer: Int = 0
 
     protected abstract fun onResetUiState()
     protected abstract fun onHideBreatherState()
@@ -138,5 +141,14 @@ abstract class BaseStudyViewModel(application: Application, private val studyMod
             )
         }
         onPracticeCardsLoaded(mappedCards)
+    }
+
+    protected fun playSound(soundResId: Int){
+        val mediaPlayer = MediaPlayer.create(getApplication(), soundResId)
+        mediaPlayer.setOnCompletionListener {
+            it.release()
+        }
+
+        mediaPlayer.start()
     }
 }

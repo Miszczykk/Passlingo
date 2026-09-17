@@ -1,5 +1,6 @@
 package com.miszczyk.passlingo.ui.screens.studyMode.components
 
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,8 +20,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -45,6 +48,19 @@ import com.miszczyk.passlingo.ui.theme.vagRoundedLight
 fun SessionSummarySection(
     cardsToPractice: List<PracticeCardUiModel>, onBack: () -> Unit, modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    DisposableEffect(key1 = Unit) {
+        val mediaPlayer = if(cardsToPractice.isEmpty()) MediaPlayer.create(context, R.raw.perfect_session_music) else MediaPlayer.create(context, R.raw.not_perfect_session_music)
+        mediaPlayer?.start()
+
+        onDispose {
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer.stop()
+            }
+            mediaPlayer?.release()
+        }
+    }
+
     if (cardsToPractice.isEmpty()) {
         Column(
             modifier = modifier

@@ -106,6 +106,18 @@ class QuizViewModel(application: Application) : BaseStudyViewModel(application, 
 
     fun checkUserAnswer(selectedText: String) {
         val isCorrect = selectedText == _uiState.value.currentBack
+
+        if(isCorrect){
+            val mediaPlayer = when {
+                ((countPerfectAnswer+1) % 10) == 0-> R.raw.ten_correct_music
+                ((countPerfectAnswer+1) % 5) == 0 -> R.raw.five_correct_music
+                else -> R.raw.correct_music
+            }
+            playSound(mediaPlayer)
+        }else{
+            playSound(R.raw.wrong_music)
+        }
+
         _uiState.update {
             it.copy(
                 selectedAnswer = selectedText,
@@ -143,6 +155,7 @@ class QuizViewModel(application: Application) : BaseStudyViewModel(application, 
 
             runCatching {
                 if (isGoodAnswer) {
+                    countPerfectAnswer+=1
                     sessionRepository.incrementCurrentRound(
                         currentSessionId, currentProgress.flashcardId
                     )
@@ -150,6 +163,7 @@ class QuizViewModel(application: Application) : BaseStudyViewModel(application, 
                         timeRepository.addCreditTime(secondsEarned = 10L * targetRounds)
                     }
                 } else {
+                    countPerfectAnswer = 0
                     sessionRepository.resetCurrentRound(
                         currentSessionId, currentProgress.flashcardId
                     )

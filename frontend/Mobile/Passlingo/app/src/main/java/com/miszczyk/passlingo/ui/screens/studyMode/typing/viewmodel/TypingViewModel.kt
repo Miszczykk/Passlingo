@@ -91,13 +91,21 @@ class TypingViewModel(application: Application) :
 
     fun checkUserAnswer(userAnswer: String, correctAnswer: String?) {
         val cleanUser = userAnswer.trim().replace(regex = "\\s+".toRegex(), replacement = " ")
-
         val cleanCorrect = correctAnswer?.trim()?.replace(regex = "\\s+".toRegex(), replacement = " ") ?: ""
 
         if (cleanUser.equals(other = cleanCorrect, ignoreCase = true)) {
+            val mediaPlayer = when {
+                ((countPerfectAnswer+1) % 10) == 0-> R.raw.ten_correct_music
+                ((countPerfectAnswer+1) % 5) == 0 -> R.raw.five_correct_music
+                else -> R.raw.correct_music
+            }
+
             _uiState.update { it.copy(userAnswer = TypeAnswer.GOOD) }
+            playSound(mediaPlayer)
             timeToBreath++
         } else {
+            playSound(R.raw.wrong_music)
+
             _uiState.update { it.copy(userAnswer = TypeAnswer.BAD) }
             if (repeatCard == null) {
                 repeatCard = currentBatch.firstOrNull()
@@ -113,6 +121,7 @@ class TypingViewModel(application: Application) :
 
             runCatching {
                 if (isGoodAnswer) {
+                    countPerfectAnswer+=1
                     if (repeatCard != null) {
                         repeatCard = null
                         _uiState.update { it.copy(hasAiRejected = false) }
@@ -126,6 +135,7 @@ class TypingViewModel(application: Application) :
                         currentBatch = currentBatch.drop(n = 1)
                     }
                 } else {
+                    countPerfectAnswer = 0
                     sessionRepository.resetCurrentRound(
                         currentSessionId, currentProgress.flashcardId
                     )
