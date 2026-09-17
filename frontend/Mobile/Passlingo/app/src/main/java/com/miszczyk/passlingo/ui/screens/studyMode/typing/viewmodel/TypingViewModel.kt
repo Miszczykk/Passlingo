@@ -36,7 +36,8 @@ class TypingViewModel(application: Application) :
                 isBreather = false,
                 userAnswer = TypeAnswer.NONE,
                 userAnswerState = TextFieldState(initialText = ""),
-                hasAiRejected = false
+                hasAiRejected = false,
+                isAiChecking = false
             )
         }
     }
@@ -124,7 +125,7 @@ class TypingViewModel(application: Application) :
                     countPerfectAnswer+=1
                     if (repeatCard != null) {
                         repeatCard = null
-                        _uiState.update { it.copy(hasAiRejected = false) }
+                        _uiState.update { it.copy(hasAiRejected = false, isAiChecking = false) }
                     } else {
                         sessionRepository.incrementCurrentRound(
                             currentSessionId, currentProgress.flashcardId
@@ -205,9 +206,9 @@ class TypingViewModel(application: Application) :
     }
 
     fun confirmButtonAIExplanationDialog(){
-        checkUserAnswer("a", "a")
         repeatCard = null
-        _uiState.update { it.copy(aiExplanationDialogText = null, isAiChecking = false, hasAiError = false) }
+        _uiState.update { it.copy(aiExplanationDialogText = null, isAiChecking = false, hasAiRejected = false, hasAiError = false) }
+        checkUserAnswer("a", "a")
     }
     fun dismissButtonAIExplanationDialog(){
         _uiState.update { it.copy(aiExplanationDialogText = null, hasAiError = false) }
