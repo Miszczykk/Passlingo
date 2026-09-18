@@ -389,3 +389,4 @@ Sztuczna inteligencja wspiera proces powstawania oraz działanie aplikacji Passl
 * [Wykorzystane dźwięki *Duolingo Soundboard*](https://www.myinstants.com/en/search/?name=duolingo)
 * [roadmap.sh, *Prompt Engineering Roadmap*, online: https://roadmap.sh/prompt-engineering [dostęp: 16.09.2026]](https://roadmap.sh/prompt-engineering)
 * [*Flutter vs Kotlin: Which one to choose for your project?*, red. Ilia Lotarev, online: https://adapty.io/blog/flutter-vs-kotlin [dostęp: 18.09.2026]](https://adapty.io/blog/flutter-vs-kotlin/)
+* [Wikipedia, *Levenshtein distance*, online: https://en.wikipedia.org/wiki/Levenshtein_distance [dostęp: 18.09.2026]](https://en.wikipedia.org/wiki/Levenshtein_distance)
