@@ -1,3 +1,5 @@
+![Screenshots of the app's key features](https://github.com/Miszczykk/Passlingo/blob/main/img/wallpaper.png)
+
 # PL - Passlingo
 
 > Doomscrolling to czynność polegająca na spędzaniu nadmiernej ilości czasu na treściach cyfrowych (np. krótkie treści, treści generowane przez użytkowników, treści generowane przez sztuczną inteligencję i wiadomości), które wywołują negatywne emocje.
