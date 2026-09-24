@@ -1,5 +1,401 @@
 ![Screenshots of the app's key features](https://github.com/Miszczykk/Passlingo/blob/main/img/wallpaper.png)
 
+# EN - Passlingo
+
+> Doomscrolling is the act of spending an excessive amount of time on digital content (e.g. short-form content, user-generated content, AI-generated content, and news) that elicit negative emotions.
+
+**Passlingo** is a free, open-source application, designed to help users regain control over their digital habits, improve focus and boost productivity. The app combines distraction-blocking with a micro-learning system. The time saved by limiting doomscrolling can be spent on learning foreign languages, mastering new concepts, or preparing for a job interview.
+
+> [!WARNING]
+> The application deliberately violates accessibility services standards, to monitor and block app selected by the user. Passlingo has permissions to force-close other processes in the system.
+
+>[!NOTE]
+> The application was created with **Android** in mind and currently does not support other operating systems. To achieve the best results, it is recommended to use additional plugins or software that block distracting websites and applications on personal computers.
+
+## Installation and Configuration
+
+For the application to be fully functional (in particular answer verification by AI), you must generate API key on the [Google AI Studio](https://aistudio.google.com/) platform and add it to the `local.properties` file:
+```
+GEMINI_API_KEY=your_api_key
+```
+Upon the first launch, the user is prompted to grant the necessary system permissions:
+* **Accessibility Services** - required to monitor and block user-selected apps.
+* **Display over other apps** - allows the app to display the lock screen overlay.
+* **Usage access** - essential to track the time spent in other applications.
+
+## Privacy and Data Storage
+
+Passlingo prioritizes your privacy. All created decks, blocked apps information and also gathered time are stored exclusively on your device.
+
+**Exception**: In "writing" learnign mode, if you choose to appeal a mistake, data such as the question text, the model answer, and the user's answer are sent to the Google Gemini API for re-verification purposes. No other data leaves the user's device.
+
+## Time Tracking System
+
+The core mechanic of Passlingo is managing a virtual currency: time. This accumulated time can be used to access blocked apps or permanently unlock them.
+
+The time can be earned in two ways:
+1. **Through learning**: the time is awarded for correct answers after completing a study session. This value depends on the selected number of rounds.
+```
+AVAILABLE TIME = AVAILABLE TIME + 10 SECONDS * NUMBER ROUNDS
+```
+2. **Through blocking the applications**: For every newly blocked app you receive an immediate time bonus.
+```
+AVAILABLE TIME = AVAILABLE TIME + NUMBER NEW BLOCKED-APPS * 15 MINUTES
+```
+
+## Blocking / Unblocking Apps
+
+To block an app, tap the lock icon on the home screen, select the desired apps, and confirm your choice. Blocked apps will remain unavailable until you use your earned time to launch them or permanently unlock them.
+
+**Unblocking Apps**:
+
+Permanently unlocking apps costs a specific amount of earned time. If you do not have sufficient funds, this action cannot be completed.
+```
+AVAILABLE TIME = AVAILABLE TIME - 1 HOUR
+```
+
+>[!CAUTION]
+> In absolute critic situations, you can bypass the block by clearing the app data in the Android settings. **This is not recommended**, as it undermines the process of building healthy digital habits.
+
+## Creating and Editing Decks (Sets)
+
+>[!IMPORTANT]
+> Passlingo **does not include** pre-made study sets. Users must create their own decks.
+
+To create a deck, enter a title and add at least 4 cards. Changing the deck icon is optional.
+
+Passlingo also supports **importing cards**, for larger sets. The required file format is: `question [TAB] answer`. Other formats are not currently supported.
+
+Editing a deck (adding or removing cards) does not affect current learning sessions. You can continue learning with the newly applied changes.
+
+## Study Modes
+
+Passlingo offers three study modes. You can switch between them, but you **cannot** have multiple active sessions of the same mode with different settings. Learning progress is continuously stored, allowing you to resume studying at any time. Additionally, each mode features a break system that activates every 10 answers (regardless of their correctness)
+
+### Flashcards
+
+```mermaid
+flowchart TD
+    Start([User opens FlashcardScreen]) --> Launch[LaunchedEffect: startSession]
+    Launch --> Reset[onResetUiState]
+    Reset --> GetDeck[Fetch deck: getDeckWithFlashcardsById]
+    GetDeck --> GetActive[Fetch active session: getActiveSession]
+    GetActive --> BuildDict[Build deckDictionary
+    front/back based on isFrontFirst]
+ 
+    BuildDict --> HasActive{Active session exists?}
+    HasActive -- Yes --> UseExisting[Use currentSessionId
+    and targetRounds from the session]
+    HasActive -- No --> CreateNew[createNewSession:
+    new sessionId, shuffled cards,
+    saved to repo]
+ 
+    UseExisting --> Total[totalCardsInSession = getTotalCardCount]
+    CreateNew --> Total
+    Total --> Init[onSessionInitialized]
+    Init --> LoadBatch[loadNextBatchAndShow]
+ 
+    LoadBatch --> GetBatch[currentBatch = getNextBatch]
+    GetBatch --> BatchEmpty{currentBatch empty?}
+ 
+    BatchEmpty -- Yes --> Practice[loadCardsToPractice
+    collect cards for review]
+    Practice --> DeleteSession[Delete session from repo]
+    DeleteSession --> SessionEnd[onSessionEndedUiState]
+    SessionEnd --> End([Session ends])
+ 
+    BatchEmpty -- No --> ShowCard[showCurrentCard:
+    set front/back/progressText]
+    ShowCard --> WaitAction([Screen waits for user action])
+ 
+    WaitAction -- Tap the card --> Flip[flipCard: toggle isFlipped]
+    Flip --> WaitAction
+ 
+    WaitAction -- Answer: correct/incorrect --> Answer[answerCard isCorrect]
+    Answer --> IsCorrect{isCorrect?}
+ 
+    IsCorrect -- Yes --> IncRound[incrementCurrentRound]
+    IncRound --> RoundsDone{currentRound + 1
+    == targetRounds?}
+    RoundsDone -- Yes --> AddCredit[addCreditTime
+    10s * targetRounds]
+    RoundsDone -- No --> DropCard
+    AddCredit --> DropCard
+ 
+    IsCorrect -- No --> ResetRound[resetCurrentRound]
+    ResetRound --> IncAttempt[incrementAttempts]
+    IncAttempt --> DropCard[Remove card from currentBatch
+    drop the first element]
+ 
+    DropCard --> BatchLeft{Cards remaining
+    in currentBatch?}
+    BatchLeft -- Yes --> ShowCard
+    BatchLeft -- No --> BreathCheck{timeToBreath >= 10?}
+ 
+    BreathCheck -- Yes --> Breather[isBreather = true
+    show breather screen]
+    Breather --> Continue[User taps 'Continue']
+    Continue --> HideBreather[onHideBreatherState
+    timeToBreath = 0]
+    HideBreather --> LoadBatch
+ 
+    BreathCheck -- No --> LoadBatch
+```
+
+### Quiz
+
+The system generates a question and up to 4 answer options (depending on the number of cards in the deck and the uniqueness of the answers). The wrong answers (distractors) are selected to visually or semantically resemble the correct answer, increasing the difficulty. To calculate this similarity, *the Levenshtein distance algorithm* is used:
+
+```kotlin
+private fun levenshteinDistance(a: String, b: String): Int {
+    val m = a.length
+    val n = b.length
+    var cost = IntArray(size = m + 1) { it }
+    var newCost = IntArray(size = m + 1) { 0 }
+    for (i in 1..n) {
+        newCost[0] = i
+        for (j in 1..m) {
+            val match = if (a[j - 1] == b[i - 1]) 0 else 1
+            val costReplace = cost[j - 1] + match
+            val costInsert = cost[j] + 1
+            val costDelete = newCost[j - 1] + 1
+            newCost[j] = minOf(a = costInsert, b = costDelete, c = costReplace)
+        }
+        val swap = cost
+        cost = newCost
+        newCost = swap
+    }
+    return cost[m]
+}
+```
+
+```mermaid
+flowchart TD
+    Start([User opens QuizScreen]) --> Launch[LaunchedEffect: startSession]
+    Launch --> Reset[onResetUiState]
+    Reset --> GetDeck[Fetch deck: getDeckWithFlashcardsById]
+    GetDeck --> GetActive[Fetch active session: getActiveSession]
+    GetActive --> BuildDict[Build deckDictionary
+    front/back based on isFrontFirst]
+ 
+    BuildDict --> HasActive{Active session exists?}
+    HasActive -- Yes --> UseExisting[Use currentSessionId
+    and targetRounds from the session]
+    HasActive -- No --> CreateNew[createNewSession:
+    new sessionId, shuffled cards,
+    saved to repo]
+ 
+    UseExisting --> Total[totalCardsInSession = getTotalCardCount]
+    CreateNew --> Total
+    Total --> InitQuiz[onSessionInitialized override:
+    allCards = getAllCards sessionId]
+    InitQuiz --> LoadBatch[loadNextBatchAndShow]
+ 
+    LoadBatch --> GetBatch[currentBatch = getNextBatch]
+    GetBatch --> BatchEmpty{currentBatch empty?}
+ 
+    BatchEmpty -- Yes --> Practice[loadCardsToPractice
+    collect cards for review]
+    Practice --> DeleteSession[Delete session from repo]
+    DeleteSession --> SessionEnd[onSessionEndedUiState]
+    SessionEnd --> End([Session ends])
+ 
+    BatchEmpty -- No --> ShowCard[showCurrentCard]
+    ShowCard --> BuildOptions[Build answer options:
+    - correctAnswer from deckDictionary
+    - allMeanings = unique translations from allCards
+    - allWrong = allMeanings minus the correct one
+    - if allWrong > 3: sort by
+      Levenshtein distance to correctAnswer
+      and take the 3 closest
+    - options = wrongAnswers + correctAnswer, shuffled]
+    BuildOptions --> UpdateUi[Update UI:
+    currentFront, currentBack, options,
+    userAnswer = NONE, progressText]
+    UpdateUi --> WaitAction([Screen waits for an answer])
+ 
+    WaitAction -- Pick an option --> CheckAnswer[checkUserAnswer selectedText]
+    CheckAnswer --> IsCorrectNow{selectedText
+    == currentBack?}
+    IsCorrectNow -- Yes --> PlayGoodSound[Play sound:
+    every 10th in a row -> ten_correct_music
+    every 5th in a row -> five_correct_music
+    otherwise -> correct_music]
+    IsCorrectNow -- No --> PlayBadSound[Play sound: wrong_music]
+    PlayGoodSound --> SetAnswered[userAnswer = GOOD
+    selectedAnswer = choice]
+    PlayBadSound --> SetAnsweredBad[userAnswer = BAD
+    selectedAnswer = choice]
+    SetAnswered --> ShowResult[UI highlights the correct/incorrect
+    answer, shows the 'Continue' button]
+    SetAnsweredBad --> ShowResult
+ 
+    ShowResult --> WaitNext([User taps 'Continue'])
+    WaitNext --> MoveNext[moveToNextCard]
+ 
+    MoveNext --> IsGood{userAnswer == GOOD?}
+    IsGood -- Yes --> IncPerfect[countPerfectAnswer++
+    incrementCurrentRound]
+    IncPerfect --> RoundsDone{currentRound + 1
+    == targetRounds?}
+    RoundsDone -- Yes --> AddCredit[addCreditTime
+    10s * targetRounds]
+    RoundsDone -- No --> IncBreath
+    AddCredit --> IncBreath
+ 
+    IsGood -- No --> ResetPerfect[countPerfectAnswer = 0
+    resetCurrentRound
+    incrementAttempts]
+    ResetPerfect --> IncBreath[timeToBreath++]
+ 
+    IncBreath --> DropCard[Remove card from currentBatch
+    drop the first element]
+    DropCard --> BatchLeft{Cards remaining
+    in currentBatch?}
+    BatchLeft -- Yes --> ShowCard
+    BatchLeft -- No --> BreathCheck{timeToBreath >= 10?}
+ 
+    BreathCheck -- Yes --> Breather[isBreather = true
+    show breather screen]
+    Breather --> Continue[User taps 'Continue']
+    Continue --> HideBreather[onHideBreatherState
+    timeToBreath = 0]
+    HideBreather --> LoadBatch
+ 
+    BreathCheck -- No --> LoadBatch
+```
+
+### Writing
+
+In this mode, the user's task is to manually type the correct answer (case and whitespace are ignored).
+
+If the system marks your answer as incorrect, you can file an *appeal*. Your answer, along with the question and the correct answer, will be sent to the **Gemini 3.5 Flash Lite** model for verification. The Artificial Intelligence can:
+* Accept the answer as correct (e.g., a different word form, a synonym).
+* Reject the appeal and provide a reason why the answer is incorrect in up to 3 sentences.
+
+Even after verification by the AI, the user has the final say: they can agree with the verdict or override the verdict and mark the answer as correct.
+
+Incorrectly answered cards return to the pool during the session, but subsequent correct answers do not count towards the final score.
+
+```mermaid
+flowchart TD
+    ShowCard[showCurrentCard:
+    currentProgress = repeatCard ?: currentBatch.first] --> UpdateUi[Update UI:
+    currentFront, currentBack, progressText]
+    UpdateUi --> WaitInput([User types an answer
+    and taps 'Check'])
+ 
+    WaitInput --> CheckAnswer[checkUserAnswer userAnswer, correctAnswer]
+    CheckAnswer --> Normalize[Normalize both strings:
+    trim + collapse multiple spaces into one]
+    Normalize --> Match{cleanUser == cleanCorrect
+    ignoreCase?}
+ 
+    Match -- Yes --> SoundGood[Play sound: every 10th in a row -> ten_correct_music
+    every 5th in a row -> five_correct_music
+    otherwise -> correct_music]
+    SoundGood --> SetGood[userAnswer = GOOD
+    timeToBreath++]
+    SetGood --> WaitGood([UI shows the 'Continue' button])
+ 
+    Match -- No --> SoundBad[Play sound: wrong_music]
+    SoundBad --> SetBad[userAnswer = BAD]
+    SetBad --> RepeatCheck{repeatCard == null?}
+    RepeatCheck -- Yes --> AssignRepeat[repeatCard = currentBatch.first]
+    RepeatCheck -- No --> KeepRepeat[keep the existing repeatCard]
+    AssignRepeat --> ShowBadUi
+    KeepRepeat --> ShowBadUi[UI shows the correct answer
+    + 'Check again with AI' and 'Continue' buttons]
+ 
+    ShowBadUi --> BadChoice{User's choice}
+    BadChoice -- "Check again with AI" --> AiFlow[[AI verification — see diagram below]]
+    BadChoice -- "Continue (skip AI)" --> MoveNext
+ 
+    AiFlow -- AI/user accepted: answer treated as correct --> WaitGood
+    AiFlow -- AI rejected, or network error and dialog dismissed --> ShowBadUi
+ 
+    WaitGood --> MoveNext[moveToNextCard]
+ 
+    MoveNext --> GuardAi{isAiChecking?}
+    GuardAi -- Yes --> Abort([Abort — wait for the
+    AI request to finish])
+    GuardAi -- No --> GetProgress[currentProgress = repeatCard ?: currentBatch.first]
+    GetProgress --> IsGoodNow{uiState.userAnswer == GOOD?}
+ 
+    IsGoodNow -- Yes --> IncPerfect[countPerfectAnswer++]
+    IncPerfect --> HadRepeat{repeatCard != null?
+    i.e. there was an earlier mistake}
+    HadRepeat -- Yes --> ClearRepeat["repeatCard = null
+    hasAiRejected = false, isAiChecking = false
+    NO incrementCurrentRound and NO drop from batch
+    (the round was already reset on the mistake,
+    the card returns to the normal cycle)"]
+    HadRepeat -- No --> IncRound[incrementCurrentRound]
+    IncRound --> RoundsDone{currentRound + 1
+    == targetRounds?}
+    RoundsDone -- Yes --> AddCredit[addCreditTime
+    10s * targetRounds]
+    RoundsDone -- No --> DropBatch
+    AddCredit --> DropBatch[currentBatch = drop the first card]
+ 
+    IsGoodNow -- No --> ResetPerfect[countPerfectAnswer = 0
+    resetCurrentRound
+    incrementAttempts]
+    ResetPerfect --> DropIfFirst{currentBatch.first.id
+    == currentProgress.id?}
+    DropIfFirst -- Yes --> DropBatch2[currentBatch = drop the first card]
+    DropIfFirst -- No --> NoDrop[don't remove from batch]
+    DropBatch2 --> ResetUi
+    NoDrop --> ResetUi
+ 
+    ClearRepeat --> ResetUi["userAnswer = NONE
+    clear the text field (userAnswerState.clear)"]
+    DropBatch --> ResetUi
+ 
+    ResetUi --> NextDecision{currentBatch not empty
+    OR repeatCard != null?}
+    NextDecision -- Yes --> ShowCard
+    NextDecision -- No --> BreathCheck{timeToBreath >= 10?}
+    BreathCheck -- Yes --> Breather[isBreather = true]
+    Breather --> Continue([User taps 'Continue'])
+    Continue --> HideBreather[onHideBreatherState
+    timeToBreath = 0]
+    HideBreather --> LoadBatch[loadNextBatchAndShow]
+    BreathCheck -- No --> LoadBatch
+```
+
+## Use of AI
+
+Artificial Intelligence supports the development and operation of Passlingo, but its use is **limited** to two strictly defined areas:
+* **User Interface and User Experience Design** - the app's visual concept and a cohesive color palette were generated using artificial intelligence tools, enabling the design of a modern and clean visual environment.
+* **Knowledge Verification (ONLY in typing mode)** - the integrated Gemini model functions as a verification assistant. It should be emphasized that the AI within the app operates **exclusively** in this single instance. It activates only at the user's explicit request when appealing an incorrect answer in typing mode. It is then responsible for the flexible evaluation of answers (e.g., accepting synonyms) and generating brief explanations. No other study modes or app features use AI to process your data.
+
+## Future Plans (Roadmap)
+
+- [ ] Enhancing the user interface and user experience.
+- [ ] Implementing low-time notifications.
+- [ ] Integrating local Machine Learning models (Offline ML) as a fallback mechanism - automatically switching to a local model in case of a Wi-Fi disconnection or an external API error.
+- [ ] Creating a desktop version.
+- [ ] Implementing server-side data synchronization.
+
+## Sources Used
+
+* [Wikipedia, *Doomscrolling*, available at: https://en.wikipedia.org/wiki/Doomscrolling [accessed: 18.09.2026]](https://en.wikipedia.org/wiki/Doomscrolling)
+* [*Flashcards-Plus A Strategy to Help Students Prepare for Three Types of Multiple-Choice Questions Commonly Found on Introductory Psychology Tests*, ed. Drew C. Appleby, available at: https://www.scribd.com/document/668833966/appleby13flashcard [accessed: 12.07.2026]](https://www.scribd.com/document/668833966/appleby13flashcard)
+* [*Reinventing Flashcards to Increase Student Learning*, ed. Sawa Senzaki, Jana Hackathorn, Drew C. Appleby, Regan A. R. Gurung, available at: https://journals.sagepub.com/doi/10.1177/1475725717719771 [accessed: 12.07.2026]](https://journals.sagepub.com/doi/10.1177/1475725717719771)
+* [*Expanding Retrieval Practice Promotes Short-Term Retention, but Equally Spaced Retrieval Enhances Long-Term Retention*, ed. Jeffrey D. Karpicke, Henry Roediger, available at: https://www.researchgate.net/publication/6261284_Expanding_Retrieval_Practice_Promotes_Short-Term_Retention_but_Equally_Spaced_Retrieval_Enhances_Long-Term_Retention [accessed: 15.07.2026]](https://www.researchgate.net/publication/6261284_Expanding_Retrieval_Practice_Promotes_Short-Term_Retention_but_Equally_Spaced_Retrieval_Enhances_Long-Term_Retention)
+* [*The Critical Importance of Retrieval for Learning*, ed. Jeffrey D. Karpicke, Henry Roediger, available at: https://www.researchgate.net/publication/5574966_The_Critical_Importance_of_Retrieval_for_Learning [accessed: 15.07.2026]](https://www.researchgate.net/publication/5574966_The_Critical_Importance_of_Retrieval_for_Learning)
+* [Trip Gabriel and Matt Richtel, *GRADING THE DIGITAL SCHOOL Inflating the Software Report Card*, available at: https://www.nytimes.com/2011/10/09/technology/a-classroom-software-boom-but-mixed-results-despite-the-hype.html [accessed: 17.07.2026]](https://www.nytimes.com/2011/10/09/technology/a-classroom-software-boom-but-mixed-results-despite-the-hype.html)
+* [Font used *VAG Rounded*](https://online-fonts.com/fonts/vag-rounded)
+* [Icons used *Chikin Variety Glyph Icons*](https://www.svgrepo.com/collection/chikin-variety-glyph-icons)
+* [Sounds used *Duolingo Soundboard*](https://www.myinstants.com/en/search/?name=duolingo)
+* [roadmap.sh, *Prompt Engineering Roadmap*, available at: https://roadmap.sh/prompt-engineering [accessed: 16.09.2026]](https://roadmap.sh/prompt-engineering)
+* [*Flutter vs Kotlin: Which one to choose for your project?*, ed. Ilia Lotarev, available at: https://adapty.io/blog/flutter-vs-kotlin [accessed: 18.09.2026]](https://adapty.io/blog/flutter-vs-kotlin/)
+* [Wikipedia, *Levenshtein distance*, available at: https://en.wikipedia.org/wiki/Levenshtein_distance [accessed: 18.09.2026]](https://en.wikipedia.org/wiki/Levenshtein_distance)
+
+
+![Screenshots of the app's key features](https://github.com/Miszczykk/Passlingo/blob/main/img/wallpaper.png)
+
 # PL - Passlingo
 
 > Doomscrolling to czynność polegająca na spędzaniu nadmiernej ilości czasu na treściach cyfrowych (np. krótkie treści, treści generowane przez użytkowników, treści generowane przez sztuczną inteligencję i wiadomości), które wywołują negatywne emocje.
@@ -384,8 +780,8 @@ Sztuczna inteligencja wspiera proces powstawania oraz działanie aplikacji Passl
 * [*Flashcards-Plus A Strategy to Help Students Prepare for Three Types of Multiple-Choice Questions Commonly Found on Introductory Psychology Tests*, red. Drew C. Appleby, online: https://www.scribd.com/document/668833966/appleby13flashcard [dostęp: 12.07.2026]](https://www.scribd.com/document/668833966/appleby13flashcard)
 * [*Reinventing Flashcards to Increase Student Learning*, red. Sawa Senzaki, Jana Hackathorn, Drew C. Appleby, Regan A. R. Gurung, online: https://journals.sagepub.com/doi/10.1177/1475725717719771 [dostęp: 12.07.2026]](https://journals.sagepub.com/doi/10.1177/1475725717719771)
 * [*Expanding Retrieval Practice Promotes Short-Term Retention, but Equally Spaced Retrieval Enhances Long-Term Retention*, red. Jeffrey D. Karpicke, Henry Roediger, online: https://www.researchgate.net/publication/6261284_Expanding_Retrieval_Practice_Promotes_Short-Term_Retention_but_Equally_Spaced_Retrieval_Enhances_Long-Term_Retention [dostęp: 15.07.2026]](https://www.researchgate.net/publication/6261284_Expanding_Retrieval_Practice_Promotes_Short-Term_Retention_but_Equally_Spaced_Retrieval_Enhances_Long-Term_Retention)
-* [*The Critical Importanceof Retrieval for Learning*, red. Jeffrey D. Karpicke, Henry Roediger, online: https://www.researchgate.net/publication/5574966_The_Critical_Importance_of_Retrieval_for_Learning [dostęp: 15.07.2026]](https://www.researchgate.net/publication/5574966_The_Critical_Importance_of_Retrieval_for_Learning)
-* [Trip Gabriel and Matt Richtel, *GRANDING THE DIGITAL SCHOOL Inflating the Software Report Card*, online: https://www.nytimes.com/2011/10/09/technology/a-classroom-software-boom-but-mixed-results-despite-the-hype.html [dostęp: 17.07.2026]](https://www.nytimes.com/2011/10/09/technology/a-classroom-software-boom-but-mixed-results-despite-the-hype.html)
+* [*The Critical Importance of Retrieval for Learning*, red. Jeffrey D. Karpicke, Henry Roediger, online: https://www.researchgate.net/publication/5574966_The_Critical_Importance_of_Retrieval_for_Learning [dostęp: 15.07.2026]](https://www.researchgate.net/publication/5574966_The_Critical_Importance_of_Retrieval_for_Learning)
+* [Trip Gabriel and Matt Richtel, *GRADING THE DIGITAL SCHOOL Inflating the Software Report Card*, online: https://www.nytimes.com/2011/10/09/technology/a-classroom-software-boom-but-mixed-results-despite-the-hype.html [dostęp: 17.07.2026]](https://www.nytimes.com/2011/10/09/technology/a-classroom-software-boom-but-mixed-results-despite-the-hype.html)
 * [Wykorzystana czcionka *VAG Rounded*](https://online-fonts.com/fonts/vag-rounded)
 * [Wykorzystane ikony *Chikin Variety Glyph Icons*](https://www.svgrepo.com/collection/chikin-variety-glyph-icons)
 * [Wykorzystane dźwięki *Duolingo Soundboard*](https://www.myinstants.com/en/search/?name=duolingo)
