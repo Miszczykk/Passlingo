@@ -172,18 +172,23 @@ abstract class DeckFormViewModel(application: Application) : AndroidViewModel(ap
             )
         }
     }
-     fun splitBulk(){
-         val inputText = bulkState.text.toString()
-         if(inputText.isBlank()) return
-         inputText.lines().filter { it.isNotBlank() }.mapNotNull { line ->
-            val parts = line.split('\t')
-            if(parts.size == 2){
-                val newCard = Flashcard(front = parts[0].trim(), back = parts[1].trim())
-                _uiState.update { currentState ->
-                    currentState.copy(cards = currentState.cards + newCard)
-                }
-            } else null
+    fun splitBulk() {
+        val inputText = bulkState.text.toString()
+        if (inputText.isBlank()) return
+
+        val blocks = inputText.split(Regex("\n\\s*\n"))
+            .map { it.trim() }
+            .filter { it.isNotBlank() }
+
+        val newCards = blocks.mapNotNull { block ->
+            val parts = block.split(Regex("\n-{3,}\n"), limit = 2)
+            if (parts.size != 2) return@mapNotNull null
+            Flashcard(front = parts[0].trim(), back = parts[1].trim())
         }
-         bulkState.clear()
+
+        if (newCards.isNotEmpty()) {
+            _uiState.update { it.copy(cards = it.cards + newCards) }
+        }
+        bulkState.clear()
     }
 }

@@ -1,5 +1,9 @@
 import java.util.Properties
-
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { localProperties.load(it) }
+}
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -9,6 +13,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        create("release") {
+            storeFile = file(localProperties.getProperty("keystore.path") ?: "")
+            storePassword = localProperties.getProperty("keystore.password")
+            keyAlias = localProperties.getProperty("keystore.alias")
+            keyPassword = localProperties.getProperty("key.password")
+        }
+    }
     namespace = "com.miszczyk.passlingo"
     compileSdk {
         version = release(36)
@@ -18,14 +30,10 @@ android {
         applicationId = "com.miszczyk.passlingo"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    val localProperties = Properties().apply {
-        load(rootProject.file("local.properties").inputStream())
     }
 
     buildTypes {
@@ -43,6 +51,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

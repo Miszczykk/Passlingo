@@ -64,7 +64,32 @@ AVAILABLE TIME = AVAILABLE TIME - 1 HOUR
 
 To create a deck, enter a title and add at least 4 cards. Changing the deck icon is optional.
 
-Passlingo also supports **importing cards**, for larger sets. The required file format is: `question [TAB] answer`. Other formats are not currently supported.
+Passlingo also supports **importing cards**, for larger sets. The required file format is:
+
+```
+question
+---
+answer
+```
+
+Each card can span multiple lines (e.g., to include a bulleted list), and cards must be separated by a blank line. Example:
+
+```
+What are the SOLID principles?
+- Single responsibility
+- Open/closed
+- Liskov substitution
+---
+A set of object-oriented design principles
+intended to make code easier to maintain.
+
+What is encapsulation?
+---
+Hiding an object's internal state and requiring
+all interaction to happen through its public methods.
+```
+
+Other formats are not currently supported.
 
 Editing a deck (adding or removing cards) does not affect current learning sessions. You can continue learning with the newly applied changes.
 
@@ -460,7 +485,32 @@ DOSTĘPNY CZAS = DOSTĘPNY CZAS - 1 GODZINA
 
 Aby utworzyć talię, należy podać jej tytuł oraz dodać minimum 4 karty. Możliwość zmiany ikony talii jest opcjonalna.
 
-Passlingo obsługuje również **import kart** w przypadku większych zbiorów. Wymagany format pliku to: `pytanie [TAB] odpowiedź`. Inne formaty nie są obecnie obsługiwane.
+Passlingo obsługuje również **import kart** w przypadku większych zbiorów. Wymagany format pliku to:
+
+```
+pytanie
+---
+odpowiedź
+```
+
+Każda karta może zajmować kilka linii (np. aby zawrzeć liste punktowaną), a poszczególne karty muszą być oddzielone pustą linią. Przykład:
+
+```
+Jakie są zasady SOLID?
+- Single responsibility
+- Open/closed
+- Liskov substitution
+---
+Zestaw zasad projektowania obiektowego,
+które mają ułatwić utrzymanie kodu.
+
+Czym jest enkapsulacja?
+---
+Ukrywanie wewnętrznego stanu obiektu i wymuszanie
+interakcji wyłącznie przez jego publiczne metody.
+```
+
+Inne formaty nie są są obecnie obsługiwane
 
 Edycja talii (dodawanie / usuwanie kart) nie wpływa na bieżące sesje nauki. Możesz kontynuować naukę z uwzględnieniem nowo wprowadzonych zmian.
 
